@@ -7,9 +7,26 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// error handler middlewares
+const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
+
+//db
+const connectDb = require("./db/connect");
+
+//routes
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
+
+// error handler
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
 const start = async () => {
   try {
-    // await connectDb();
+    await connectDb();
+    console.log("Connected to Database...\n");
     app.listen(port, () => {
       console.log(`Server for jobs is running on port ${port} `);
     });
