@@ -34,7 +34,7 @@ const ProjectSchema = new mongoose.Schema({
     ],
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   likes: [
@@ -67,3 +67,5 @@ const ProjectSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+module.exports = mongoose.model("Project", ProjectSchema);
