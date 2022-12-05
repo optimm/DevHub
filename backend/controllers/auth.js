@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { StatusCodes } = require("http-status-codes");
+const { StatusCodes, BAD_GATEWAY } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -51,4 +51,23 @@ const login = async (req, res) => {
     .json({ user: { name: user.name }, token });
 };
 
-module.exports = { register, login };
+const changePassword = async (req, res) => {
+  const { userId } = req.user;
+  const me = await User.findById(userId).select("+password");
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    throw new BadRequestError("Please provide current and new password");
+  }
+  const isValid = await me.CheckPassword(currentPassword);
+  if (!isValid) {
+    throw new UnauthenticatedError("Current password is incorrect");
+  }
+  if (currentPassword === newPassword) {
+    throw new BadRequestError("Cannot use previous password");
+  }
+  me.password = newPassword;
+  await me.save();
+  res.status(StatusCodes.OK).json({ success: true, msg: "Password changed" });
+};
+
+module.exports = { register, login, changePassword };

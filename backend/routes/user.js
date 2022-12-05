@@ -9,10 +9,13 @@ const {
   getAllUsers,
   getSingleUser,
   followUser,
-  updateUser,
+  updateProfile,
 } = require("../controllers/user");
 
-router.route("/me").get(authMiddleware, getMyData);
+router
+  .route("/me")
+  .get(authMiddleware, getMyData)
+  .patch(authMiddleware, updateProfile);
 router.route("/").get(ifAuthenticated, getAllUsers);
 router.route("/:id").get(getSingleUser);
 router.route("/follow/:id").get(authMiddleware, followUser);
