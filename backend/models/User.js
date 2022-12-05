@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { emailReg } = require("../utils/validation");
+const Project = require("./Project");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -12,13 +13,51 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide an email"],
     match: [emailReg, "Please provide a valid email"],
-    unique: true,
+    unique: [true, "Email already in use"],
   },
   password: {
     type: String,
     required: [true, "Please provide a password"],
     select: false,
   },
+  avatar: {
+    public_id: String,
+    url: String,
+  },
+  about: {
+    type: String,
+    max: [200, "About cannot be more than 200 characters"],
+  },
+  profiles: [
+    {
+      link: {
+        type: String,
+        required: [true, "Please provide a link"],
+      },
+      platform: {
+        type: String,
+        required: [true, "Please provide the platform name"],
+      },
+    },
+  ],
+  projects: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 UserSchema.pre("save", async function (next) {
