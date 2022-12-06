@@ -33,8 +33,8 @@ const getFollowers = async (req, res) => {
   const followersId = user.followers;
   const queryObject = { _id: { $in: followersId } };
 
-  const followers = await searchUser(req, res, queryObject);
-  res.status(StatusCodes.OK).json({ success: true, followers });
+  const data = await searchUser(req, res, queryObject);
+  res.status(StatusCodes.OK).json({ success: true, data });
 };
 
 const getFollowing = async (req, res) => {
@@ -46,8 +46,8 @@ const getFollowing = async (req, res) => {
   const followingId = user.following;
   const queryObject = { _id: { $in: followingId } };
 
-  const following = await searchUser(req, res, queryObject);
-  res.status(StatusCodes.OK).json({ success: true, following });
+  const data = await searchUser(req, res, queryObject);
+  res.status(StatusCodes.OK).json({ success: true, data });
 };
 
 const updateProfile = async (req, res) => {
