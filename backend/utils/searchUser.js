@@ -1,6 +1,7 @@
 const User = require("../models/User");
+const paginate = require("./paginate");
 
-const searchUser = async (req, res, searchQuery) => {
+const searchUser = async (req, res, searchQuery, total) => {
   const { q } = req.query;
   let queryObject = { ...searchQuery };
   const userQuery = {
@@ -12,8 +13,9 @@ const searchUser = async (req, res, searchQuery) => {
   if (q) {
     queryObject = { ...queryObject, ...userQuery };
   }
-  const users = await User.find(queryObject).select("name email avatar");
-  return users;
+  const mongoQuery = User.find(queryObject).select("name email avatar");
+  const data = await paginate(req, res, mongoQuery);
+  return data;
 };
 
 module.exports = searchUser;

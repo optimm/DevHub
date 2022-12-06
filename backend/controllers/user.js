@@ -5,17 +5,14 @@ const searchUser = require("../utils/searchUser");
 
 //**************************Generic Routes***********************/
 const getAllUsers = async (req, res) => {
-  const { q } = req.query;
-
   let searchQuery = {};
-
   if (req.user) {
     const authUserQuery = { _id: { $ne: req.user.userId } };
     searchQuery = { ...authUserQuery };
   }
-
-  const users = await searchUser(req, res, searchQuery);
-  res.status(StatusCodes.OK).json({ success: true, users });
+  const total = await User.countDocuments({});
+  const users = await searchUser(req, res, searchQuery, total);
+  res.status(StatusCodes.OK).json({ success: true, data: { users, total } });
 };
 
 const getSingleUser = async (req, res) => {
@@ -29,46 +26,27 @@ const getSingleUser = async (req, res) => {
 
 const getFollowers = async (req, res) => {
   const { id } = req.params;
-  const { q } = req.query;
   const user = await User.findById(id);
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
   const followersId = user.followers;
   const queryObject = { _id: { $in: followersId } };
-  const searchQuery = {
-    $or: [
-      { name: { $regex: q, $options: "i" } },
-      { email: { $regex: q, $options: "i" } },
-    ],
-  };
-  if (q) {
-    queryObject = { ...queryObject, ...searchQuery };
-  }
-  const followers = await User.find(queryObject).select("name email avatar");
+
+  const followers = await searchUser(req, res, queryObject);
   res.status(StatusCodes.OK).json({ success: true, followers });
 };
 
 const getFollowing = async (req, res) => {
   const { id } = req.params;
-  const { q } = req.query;
   const user = await User.findById(id);
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
   const followingId = user.following;
+  const queryObject = { _id: { $in: followingId } };
 
-  let queryObject = { _id: { $in: followingId } };
-  const searchQuery = {
-    $or: [
-      { name: { $regex: q, $options: "i" } },
-      { email: { $regex: q, $options: "i" } },
-    ],
-  };
-  if (q) {
-    queryObject = { ...queryObject, ...searchQuery };
-  }
-  const following = await User.find(queryObject).select("name email avatar");
+  const following = await searchUser(req, res, queryObject);
   res.status(StatusCodes.OK).json({ success: true, following });
 };
 
