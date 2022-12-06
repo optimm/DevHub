@@ -15,6 +15,7 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     max: [200, "Descripition cannot be more than 300 characters"],
   },
+  tags: [{ type: String }],
   github_link: {
     type: String,
     required: [

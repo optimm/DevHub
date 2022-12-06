@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
 const searchUser = require("../utils/searchUser");
+const Project = require("../models/Project");
 
 //**************************Generic Routes***********************/
 const getAllUsers = async (req, res) => {
@@ -71,7 +72,29 @@ const updateProfile = async (req, res) => {
 const deleteProfile = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
-  res.status(StatusCodes.OK).json({ success: true, msg: "Profile Deleted" });
+  const following = me.following;
+  const followers = me.followers;
+
+  //remove user
+  await User.deleteOne({ _id: userId });
+
+  // Delete all projects of the user
+  await Project.deleteMany({ owner: userId });
+
+  // Removing user from other's followers whom this user follows
+  await User.updateMany({ follower: userId }, { $pull: { followers: userId } });
+
+  // Removing user from other's following
+  await User.updateMany(
+    { following: userId },
+    { $pull: { following: userId } }
+  );
+
+  //logout and send res
+  res
+    .status(StatusCodes.OK)
+    .cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+    .json({ success: true, msg: "Profile Deleted" });
 };
 
 //follow unfollow route
