@@ -4,15 +4,31 @@ const { BadRequestError, UnauthenticatedError } = require("../errors");
 
 //**************************Generic Routes***********************/
 const getAllUsers = async (req, res) => {
+  const { q } = req.query;
+
+  const searchQuery = {
+    $or: [
+      { name: { $regex: q, $options: "i" } },
+      { email: { $regex: q, $options: "i" } },
+    ],
+  };
+  let queryObject = {};
+
   if (req.user) {
-    const users = await User.find({ _id: { $ne: req.user.userId } }).select(
-      "name avatar email"
-    );
-    res.status(StatusCodes.OK).json({ success: true, data: users });
+    const authUserQuery = { _id: { $ne: req.user.userId } };
+    if (q) {
+      queryObject = { ...searchQuery, ...authUserQuery };
+    } else {
+      queryObject = { ...authUserQuery };
+    }
   } else {
-    const users = await User.find({}).select("name avatar email");
-    res.status(StatusCodes.OK).json({ success: true, data: users });
+    if (q) {
+      queryObject = { ...searchQuery };
+    }
   }
+  console.log({ queryObject });
+  const users = await User.find(queryObject).select("name avatar email");
+  res.status(StatusCodes.OK).json({ success: true, data: users });
 };
 
 const getSingleUser = async (req, res) => {
@@ -26,27 +42,47 @@ const getSingleUser = async (req, res) => {
 
 const getFollowers = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).populate(
-    "followers",
-    "name email avatar _id"
-  );
+  const { q } = req.query;
+  const user = await User.findById(id);
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
   const followersId = user.followers;
-  res.status(StatusCodes.OK).json({ success: true, data: user.followers });
+  const queryObject = { _id: { $in: followersId } };
+  const searchQuery = {
+    $or: [
+      { name: { $regex: q, $options: "i" } },
+      { email: { $regex: q, $options: "i" } },
+    ],
+  };
+  if (q) {
+    queryObject = { ...queryObject, ...searchQuery };
+  }
+  const followers = await User.find(queryObject).select("name email avatar");
+  res.status(StatusCodes.OK).json({ success: true, data: followers });
 };
 
 const getFollowing = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).populate(
-    "following",
-    "name email avatar _id"
-  );
+  const { q } = req.query;
+  const user = await User.findById(id);
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
-  res.status(StatusCodes.OK).json({ success: true, data: user.following });
+  const followingId = user.following;
+
+  let queryObject = { _id: { $in: followingId } };
+  const searchQuery = {
+    $or: [
+      { name: { $regex: q, $options: "i" } },
+      { email: { $regex: q, $options: "i" } },
+    ],
+  };
+  if (q) {
+    queryObject = { ...queryObject, ...searchQuery };
+  }
+  const following = await User.find(queryObject).select("name email avatar");
+  res.status(StatusCodes.OK).json({ success: true, data: following });
 };
 
 const updateProfile = async (req, res) => {

@@ -86,4 +86,7 @@ const changePassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Password changed" });
 };
 
+const forgotPassword = async (req, res) => {};
+const resetPassword = async (req, res) => {};
+
 module.exports = { register, login, changePassword, checkMyAuth, logout };
