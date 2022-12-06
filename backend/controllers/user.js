@@ -18,11 +18,13 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).select(
+    "-followers -following -projects"
+  );
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
-  res.status(StatusCodes.OK).json({ success: true, user });
+  res.status(StatusCodes.OK).json({ success: true, data: user });
 };
 
 const getFollowers = async (req, res) => {
@@ -130,6 +132,8 @@ const followUser = async (req, res) => {
   }
 
   if (userToFollow.followers.includes(userId) && me.following.includes(id)) {
+    me.total_following -= 1;
+    userToFollow.total_followers -= 1;
     const index1 = userToFollow.followers.indexOf(userId);
     const index2 = me.following.indexOf(id);
     userToFollow.followers.splice(index1, 1);
@@ -140,6 +144,8 @@ const followUser = async (req, res) => {
       .status(StatusCodes.OK)
       .json({ success: true, msg: `Unfollowed ${userToFollow.name}` });
   } else {
+    me.total_following += 1;
+    userToFollow.total_followers += 1;
     userToFollow.followers.push(userId);
     me.following.push(id);
     await userToFollow.save();

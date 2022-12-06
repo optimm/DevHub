@@ -58,6 +58,18 @@ const UserSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  total_followers: {
+    type: Number,
+    default: 0,
+  },
+  total_following: {
+    type: Number,
+    default: 0,
+  },
+  total_projects: {
+    type: Number,
+    default: 0,
+  },
 });
 
 UserSchema.pre("save", async function (next) {

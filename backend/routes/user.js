@@ -26,4 +26,6 @@ router.route("/:id/followers").get(getFollowers);
 router.route("/:id/following").get(getFollowing);
 router.route("/:id/follow").get(authMiddleware, followUser);
 
+// route for user projects
+
 module.exports = router;

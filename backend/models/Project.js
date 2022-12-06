@@ -67,6 +67,18 @@ const ProjectSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  total_likes: {
+    type: Number,
+    default: 0,
+  },
+  total_comments: {
+    type: Number,
+    default: 0,
+  },
+  total_saves: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("Project", ProjectSchema);

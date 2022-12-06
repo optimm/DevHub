@@ -31,8 +31,8 @@ app.get("/", (req, res) => {
   res.send("Hello");
 });
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/project", projectRouter);
 
 // error handler
 app.use(notFoundMiddleware);
