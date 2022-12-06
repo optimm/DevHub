@@ -26,10 +26,27 @@ const getSingleUser = async (req, res) => {
 
 const getFollowers = async (req, res) => {
   const { id } = req.params;
+  const user = await User.findById(id).populate(
+    "followers",
+    "name email avatar _id"
+  );
+  if (!user) {
+    throw new BadRequestError("User does not exist");
+  }
+  const followersId = user.followers;
+  res.status(StatusCodes.OK).json({ success: true, data: user.followers });
 };
 
 const getFollowing = async (req, res) => {
   const { id } = req.params;
+  const user = await User.findById(id).populate(
+    "following",
+    "name email avatar _id"
+  );
+  if (!user) {
+    throw new BadRequestError("User does not exist");
+  }
+  res.status(StatusCodes.OK).json({ success: true, data: user.following });
 };
 
 const updateProfile = async (req, res) => {
@@ -78,7 +95,7 @@ const followUser = async (req, res) => {
     await me.save();
     res
       .status(StatusCodes.OK)
-      .json({ success: true, msg: `unfollowed ${userToFollow.name}` });
+      .json({ success: true, msg: `Unfollowed ${userToFollow.name}` });
   } else {
     userToFollow.followers.push(userId);
     me.following.push(id);
@@ -86,7 +103,7 @@ const followUser = async (req, res) => {
     await me.save();
     res
       .status(StatusCodes.OK)
-      .json({ success: true, msg: `followed ${userToFollow.name}` });
+      .json({ success: true, msg: `Followed ${userToFollow.name}` });
   }
 };
 

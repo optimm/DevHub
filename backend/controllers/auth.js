@@ -51,6 +51,14 @@ const login = async (req, res) => {
     .json({ user: { name: user.name }, token });
 };
 
+const logout = async (req, res) => {
+  const { userId } = req.user;
+  res
+    .status(StatusCodes.OK)
+    .cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+    .json({ success: true, msg: "Logged out" });
+};
+
 //To check my auth and send back my data
 const checkMyAuth = async (req, res) => {
   const me = await User.findById(req.user.userId).select(
@@ -78,4 +86,4 @@ const changePassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Password changed" });
 };
 
-module.exports = { register, login, changePassword, checkMyAuth };
+module.exports = { register, login, changePassword, checkMyAuth, logout };
