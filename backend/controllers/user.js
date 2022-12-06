@@ -10,9 +10,9 @@ const getAllUsers = async (req, res) => {
     const authUserQuery = { _id: { $ne: req.user.userId } };
     searchQuery = { ...authUserQuery };
   }
-  const total = await User.countDocuments({});
-  const users = await searchUser(req, res, searchQuery, total);
-  res.status(StatusCodes.OK).json({ success: true, data: { users, total } });
+
+  const data = await searchUser(req, res, searchQuery);
+  res.status(StatusCodes.OK).json({ success: true, data });
 };
 
 const getSingleUser = async (req, res) => {

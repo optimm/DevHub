@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const paginate = require("./paginate");
 
-const searchUser = async (req, res, searchQuery, total) => {
+const searchUser = async (req, res, searchQuery) => {
   const { q } = req.query;
   let queryObject = { ...searchQuery };
   const userQuery = {
@@ -15,7 +15,8 @@ const searchUser = async (req, res, searchQuery, total) => {
   }
   const mongoQuery = User.find(queryObject).select("name email avatar");
   const data = await paginate(req, res, mongoQuery);
-  return data;
+  const total = await User.countDocuments(queryObject);
+  return { data, total };
 };
 
 module.exports = searchUser;
