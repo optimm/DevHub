@@ -59,14 +59,6 @@ const logout = async (req, res) => {
     .json({ success: true, msg: "Logged out" });
 };
 
-//To check my auth and send back my data
-const checkMyAuth = async (req, res) => {
-  const me = await User.findById(req.user.userId).select(
-    "name email _id avatar"
-  );
-  res.status(StatusCodes.OK).json({ success: true, data: me });
-};
-
 const changePassword = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId).select("+password");
@@ -89,4 +81,4 @@ const changePassword = async (req, res) => {
 const forgotPassword = async (req, res) => {};
 const resetPassword = async (req, res) => {};
 
-module.exports = { register, login, changePassword, checkMyAuth, logout };
+module.exports = { register, login, changePassword, logout };

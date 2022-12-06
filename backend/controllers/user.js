@@ -51,6 +51,14 @@ const getFollowing = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, data });
 };
 
+//To check my auth and send back my data
+const checkMyAuth = async (req, res) => {
+  const me = await User.findById(req.user.userId).select(
+    "name email _id avatar"
+  );
+  res.status(StatusCodes.OK).json({ success: true, data: me });
+};
+
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
   const { name, email, about, profiles } = req.body;
@@ -147,6 +155,7 @@ module.exports = {
   getSingleUser,
   getFollowers,
   getFollowing,
+  checkMyAuth,
   updateProfile,
   deleteProfile,
   followUser,
