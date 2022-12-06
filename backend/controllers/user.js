@@ -72,8 +72,6 @@ const updateProfile = async (req, res) => {
 const deleteProfile = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
-  const following = me.following;
-  const followers = me.followers;
 
   //remove user
   await User.deleteOne({ _id: userId });
@@ -88,6 +86,19 @@ const deleteProfile = async (req, res) => {
   await User.updateMany(
     { following: userId },
     { $pull: { following: userId } }
+  );
+
+  //removing likes of this user from posts
+  const obj = { user: userId };
+  await Project.updateMany({ "likes.user": userId }, { $pull: { likes: obj } });
+
+  //removing user from posts he saved
+  await Project.updateMany({ "saved.user": userId }, { $pull: { saved: obj } });
+
+  //removing comment of this user from posts
+  await Project.updateMany(
+    { "comments.user": userId },
+    { $pull: { comments: { user: userId } } }
   );
 
   //logout and send res
