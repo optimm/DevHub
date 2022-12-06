@@ -51,9 +51,11 @@ const login = async (req, res) => {
     .json({ user: { name: user.name }, token });
 };
 
-//To check my auth and send back my id
+//To check my auth and send back my data
 const checkMyAuth = async (req, res) => {
-  const me = await User.findById(req.user.userId).select("_id");
+  const me = await User.findById(req.user.userId).select(
+    "name email _id avatar"
+  );
   res.status(StatusCodes.OK).json({ success: true, data: me });
 };
 
