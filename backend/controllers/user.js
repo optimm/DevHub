@@ -2,11 +2,36 @@ const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
 
-//******************************me routes*********************
-const getMyData = async (req, res) => {
-  const me = await User.findById(req.user.userId);
-  res.status(StatusCodes.OK).json({ success: true, data: me });
+//**************************Generic Routes***********************/
+const getAllUsers = async (req, res) => {
+  if (req.user) {
+    const users = await User.find({ _id: { $ne: req.user.userId } }).select(
+      "name avatar email"
+    );
+    res.status(StatusCodes.OK).json({ success: true, data: users });
+  } else {
+    const users = await User.find({}).select("name avatar email");
+    res.status(StatusCodes.OK).json({ success: true, data: users });
+  }
 };
+
+const getSingleUser = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    throw new BadRequestError("User does not exist");
+  }
+  res.status(StatusCodes.OK).json({ success: true, data: user });
+};
+
+const getFollowers = async (req, res) => {
+  const { id } = req.params;
+};
+
+const getFollowing = async (req, res) => {
+  const { id } = req.params;
+};
+
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
   const { name, email, about, profiles } = req.body;
@@ -23,6 +48,12 @@ const updateProfile = async (req, res) => {
   if (profiles) me.profiles = [...profiles];
   await me.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Profile updated" });
+};
+
+const deleteProfile = async (req, res) => {
+  const { userId } = req.user;
+  const me = await User.findById(userId);
+  res.status(StatusCodes.OK).json({ success: true, msg: "Profile Deleted" });
 };
 
 //follow unfollow route
@@ -59,32 +90,12 @@ const followUser = async (req, res) => {
   }
 };
 
-//*********************************other users********************
-const getAllUsers = async (req, res) => {
-  if (req.user) {
-    const users = await User.find({ _id: { $ne: req.user.userId } }).select(
-      "name avatar email"
-    );
-    res.status(StatusCodes.OK).json({ success: true, data: users });
-  } else {
-    const users = await User.find({}).select("name avatar email");
-    res.status(StatusCodes.OK).json({ success: true, data: users });
-  }
-};
-
-const getSingleUser = async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id);
-  if (!user) {
-    throw new BadRequestError("User does not exist");
-  }
-  res.status(StatusCodes.OK).json({ success: true, data: user });
-};
-
 module.exports = {
-  getMyData,
   getAllUsers,
   getSingleUser,
-  followUser,
+  getFollowers,
+  getFollowing,
   updateProfile,
+  deleteProfile,
+  followUser,
 };

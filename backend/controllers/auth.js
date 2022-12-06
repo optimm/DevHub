@@ -51,6 +51,12 @@ const login = async (req, res) => {
     .json({ user: { name: user.name }, token });
 };
 
+//To check my auth and send back my id
+const checkMyAuth = async (req, res) => {
+  const me = await User.findById(req.user.userId).select("_id");
+  res.status(StatusCodes.OK).json({ success: true, data: me });
+};
+
 const changePassword = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId).select("+password");
@@ -70,4 +76,4 @@ const changePassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Password changed" });
 };
 
-module.exports = { register, login, changePassword };
+module.exports = { register, login, changePassword, checkMyAuth };
