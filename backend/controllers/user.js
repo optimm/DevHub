@@ -1,34 +1,21 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
+const searchUser = require("../utils/searchUser");
 
 //**************************Generic Routes***********************/
 const getAllUsers = async (req, res) => {
   const { q } = req.query;
 
-  const searchQuery = {
-    $or: [
-      { name: { $regex: q, $options: "i" } },
-      { email: { $regex: q, $options: "i" } },
-    ],
-  };
-  let queryObject = {};
+  let searchQuery = {};
 
   if (req.user) {
     const authUserQuery = { _id: { $ne: req.user.userId } };
-    if (q) {
-      queryObject = { ...searchQuery, ...authUserQuery };
-    } else {
-      queryObject = { ...authUserQuery };
-    }
-  } else {
-    if (q) {
-      queryObject = { ...searchQuery };
-    }
+    searchQuery = { ...authUserQuery };
   }
-  console.log({ queryObject });
-  const users = await User.find(queryObject).select("name avatar email");
-  res.status(StatusCodes.OK).json({ success: true, data: users });
+
+  const users = await searchUser(req, res, searchQuery);
+  res.status(StatusCodes.OK).json({ success: true, users });
 };
 
 const getSingleUser = async (req, res) => {
@@ -37,7 +24,7 @@ const getSingleUser = async (req, res) => {
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
-  res.status(StatusCodes.OK).json({ success: true, data: user });
+  res.status(StatusCodes.OK).json({ success: true, user });
 };
 
 const getFollowers = async (req, res) => {
@@ -59,7 +46,7 @@ const getFollowers = async (req, res) => {
     queryObject = { ...queryObject, ...searchQuery };
   }
   const followers = await User.find(queryObject).select("name email avatar");
-  res.status(StatusCodes.OK).json({ success: true, data: followers });
+  res.status(StatusCodes.OK).json({ success: true, followers });
 };
 
 const getFollowing = async (req, res) => {
@@ -82,7 +69,7 @@ const getFollowing = async (req, res) => {
     queryObject = { ...queryObject, ...searchQuery };
   }
   const following = await User.find(queryObject).select("name email avatar");
-  res.status(StatusCodes.OK).json({ success: true, data: following });
+  res.status(StatusCodes.OK).json({ success: true, following });
 };
 
 const updateProfile = async (req, res) => {
