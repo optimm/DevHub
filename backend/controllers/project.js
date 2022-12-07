@@ -1,6 +1,10 @@
 const Project = require("../models/Project");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../errors");
 const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
 
@@ -21,18 +25,23 @@ const getSingleProject = async (req, res) => {
     "name email avatar"
   );
   if (!project) {
-    throw new BadRequestError("Project does not exist");
+    throw new NotFoundError("Project not found");
   }
   res.status(StatusCodes.OK).json({ success: true, data: project });
 };
 
 const getProjectsOfUser = async (req, res) => {
   const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
   let searchQuery = { owner: id };
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
 
+// can be done by only owner********/
 const createProject = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
@@ -51,6 +60,12 @@ const updateProject = async (req, res) => {
   const { id } = req.query;
   const { userId } = req.user;
   const project = await Project.findById(id);
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  if (userId.toString() !== project.owner.toString()) {
+    throw new UnauthenticatedError("Project is not owned by current user");
+  }
   const { title, live_link, github_link, tags, desc } = req.body;
   if (title) {
     project.title = title;
@@ -76,7 +91,7 @@ const deleteProject = async (req, res) => {
   const { userId } = req.user;
   const project = await Project.findById(id);
   if (!project) {
-    throw new BadRequestError("Project does not exist");
+    throw new NotFoundError("Project not found");
   }
   if (userId.toString() !== project.owner.toString()) {
     throw new UnauthenticatedError("Project is not owned by current user");
@@ -93,11 +108,14 @@ const deleteProject = async (req, res) => {
   await Project.deleteOne({ _id: id });
   res.status(StatusCodes.OK).json({ success: true, msg: "Project deleted" });
 };
-
+//**********************************/
 const likeProject = async (req, res) => {
   const { userId } = req.user;
   const { id } = req.params;
   const project = await Project.findById(id);
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
 
   if (project.likes.includes(userId)) {
     const index = project.likes.indexOf(userId);
@@ -118,6 +136,9 @@ const saveProject = async (req, res) => {
   const { id } = req.params;
   const me = await User.findById(userId);
   const project = await Project.findById(id);
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
   if (me.saved_projects.includes(id)) {
     const index = project.saved.indexOf(userId);
     const index2 = me.saved_projects.indexOf(id);
@@ -137,9 +158,54 @@ const saveProject = async (req, res) => {
   }
 };
 
-const commentOnProject = async (req, res) => {};
+const commentOnProject = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  const { comment } = req.body;
+  if (!comment) {
+    throw new BadRequestError("Please provide a comment");
+  }
+  const project = await Project.findById(id);
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  project.comments.push({ user: userId, comment });
+  await project.save();
+  res.status(StatusCodes.OK).json({ success: true, message: "Comment added" });
+};
 
-const deleteComment = async (req, res) => {};
+const deleteComment = async (req, res) => {
+  const { userId } = req.user;
+  const { id: pId } = req.params;
+  const { commentId } = req.body;
+  const project = await Project.findById(pId);
+
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  let comments = project.comments;
+  comments = comments.filter(
+    (item) => item._id.toString() === commentId.toString()
+  );
+
+  if (comments.length < 1) {
+    throw new NotFoundError("Comment not found");
+  }
+  const comment = comments[0];
+  if (
+    !(
+      comment.user.toString() === userId.toString() ||
+      project.owner.toString() === userId.toString()
+    )
+  ) {
+    throw new UnauthenticatedError("Not authorized to delete comment");
+  }
+  project.comments = project.comments.filter(
+    (item) => item._id.toString() !== commentId.toString()
+  );
+  await project.save();
+  res.status(StatusCodes.OK).json({ success: true, msg: "Comment Deleted" });
+};
 
 module.exports = {
   getAllProjects,

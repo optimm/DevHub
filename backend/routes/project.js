@@ -28,6 +28,6 @@ router.route("/:id/save").get(authMiddleware, saveProject);
 
 router
   .route("/:id/comment")
-  .get(authMiddleware, commentOnProject)
+  .post(authMiddleware, commentOnProject)
   .delete(authMiddleware, deleteComment);
 module.exports = router;

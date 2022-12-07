@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../errors");
 const searchUser = require("../utils/searchUser");
 const Project = require("../models/Project");
 
@@ -18,7 +22,9 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select("-followers -following");
+  const user = await User.findById(id).select(
+    "-followers -following -projects"
+  );
   if (!user) {
     throw new BadRequestError("User does not exist");
   }
@@ -29,7 +35,7 @@ const getFollowers = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {
-    throw new BadRequestError("User does not exist");
+    throw new NotFoundError("User not found");
   }
   const followersId = user.followers;
   const queryObject = { _id: { $in: followersId } };
@@ -42,7 +48,7 @@ const getFollowing = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {
-    throw new BadRequestError("User does not exist");
+    throw new NotFoundError("User not found");
   }
   const followingId = user.following;
   const queryObject = { _id: { $in: followingId } };
@@ -126,7 +132,7 @@ const followUser = async (req, res) => {
   const userToFollow = await User.findById(id);
   const me = await User.findById(userId);
   if (!userToFollow) {
-    throw new BadRequestError("User you are trying to follow does not exist");
+    throw new NotFoundError("User not found");
   }
 
   if (userToFollow.followers.includes(userId) && me.following.includes(id)) {
