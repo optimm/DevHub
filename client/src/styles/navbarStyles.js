@@ -13,7 +13,8 @@ export const NavContainerMain = styled.div`
 `;
 
 export const Logo = styled.div`
-  font-size: 24px;
+  font-family: "Zen Dots", cursive;
+  font-size: 23px;
   font-weight: 700;
   margin-right: 20px;
   color: var(--text-white);
