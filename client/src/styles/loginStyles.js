@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexcv } from "./globalStyle";
+import { backgroundGeneral, flexcv } from "./globalStyle";
 
 export const MainWrapper = styled.div`
   ${flexcv}
@@ -54,8 +54,7 @@ export const MainCardImage = styled.div`
   height: 100%;
   width: 50%;
   background: url(${(props) => props.url});
-  background-size: cover;
-  background-position: center;
+  ${backgroundGeneral}
 `;
 
 export const MainCardOverLay = styled.div`

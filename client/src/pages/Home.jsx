@@ -1,10 +1,12 @@
 import React from "react";
-import { LandingContainer } from "../styles/homeStyles";
+import { LandingContainer, LandingOverlay } from "../styles/homeStyles";
 
 const Home = () => {
   return (
     <>
-      <LandingContainer></LandingContainer>
+      <LandingContainer url="./images/landing.jpg">
+        <LandingOverlay></LandingOverlay>
+      </LandingContainer>
     </>
   );
 };
