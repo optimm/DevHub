@@ -99,11 +99,11 @@ const deleteProfile = async (req, res) => {
   );
 
   //removing likes of this user from posts
-  const obj = { user: userId };
-  await Project.updateMany({ "likes.user": userId }, { $pull: { likes: obj } });
+
+  await Project.updateMany({ likes: userId }, { $pull: { likes: userId } });
 
   //removing user from posts he saved
-  await Project.updateMany({ "saved.user": userId }, { $pull: { saved: obj } });
+  await Project.updateMany({ saved: userId }, { $pull: { saved: userId } });
 
   //removing comment of this user from posts
   await Project.updateMany(

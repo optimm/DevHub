@@ -53,39 +53,43 @@ const deleteProject = async (req, res) => {
 const likeProject = async (req, res) => {
   const { userId } = req.user;
   const { id } = req.params;
-  const project = Project.findById(id);
-  if (project.likes.includes(userId)) {
-    const index = project.likes.indexOf(userId);
+  const project = await Project.findById(id);
+
+  if (project.likes.some((obj) => obj.user === userId)) {
+    const index = project.likes.indexOf({ user: userId });
     project.likes.splice(index, 1);
+    project.total_likes -= 1;
     await project.save();
     res.status(StatusCodes.OK).json({ success: true, msg: "Project unliked" });
   } else {
-    project.likes.push(userId);
+    project.likes.push({ user: userId });
+    project.total_likes += 1;
     await project.save();
     res.status(StatusCodes.OK).json({ success: true, msg: "Project liked" });
   }
 };
 
 const saveProject = async (req, res) => {
-  const { userId } = req.user;
-  const { id } = req.params;
-  const me = User.findById(userId);
-  const project = Project.findById(id);
-  if (project.saved.includes(userId) && me.saved_projects.includes(id)) {
-    const index = project.saved.indexOf(userId);
-    const index2 = me.saved_projects.indexOf(id);
-    project.saved.splice(index, 1);
-    me.saved_projects.splice(index2, 1);
-    await project.save();
-    await me.save();
-    res.status(StatusCodes.OK).json({ success: true, msg: "Project unsaved" });
-  } else {
-    project.saved.push(userId);
-    me.saved_projects.push(id);
-    await project.save();
-    await me.save();
-    res.status(StatusCodes.OK).json({ success: true, msg: "Project saved" });
-  }
+  // const { userId } = req.user;
+  // const { id } = req.params;
+  // const me = await User.findById(userId);
+  // const project = await Project.findById(id);
+  // if (me.saved_projects.includes(id)) {
+  //   const obj = { user: userId };
+  //   const index = project.saved.indexOf(obj);
+  //   const index2 = me.saved_projects.indexOf(id);
+  //   project.saved.splice(index, 1);
+  //   me.saved_projects.splice(index2, 1);
+  //   await project.save();
+  //   await me.save();
+  //   res.status(StatusCodes.OK).json({ success: true, msg: "Project unsaved" });
+  // } else {
+  //   project.saved.push({ user: userId });
+  //   me.saved_projects.push(id);
+  //   await project.save();
+  //   await me.save();
+  //   res.status(StatusCodes.OK).json({ success: true, msg: "Project saved" });
+  // }
 };
 
 const commentOnProject = async (req, res) => {};
