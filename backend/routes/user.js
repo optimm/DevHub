@@ -14,6 +14,7 @@ const {
   deleteProfile,
   checkMyAuth,
 } = require("../controllers/user");
+const { getProjectsOfUser } = require("../controllers/project");
 
 router.route("/").get(ifAuthenticated, getAllUsers);
 router
@@ -25,6 +26,7 @@ router.route("/:id").get(getSingleUser);
 router.route("/:id/followers").get(getFollowers);
 router.route("/:id/following").get(getFollowing);
 router.route("/:id/follow").get(authMiddleware, followUser);
+router.route("/:id/projects").get(getProjectsOfUser);
 
 // route for user projects
 

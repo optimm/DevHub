@@ -26,6 +26,13 @@ const getSingleProject = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, data: project });
 };
 
+const getProjectsOfUser = async (req, res) => {
+  const { id } = req.params;
+  let searchQuery = { owner: id };
+  const data = await searchProject(req, res, searchQuery);
+  res.status(StatusCodes.OK).json({ success: true, data });
+};
+
 const createProject = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
@@ -71,14 +78,14 @@ const deleteProject = async (req, res) => {
   if (!project) {
     throw new BadRequestError("Project does not exist");
   }
-  console.log(project.owner, userId);
   if (userId.toString() !== project.owner.toString()) {
     throw new UnauthenticatedError("Project is not owned by current user");
   }
-  await User.updateOne(
-    { _id: userId },
-    { $inc: { total_projects: -1 }, $pull: { projects: id } }
-  );
+  const me = await User.findById(userId);
+  me.total_projects -= 1;
+  const index = me.projects.indexOf(id);
+  me.projects.splice(index, 1);
+  await me.save();
   await User.updateMany(
     { saved_projects: id },
     { $pull: { saved_projects: id } }
@@ -144,4 +151,5 @@ module.exports = {
   saveProject,
   commentOnProject,
   deleteComment,
+  getProjectsOfUser,
 };
