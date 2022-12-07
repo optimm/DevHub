@@ -33,8 +33,29 @@ export const MainCardImage = styled.div`
 `;
 
 export const MainCardOverLay = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
   height: 100%;
   width: 100%;
-  background: var(--primary-color);
-  opacity: 70%;
+  background: var(--primary-color-glass);
+  padding: 50px 40px;
+  .heading {
+    font-size: 35px;
+    font-weight: 700;
+    color: var(--text-white);
+  }
+  .text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-white);
+  }
+  .card-button {
+    height: 35px;
+    width: 150px;
+    background: white;
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 600;
+  }
 `;

@@ -24,9 +24,9 @@ const Navbar = () => {
         <Link to="/about">About</Link>
       </Item>
       <NavContainerRight>
-        <Link to="/login">
-          <NavButton>Login</NavButton>
-        </Link>
+        <Item>
+          <Link to="/login">Login</Link>
+        </Item>
         <Link to="/register">
           <NavButton>Register</NavButton>
         </Link>

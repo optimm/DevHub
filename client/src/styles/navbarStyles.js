@@ -26,7 +26,7 @@ export const Logo = styled.div`
 
 export const NavContainerRight = styled.div`
   ${flexch}
-  gap:1.5vw;
+  gap:2.5vw;
   margin-left: auto;
 `;
 
@@ -41,17 +41,16 @@ export const Item = styled.div`
 `;
 
 export const NavButton = styled.button`
-  height: 35px;
   width: 100px;
-  border-radius: 5px;
+  height: 35px;
+  background: white;
+  color: var(--color-primary);
   font-size: 14px;
+  border-radius: 5px;
   font-weight: 600;
-  color: var(--text-white-light);
-  background: var(--glassmorph);
-  cursor: pointer;
   transition: all 0.2s ease;
+  opacity: 95%;
   &:hover {
-    background: var(--glassmorph-dark);
-    color: var(--text-white);
+    opacity: 100%;
   }
 `;

@@ -25,11 +25,13 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 /* setting up colors */
 
 :root {
   --primary-color: #16003b;
+  --primary-color-glass: #16003ba4;
   --primary-color-light: #c8c3d3;
   --glassmorph: rgb(255, 255, 255, 0.1);
   --glassmorph-dark: rgb(255, 255, 255, 0.2);
