@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+}
+html {
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  outline: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* setting up colors */
+
+:root {
+  --primary-color: #3f0071;
+  --secondary-color: rgb(29, 29, 29);
+  --glassmorph: rgb(255, 255, 255, 0.1);
+  --glassmorph-dark: rgb(255, 255, 255, 0.2);
+
+  /* text */
+  --text-1: #000;
+  --text-2: #444;
+  --text-3: #666;
+  --text-4: #777;
+  --text-white: #fff;
+  --text-white-light: rgb(235, 235, 235);
+}
