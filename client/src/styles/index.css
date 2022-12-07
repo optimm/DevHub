@@ -30,6 +30,7 @@ button {
 
 :root {
   --primary-color: #16003b;
+  --primary-color-light: #c8c3d3;
   --glassmorph: rgb(255, 255, 255, 0.1);
   --glassmorph-dark: rgb(255, 255, 255, 0.2);
 
