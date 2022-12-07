@@ -108,6 +108,13 @@ const deleteProject = async (req, res) => {
   await Project.deleteOne({ _id: id });
   res.status(StatusCodes.OK).json({ success: true, msg: "Project deleted" });
 };
+
+const getSavedProjects = async (req, res) => {
+  const { userId } = req.user;
+  const searchQuery = { saved: userId };
+  const data = await searchProject(req, res, searchQuery);
+  res.status(StatusCodes.OK).json({ success: true, data });
+};
 //**********************************/
 const likeProject = async (req, res) => {
   const { userId } = req.user;
@@ -213,6 +220,7 @@ module.exports = {
   createProject,
   updateProject,
   deleteProject,
+  getSavedProjects,
   likeProject,
   saveProject,
   commentOnProject,

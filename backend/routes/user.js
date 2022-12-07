@@ -14,7 +14,10 @@ const {
   deleteProfile,
   checkMyAuth,
 } = require("../controllers/user");
-const { getProjectsOfUser } = require("../controllers/project");
+const {
+  getProjectsOfUser,
+  getSavedProjects,
+} = require("../controllers/project");
 
 router.route("/").get(ifAuthenticated, getAllUsers);
 router
@@ -22,6 +25,7 @@ router
   .get(authMiddleware, checkMyAuth)
   .patch(authMiddleware, updateProfile)
   .delete(authMiddleware, deleteProfile);
+router.route("/me/saved").get(authMiddleware, getSavedProjects);
 router.route("/:id").get(getSingleUser);
 router.route("/:id/followers").get(getFollowers);
 router.route("/:id/following").get(getFollowing);

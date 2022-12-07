@@ -2,7 +2,7 @@ const Project = require("../models/Project");
 const paginate = require("./paginate");
 
 const searchProject = async (req, res, searchQuery) => {
-  const { q, tags, sortByLikes, sortByComments } = req.query;
+  let { q, tags, sortByLikes, sortByComments } = req.query;
   let queryObject = { ...searchQuery };
   const tagQuery = { tags: { $in: tags } };
 
@@ -21,7 +21,9 @@ const searchProject = async (req, res, searchQuery) => {
   );
 
   let data = await paginate(req, res, mongoQuery);
+
   if (q) {
+    q = q.toLowerCase();
     data = data.filter(
       (item) =>
         item.title.includes(q) ||
