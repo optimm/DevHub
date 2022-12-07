@@ -44,7 +44,7 @@ export const NavButton = styled.button`
   width: 100px;
   height: 35px;
   background: white;
-  color: var(--color-primary);
+  color: var(--primary-color);
   font-size: 14px;
   border-radius: 5px;
   font-weight: 600;

@@ -19,14 +19,40 @@ export const MainCard = styled.div`
   border-radius: 5px;
 `;
 
-export const MainCardForm = styled.div`
+export const MainCardForm = styled.form`
   height: 100%;
-  flex: 1;
+  width: 50%;
+  padding: 50px 40px 10px 40px;
+  .inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: ${(props) => (props.login ? "30px" : "25px")};
+  }
+  .form-head {
+    font-size: 25px;
+    font-weight: 700;
+    color: var(--text-3);
+    margin-top: ${(props) => props.login && "10px"};
+  }
+  .form-button {
+    height: 35px;
+    width: 150px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .MuiFormHelperText-root {
+    font-size: 11px;
+  }
 `;
 
 export const MainCardImage = styled.div`
   height: 100%;
-  flex: 1;
+  width: 50%;
   background: url(${(props) => props.url});
   background-size: cover;
   background-position: center;
@@ -54,7 +80,7 @@ export const MainCardOverLay = styled.div`
     height: 35px;
     width: 150px;
     background: white;
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-size: 14px;
     font-weight: 600;
   }
