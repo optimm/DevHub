@@ -18,9 +18,7 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select(
-    "-followers -following -projects"
-  );
+  const user = await User.findById(id).select("-followers -following");
   if (!user) {
     throw new BadRequestError("User does not exist");
   }

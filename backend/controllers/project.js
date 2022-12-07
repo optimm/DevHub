@@ -40,14 +40,51 @@ const createProject = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Project Created" });
 };
 
-const updateProject = async (req, res) => {};
+const updateProject = async (req, res) => {
+  const { id } = req.query;
+  const { userId } = req.user;
+  const project = await Project.findById(id);
+  const { title, live_link, github_link, tags, desc } = req.body;
+  if (title) {
+    project.title = title;
+  }
+  if (desc) {
+    project.desc = desc;
+  }
+  if (live_link) {
+    project.live_link = live_link;
+  }
+  if (github_link) {
+    project.github_link = github_link;
+  }
+  if (tags) {
+    project.tags = [...tags];
+  }
+  await project.save();
+  res.status(StatusCodes.OK).json({ success: true, msg: "Project Updated" });
+};
 
 const deleteProject = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.user;
-  await User.updateOne({ _id: userId }, { $pull: { projects: id } });
+  const project = await Project.findById(id);
+  if (!project) {
+    throw new BadRequestError("Project does not exist");
+  }
+  console.log(project.owner, userId);
+  if (userId.toString() !== project.owner.toString()) {
+    throw new UnauthenticatedError("Project is not owned by current user");
+  }
+  await User.updateOne(
+    { _id: userId },
+    { $inc: { total_projects: -1 }, $pull: { projects: id } }
+  );
+  await User.updateMany(
+    { saved_projects: id },
+    { $pull: { saved_projects: id } }
+  );
   await Project.deleteOne({ _id: id });
-  res.status(StatusCodes.OK).json({ success: true, msg: "Porject deleted" });
+  res.status(StatusCodes.OK).json({ success: true, msg: "Project deleted" });
 };
 
 const likeProject = async (req, res) => {
@@ -55,14 +92,14 @@ const likeProject = async (req, res) => {
   const { id } = req.params;
   const project = await Project.findById(id);
 
-  if (project.likes.some((obj) => obj.user === userId)) {
-    const index = project.likes.indexOf({ user: userId });
+  if (project.likes.includes(userId)) {
+    const index = project.likes.indexOf(userId);
     project.likes.splice(index, 1);
     project.total_likes -= 1;
     await project.save();
     res.status(StatusCodes.OK).json({ success: true, msg: "Project unliked" });
   } else {
-    project.likes.push({ user: userId });
+    project.likes.push(userId);
     project.total_likes += 1;
     await project.save();
     res.status(StatusCodes.OK).json({ success: true, msg: "Project liked" });
@@ -70,26 +107,27 @@ const likeProject = async (req, res) => {
 };
 
 const saveProject = async (req, res) => {
-  // const { userId } = req.user;
-  // const { id } = req.params;
-  // const me = await User.findById(userId);
-  // const project = await Project.findById(id);
-  // if (me.saved_projects.includes(id)) {
-  //   const obj = { user: userId };
-  //   const index = project.saved.indexOf(obj);
-  //   const index2 = me.saved_projects.indexOf(id);
-  //   project.saved.splice(index, 1);
-  //   me.saved_projects.splice(index2, 1);
-  //   await project.save();
-  //   await me.save();
-  //   res.status(StatusCodes.OK).json({ success: true, msg: "Project unsaved" });
-  // } else {
-  //   project.saved.push({ user: userId });
-  //   me.saved_projects.push(id);
-  //   await project.save();
-  //   await me.save();
-  //   res.status(StatusCodes.OK).json({ success: true, msg: "Project saved" });
-  // }
+  const { userId } = req.user;
+  const { id } = req.params;
+  const me = await User.findById(userId);
+  const project = await Project.findById(id);
+  if (me.saved_projects.includes(id)) {
+    const index = project.saved.indexOf(userId);
+    const index2 = me.saved_projects.indexOf(id);
+    project.saved.splice(index, 1);
+    me.saved_projects.splice(index2, 1);
+    project.total_saves -= 1;
+    await project.save();
+    await me.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project unsaved" });
+  } else {
+    project.saved.push(userId);
+    me.saved_projects.push(id);
+    project.total_saves += 1;
+    await project.save();
+    await me.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project saved" });
+  }
 };
 
 const commentOnProject = async (req, res) => {};
