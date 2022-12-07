@@ -4,7 +4,7 @@ import { flexch } from "./globalStyle";
 export const NavContainerMain = styled.div`
   display: flex;
   align-items: center;
-  padding: 0px 5%;
+  padding: 0px 6%;
   height: 70px;
   width: 100%;
   background: var(--primary-color);
@@ -17,7 +17,11 @@ export const Logo = styled.div`
   font-size: 23px;
   font-weight: 700;
   margin-right: 20px;
-  color: var(--text-white);
+  color: var(--text-white-light);
+  transition: all 0.2s ease;
+  &:hover {
+    color: var(--text-white);
+  }
 `;
 
 export const NavContainerRight = styled.div`
@@ -30,7 +34,7 @@ export const Item = styled.div`
   font-size: 14px;
   font-weight: 600;
   color: var(--text-white-light);
-  transition: all 0.1s ease;
+  transition: all 0.2s ease;
   &:hover {
     color: var(--text-white);
   }
@@ -45,7 +49,7 @@ export const NavButton = styled.button`
   color: var(--text-white-light);
   background: var(--glassmorph);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   &:hover {
     background: var(--glassmorph-dark);
     color: var(--text-white);

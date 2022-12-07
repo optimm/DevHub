@@ -29,8 +29,7 @@ button {
 /* setting up colors */
 
 :root {
-  --primary-color: #3f0071;
-  --secondary-color: rgb(29, 29, 29);
+  --primary-color: #16003b;
   --glassmorph: rgb(255, 255, 255, 0.1);
   --glassmorph-dark: rgb(255, 255, 255, 0.2);
 
