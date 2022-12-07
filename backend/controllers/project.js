@@ -16,7 +16,10 @@ const getAllProjects = async (req, res) => {
 
 const getSingleProject = async (req, res) => {
   const { id } = req.params;
-  const project = await Project.findById(id);
+  const project = await Project.findById(id).populate(
+    "owner",
+    "name email avatar"
+  );
   if (!project) {
     throw new BadRequestError("Project does not exist");
   }
@@ -38,10 +41,53 @@ const createProject = async (req, res) => {
 };
 
 const updateProject = async (req, res) => {};
-const deleteProject = async (req, res) => {};
 
-const likeProject = async (req, res) => {};
-const saveProject = async (req, res) => {};
+const deleteProject = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  await User.updateOne({ _id: userId }, { $pull: { projects: id } });
+  await Project.deleteOne({ _id: id });
+  res.status(StatusCodes.OK).json({ success: true, msg: "Porject deleted" });
+};
+
+const likeProject = async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+  const project = Project.findById(id);
+  if (project.likes.includes(userId)) {
+    const index = project.likes.indexOf(userId);
+    project.likes.splice(index, 1);
+    await project.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project unliked" });
+  } else {
+    project.likes.push(userId);
+    await project.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project liked" });
+  }
+};
+
+const saveProject = async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+  const me = User.findById(userId);
+  const project = Project.findById(id);
+  if (project.saved.includes(userId) && me.saved_projects.includes(id)) {
+    const index = project.saved.indexOf(userId);
+    const index2 = me.saved_projects.indexOf(id);
+    project.saved.splice(index, 1);
+    me.saved_projects.splice(index2, 1);
+    await project.save();
+    await me.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project unsaved" });
+  } else {
+    project.saved.push(userId);
+    me.saved_projects.push(id);
+    await project.save();
+    await me.save();
+    res.status(StatusCodes.OK).json({ success: true, msg: "Project saved" });
+  }
+};
+
 const commentOnProject = async (req, res) => {};
 
 const deleteComment = async (req, res) => {};

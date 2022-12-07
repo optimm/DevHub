@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { authMiddleware } = require("../middleware/auth");
+const { ifAuthenticated } = require("../middleware/if-autheticated");
 const {
   getAllProjects,
   getSingleProject,
@@ -14,7 +15,7 @@ const {
   deleteComment,
 } = require("../controllers/project");
 
-router.route("/").get(getAllProjects);
+router.route("/").get(ifAuthenticated, getAllProjects);
 router
   .route("/:id")
   .get(getSingleProject)

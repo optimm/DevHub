@@ -17,8 +17,11 @@ const searchProject = async (req, res, searchQuery) => {
     "owner",
     "name email avatar"
   );
-  const data = await paginate(req, res, mongoQuery);
+  let data = await paginate(req, res, mongoQuery);
   const total = await Project.countDocuments(queryObject);
+  data = data.filter(
+    (item) => item.owner.name.includes(q) || item.owner.email.includes(q)
+  );
   return { data, total };
 };
 

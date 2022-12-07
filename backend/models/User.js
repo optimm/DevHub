@@ -46,6 +46,12 @@ const UserSchema = new mongoose.Schema({
       ref: "Project",
     },
   ],
+  saved_projects: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
