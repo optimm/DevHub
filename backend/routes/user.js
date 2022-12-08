@@ -26,7 +26,7 @@ router
   .patch(authMiddleware, updateProfile)
   .delete(authMiddleware, deleteProfile);
 router.route("/me/saved").get(authMiddleware, getSavedProjects);
-router.route("/:id").get(getSingleUser);
+router.route("/:id").get(ifAuthenticated, getSingleUser);
 router.route("/:id/followers").get(getFollowers);
 router.route("/:id/following").get(getFollowing);
 router.route("/:id/follow").get(authMiddleware, followUser);

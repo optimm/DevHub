@@ -51,7 +51,7 @@ const Register = () => {
     <>
       <MainWrapper>
         <MainCard>
-          <MainCardImage url="./images/register.jpg">
+          <MainCardImage url="/images/register.jpg">
             <MainCardOverLay>
               <div className="heading">Join DevHub Today.</div>
               <div className="text">

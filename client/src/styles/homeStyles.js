@@ -10,13 +10,15 @@ export const LandingContainer = styled.div`
 
 export const LandingOverlay = styled.div`
   ${flexcv}
-  align-items:flex-start;
   padding: 0% 6%;
   width: 100%;
   height: 100%;
   background: var(--back-drop);
   color: var(--text-white);
-
+  .section-main {
+    text-align: center;
+    width: fit-content;
+  }
   .text-main {
     font-size: clamp(40px, 5vw, 5vw);
   }
@@ -24,10 +26,11 @@ export const LandingOverlay = styled.div`
     font-family: "Zen Dots", cursive;
   }
   .text-sub {
-    margin-top: 4%;
     font-size: clamp(16px, 1.5vw, 1.5vw);
     font-weight: 500;
-    width: 52%;
+    width: 65%;
+    margin: 0% auto;
+    margin-top: 3%;
   }
   .button-container {
     display: flex;
@@ -35,6 +38,7 @@ export const LandingOverlay = styled.div`
     margin-top: 5%;
   }
   .button-main {
+    margin: 0% auto;
     height: 55px;
     width: 230px;
     border-radius: 5px;

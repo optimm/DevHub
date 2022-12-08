@@ -25,7 +25,15 @@ export const userApi = createApi({
         }
       },
     }),
+    getSingleUser: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `${id}`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useCheckMyAuthQuery } = userApi;
+export const { useCheckMyAuthQuery, useGetSingleUserQuery } = userApi;

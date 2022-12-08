@@ -87,7 +87,7 @@ const Login = () => {
               )}
             </div>
           </MainCardForm>
-          <MainCardImage url="./images/login.jpg">
+          <MainCardImage url="/images/login.jpg">
             <MainCardOverLay>
               <div className="heading">Welcome Back Mate.</div>
               <div className="text">

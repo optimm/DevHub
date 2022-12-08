@@ -27,6 +27,12 @@ button {
   align-items: center;
   cursor: pointer;
 }
+
+.sepration {
+  background: var(--sepration);
+  width: 90%;
+  height: 1px;
+}
 /* setting up colors */
 
 :root {
@@ -35,6 +41,9 @@ button {
   --primary-color-glass: #16003ba1;
   --glass-morph: rgb(255, 255, 255, 0.2);
   --back-drop: #04000cb7;
+
+  /* borders and seprations */
+  --sepration: rgb(204, 204, 204);
 
   /* text */
   --text-1: #000;

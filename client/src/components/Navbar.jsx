@@ -1,4 +1,6 @@
+import { Avatar } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   Item,
@@ -9,6 +11,7 @@ import {
 } from "../styles/navbarStyles";
 
 const Navbar = () => {
+  const { isAuthenticated } = useSelector((state) => state.me);
   return (
     <NavContainerMain>
       <Logo>
@@ -24,12 +27,18 @@ const Navbar = () => {
         <Link to="/about">About</Link>
       </Item>
       <NavContainerRight>
-        <Item>
-          <Link to="/login">Login</Link>
-        </Item>
-        <Link to="/register">
-          <NavButton>Register</NavButton>
-        </Link>
+        {isAuthenticated ? (
+          <Avatar sx={{ width: 35, height: 35 }} />
+        ) : (
+          <>
+            <Item>
+              <Link to="/login">Login</Link>
+            </Item>
+            <Link to="/register">
+              <NavButton>Register</NavButton>
+            </Link>
+          </>
+        )}
       </NavContainerRight>
     </NavContainerMain>
   );

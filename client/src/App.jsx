@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
-import { authenticateMe } from "./features/meSlice";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 
 const App = () => {
-  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { data, error, isError, isSuccess, isLoading, isFetching } =
-    useCheckMyAuthQuery();
+  const { isLoading, isFetching } = useCheckMyAuthQuery();
 
   return (
     <>
@@ -32,8 +30,22 @@ const App = () => {
                   </>
                 }
               />
-              <Route path={"/login"} element={<Login />} />
+              <Route
+                path={"/login"}
+                element={
+                  isAuthenticated ? <Navigate replace to="/" /> : <Login />
+                }
+              />
               <Route path={"/register"} element={<Register />} />
+              <Route
+                path="/user/:id"
+                element={
+                  <>
+                    <Navbar />
+                    <Profile />
+                  </>
+                }
+              />
             </Routes>
           </BrowserRouter>
           <Notification />
