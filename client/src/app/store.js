@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import meSlice from "../features/meSlice";
+import { authApi } from "../services/authApi";
 
-// redux store -- state of the app
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    me: meSlice,
+    [authApi.reducerPath]: authApi.reducer,
+  },
 });
 
 export default store;

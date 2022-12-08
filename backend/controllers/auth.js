@@ -48,7 +48,10 @@ const login = async (req, res) => {
   res
     .status(StatusCodes.OK)
     .cookie("token", token, options)
-    .json({ user: { name: user.name }, token });
+    .json({
+      succcess: true,
+      user: { name: user.name, email: user.email, avatar: user.avatar },
+    });
 };
 
 const logout = async (req, res) => {

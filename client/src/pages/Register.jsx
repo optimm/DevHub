@@ -2,6 +2,7 @@ import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useRegisterMutation } from "../services/authApi";
 import {
   MainCard,
   MainCardForm,
@@ -12,6 +13,7 @@ import {
 import registerSchema from "../validationSchemas/register";
 
 const Register = () => {
+  const [register, { error, isLoading }] = useRegisterMutation();
   const {
     touched,
     errors,
@@ -28,10 +30,11 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
-      console.log({ values });
-      resetForm();
+      await register({ data: values });
+      // resetForm();
     },
   });
+
   return (
     <>
       <MainWrapper>
@@ -92,8 +95,12 @@ const Register = () => {
                   touched.password && errors.password ? errors.password : null
                 }
               />
-              <button className="form-button" type="submit">
-                Register
+              <button
+                className="form-button"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading" : "Register"}
               </button>
             </div>
           </MainCardForm>

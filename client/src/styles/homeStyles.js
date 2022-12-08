@@ -14,9 +14,8 @@ export const LandingOverlay = styled.div`
   width: 100%;
   height: 100%;
   padding: 10% 20% 0 20%;
-  background: rgb(0, 0, 0, 0.6);
+  background: rgb(0, 0, 0, 0.7);
   color: var(--text-white);
-  font-weight: 600;
   .text-main {
     font-size: clamp(40px, 5vw, 5vw);
   }
