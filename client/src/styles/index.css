@@ -31,10 +31,9 @@ button {
 
 :root {
   --primary-color: #16003b;
-  --primary-color-glass: #16003ba4;
   --primary-color-light: #c8c3d3;
-  --glassmorph: rgb(255, 255, 255, 0.1);
-  --glassmorph-dark: rgb(255, 255, 255, 0.2);
+  --primary-color-glass: #16003ba1;
+  --glass-morph: rgb(255, 255, 255, 0.2);
 
   /* text */
   --text-1: #000;

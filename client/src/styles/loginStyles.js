@@ -31,7 +31,7 @@ export const MainCardForm = styled.form`
     gap: ${(props) => (props.login ? "30px" : "25px")};
   }
   .form-head {
-    font-size: 25px;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-3);
     margin-top: ${(props) => props.login && "10px"};
@@ -41,12 +41,12 @@ export const MainCardForm = styled.form`
     width: 150px;
     background: var(--primary-color);
     color: white;
-    font-size: 14px;
+    font-size: 0.88rem;
     font-weight: 600;
   }
 
   .MuiFormHelperText-root {
-    font-size: 11px;
+    font-size: 0.7rem;
   }
 `;
 
@@ -66,12 +66,12 @@ export const MainCardOverLay = styled.div`
   background: var(--primary-color-glass);
   padding: 50px 40px;
   .heading {
-    font-size: 35px;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--text-white);
   }
   .text {
-    font-size: 14px;
+    font-size: 0.88rem;
     font-weight: 500;
     color: var(--text-white);
   }
@@ -80,7 +80,7 @@ export const MainCardOverLay = styled.div`
     width: 150px;
     background: white;
     color: var(--primary-color);
-    font-size: 14px;
+    font-size: 0.88rem;
     font-weight: 600;
   }
 `;

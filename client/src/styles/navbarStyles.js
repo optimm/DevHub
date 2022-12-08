@@ -8,13 +8,16 @@ export const NavContainerMain = styled.div`
   height: 70px;
   width: 100%;
   background: var(--primary-color);
+  position: sticky;
+  top: 0px;
+  z-index: 10;
   opacity: 95%;
   gap: 2.5%;
 `;
 
 export const Logo = styled.div`
   font-family: "Zen Dots", cursive;
-  font-size: 23px;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-right: 20px;
   color: var(--text-white-light);
@@ -31,7 +34,7 @@ export const NavContainerRight = styled.div`
 `;
 
 export const Item = styled.div`
-  font-size: 14px;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-white-light);
   transition: all 0.2s ease;
