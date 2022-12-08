@@ -11,6 +11,7 @@ import {
   MainWrapper,
 } from "../styles/loginStyles";
 import registerSchema from "../validationSchemas/register";
+import { createNotification } from "../components/Notification";
 
 const Register = () => {
   const [
@@ -41,8 +42,8 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess) {
       resetForm();
-      console.log({ data });
-      // navigate("/login");
+      createNotification(data.msg, "success", 2000);
+      navigate("/login");
     }
   }, [isSuccess]);
 

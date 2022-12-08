@@ -27,7 +27,7 @@ const createNotification = (gotMessage, gotSeverity, timeout) => {
 };
 
 function TransitionDown(props) {
-  return <Slide {...props} direction="down" />;
+  return <Slide {...props} direction="up" />;
 }
 
 const Notification = () => {
