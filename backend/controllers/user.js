@@ -22,13 +22,41 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select(
-    "-followers -following -projects"
-  );
-  if (!user) {
-    throw new BadRequestError("User does not exist");
+  let isFollowing = false;
+  let isMe = false;
+  let user;
+  let data;
+
+  if (req?.user?.userId) {
+    const userId = req?.user?.userId.toString();
+    if (userId === id) {
+      user = await User.findById(id).select("-following -followers -projects");
+      isMe = true;
+      data = { ...user._doc };
+    } else {
+      user = await User.findById(id).select(
+        "-following -projects -saved_projects"
+      );
+      if (!user) {
+        throw new BadRequestError("User does not exist");
+      }
+      isFollowing = user.followers.some(
+        (item) => item.toString() === req?.user?.userId.toString()
+      );
+      data = { ...user._doc };
+      delete data.followers;
+    }
+  } else {
+    user = await User.findById(id).select(
+      "-following -followers -projects -saved_projects"
+    );
+    if (!user) {
+      throw new BadRequestError("User does not exist");
+    }
+    data = { ...user._doc };
   }
-  res.status(StatusCodes.OK).json({ success: true, data: user });
+
+  res.status(StatusCodes.OK).json({ success: true, data, isFollowing, isMe });
 };
 
 const getFollowers = async (req, res) => {
@@ -59,15 +87,13 @@ const getFollowing = async (req, res) => {
 
 //To check my auth and send back my data
 const checkMyAuth = async (req, res) => {
-  const me = await User.findById(req.user.userId).select(
-    "name email _id avatar"
-  );
+  const me = await User.findById(req.user.userId).select("name email avatar");
   res.status(StatusCodes.OK).json({ success: true, data: me });
 };
 
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
-  const { name, email, about, profiles } = req.body;
+  const { name, email, about, profiles, bio } = req.body;
   const me = await User.findById(userId);
   if (email) {
     const user = await User.findOne({ email });
@@ -78,6 +104,7 @@ const updateProfile = async (req, res) => {
   }
   if (name) me.name = name;
   if (about) me.about = about;
+  if (bio) me.bio = bio;
   if (profiles) me.profiles = [...profiles];
   await me.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Profile updated" });

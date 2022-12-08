@@ -6,6 +6,11 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT;
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const helemt = require("helmet");
+const xss = require("xss-clean");
+const morgan = require("morgan");
+
 //db
 const connectDb = require("./db/connect");
 
@@ -20,11 +25,14 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 //*******************************
 
-//built in middeware
+//middlewares
+app.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use(cookieParser());
+app.use(helemt());
+app.use(xss());
+app.use(morgan("dev"));
 
 //routes
 app.get("/", (req, res) => {

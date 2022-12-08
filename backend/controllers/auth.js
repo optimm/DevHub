@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const { StatusCodes, BAD_GATEWAY } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -48,7 +52,15 @@ const login = async (req, res) => {
   res
     .status(StatusCodes.OK)
     .cookie("token", token, options)
-    .json({ user: { name: user.name }, token });
+    .json({
+      succcess: true,
+      data: {
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        _id: user._id,
+      },
+    });
 };
 
 const logout = async (req, res) => {
