@@ -34,7 +34,7 @@ const Notification = () => {
   [open, setOpen] = useState(false);
   [message, setMessage] = useState("");
   [severity, setSeverity] = useState("");
-  [timeout, setTimeout] = useState(3000);
+  [timeout, setTimeout] = useState(2000);
   React.useEffect(() => {
     setTimeout(() => {
       setOpen(false);
@@ -54,7 +54,7 @@ const Notification = () => {
         autoHideDuration={timeout}
         TransitionComponent={TransitionDown}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
           {message}

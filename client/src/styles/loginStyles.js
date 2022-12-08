@@ -48,6 +48,14 @@ export const MainCardForm = styled.form`
   .MuiFormHelperText-root {
     font-size: 0.7rem;
   }
+  .error {
+    font-size: 0.88rem;
+    color: red;
+  }
+  .success {
+    font-size: 0.88rem;
+    color: green;
+  }
 `;
 
 export const MainCardImage = styled.div`

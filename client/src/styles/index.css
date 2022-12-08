@@ -34,6 +34,7 @@ button {
   --primary-color-light: #c8c3d3;
   --primary-color-glass: #16003ba1;
   --glass-morph: rgb(255, 255, 255, 0.2);
+  --back-drop: #04000cb7;
 
   /* text */
   --text-1: #000;

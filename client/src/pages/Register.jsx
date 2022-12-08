@@ -1,7 +1,7 @@
+import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../services/authApi";
 import {
   MainCard,
@@ -13,7 +13,11 @@ import {
 import registerSchema from "../validationSchemas/register";
 
 const Register = () => {
-  const [register, { error, isLoading }] = useRegisterMutation();
+  const [
+    register,
+    { data, error: requestError, isLoading, isError, isSuccess },
+  ] = useRegisterMutation();
+  const navigate = useNavigate();
   const {
     touched,
     errors,
@@ -31,9 +35,16 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit: async (values) => {
       await register({ data: values });
-      // resetForm();
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+      console.log({ data });
+      // navigate("/login");
+    }
+  }, [isSuccess]);
 
   return (
     <>
@@ -100,8 +111,11 @@ const Register = () => {
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? "Loading" : "Register"}
+                {"Register"}
               </button>
+              {isError && (
+                <div className="error">{requestError?.data?.msg}</div>
+              )}
             </div>
           </MainCardForm>
         </MainCard>

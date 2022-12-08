@@ -16,7 +16,6 @@ const Home = () => {
           <div className="button-container">
             <button className="button-main">Discover Projects</button>
           </div>
-      
         </LandingOverlay>
       </LandingContainer>
     </>

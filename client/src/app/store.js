@@ -7,6 +7,8 @@ const store = configureStore({
     me: meSlice,
     [authApi.reducerPath]: authApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authApi.middleware),
 });
 
 export default store;
