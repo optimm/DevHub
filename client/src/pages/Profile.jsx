@@ -5,54 +5,80 @@ import {
   ProfileMainWrapper,
 } from "../styles/profileStyles";
 
-import { RiUserFollowLine, RiMailOpenLine } from "react-icons/ri";
+import {
+  RiUserFollowLine,
+  RiMailOpenLine,
+  RiUserUnfollowLine,
+  RiEditFill,
+} from "react-icons/ri";
+import { useGetSingleUserQuery } from "../app/services/userApi";
 
 const Profile = () => {
   const { id } = useParams();
-  return (
-    <ProfileMainWrapper>
-      <div className="main-left">
-        <div className="user-data">
-          <div className="name-section">
-            <div className="name">Ayush Saxena</div>
-            <div className="bio">
-              Hello I am ayush saxena and i am a full stack mern developer, i
-              love to create webistes that can be used.
-            </div>
-          </div>
-          <div className="sepration" />
-          <div className="numbers-section">
-            <div className="posts">
-              <span>10</span> Posts
-            </div>
-            <div className="follower-section">
-              <div>
-                <span>112</span> Followers
-              </div>
-              <div>
-                <span>50</span> Following
-              </div>
-            </div>
-          </div>
-          <div className="sepration" />
+  const { data, isError, isSuccess, isLoading, isFetching } =
+    useGetSingleUserQuery({ id });
 
-          <div className="button-section">
-            <button>
-              {"Follow "} <RiUserFollowLine />
-            </button>
-            <button>
-              {"Contact "} <RiMailOpenLine />
-            </button>
+  return (
+    <>
+      {isLoading || isFetching ? (
+        <>Loading</>
+      ) : (
+        <ProfileMainWrapper>
+          <div className="main-left">
+            <div className="user-data">
+              <div className="name-section">
+                <div className="name">{data?.data?.name}</div>
+                <div className="bio">{data?.data?.bio}</div>
+              </div>
+              <div className="sepration" />
+              <div className="numbers-section">
+                <div className="posts">
+                  <span>{data?.data?.total_projects}</span> Projects
+                </div>
+                <div className="follower-section">
+                  <div>
+                    <span>{data?.data?.total_followers}</span> Followers
+                  </div>
+                  <div>
+                    <span>{data?.data?.total_following}</span> Following
+                  </div>
+                </div>
+              </div>
+              <div className="sepration" />
+
+              <div className="button-section">
+                {data?.isMe ? (
+                  <button>
+                    <RiEditFill /> Profile
+                  </button>
+                ) : (
+                  <>
+                    {data?.isFollowing ? (
+                      <button>
+                        Unfollow <RiUserUnfollowLine />
+                      </button>
+                    ) : (
+                      <button>
+                        Follow <RiUserFollowLine />
+                      </button>
+                    )}
+                    <button>
+                      Contact <RiMailOpenLine />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="main-right">
-        <ProfileImageWrapper url="/images/login.jpg">
-          <div className="profile-back"></div>
-          <div className="profile-image"></div>
-        </ProfileImageWrapper>
-      </div>
-    </ProfileMainWrapper>
+          <div className="main-right">
+            <ProfileImageWrapper url="/images/login.jpg">
+              <div className="profile-back"></div>
+              <div className="profile-image"></div>
+            </ProfileImageWrapper>
+          </div>
+        </ProfileMainWrapper>
+      )}
+    </>
   );
 };
 

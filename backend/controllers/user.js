@@ -23,6 +23,7 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
   const { id } = req.params;
   let isFollowing = false;
+  let isMe = false;
   let user;
   let data;
 
@@ -30,6 +31,7 @@ const getSingleUser = async (req, res) => {
     const userId = req?.user?.userId.toString();
     if (userId === id) {
       user = await User.findById(id).select("-following -followers -projects");
+      isMe = true;
       data = { ...user._doc };
     } else {
       user = await User.findById(id).select(
@@ -54,7 +56,7 @@ const getSingleUser = async (req, res) => {
     data = { ...user._doc };
   }
 
-  res.status(StatusCodes.OK).json({ success: true, data, isFollowing });
+  res.status(StatusCodes.OK).json({ success: true, data, isFollowing, isMe });
 };
 
 const getFollowers = async (req, res) => {
