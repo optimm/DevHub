@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { authenticateMe } from "../../features/meSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -16,7 +17,6 @@ export const authApi = createApi({
         };
       },
     }),
-
     login: builder.mutation({
       query: ({ body }) => {
         return {
@@ -26,7 +26,9 @@ export const authApi = createApi({
         };
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        console.log({ arg });
+        const { data } = await queryFulfilled;
+        const { data: user } = data;
+        dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
     }),
   }),

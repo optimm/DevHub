@@ -39,7 +39,7 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       resetForm();
-      createNotification(`Welcome ${data?.user?.name}`, "success", 2000);
+      createNotification(`Welcome ${data?.data?.name}`, "success", 2000);
       navigate("/");
     }
   }, [isSuccess]);

@@ -8,13 +8,14 @@ const meSlice = createSlice({
   },
   reducers: {
     authenticateMe: (state, action) => {
-      if (action?.payload?.isAuthenticated) {
+      const { isAuthenticated, data } = action.payload;
+      if (isAuthenticated) {
         state.isAuthenticated = true;
-        state.myData = { ...action.payload.data };
+        state.myData = data;
       } else {
         state.isAuthenticated = false;
         state.myData = {};
-      }
+      } 
     },
   },
 });

@@ -54,7 +54,7 @@ const login = async (req, res) => {
     .cookie("token", token, options)
     .json({
       succcess: true,
-      user: {
+      data: {
         name: user.name,
         email: user.email,
         avatar: user.avatar,

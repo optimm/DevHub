@@ -24,7 +24,7 @@ export const LandingOverlay = styled.div`
     font-family: "Zen Dots", cursive;
   }
   .text-sub {
-    margin-top: 3%;
+    margin-top: 4%;
     font-size: clamp(16px, 1.5vw, 1.5vw);
     font-weight: 500;
     width: 52%;
