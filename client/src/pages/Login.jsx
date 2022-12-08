@@ -1,7 +1,9 @@
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { createNotification } from "../components/Notification";
+import { useLoginMutation } from "../app/services/authApi";
 import {
   MainCard,
   MainCardForm,
@@ -12,6 +14,9 @@ import {
 import loginSchema from "../validationSchemas/login";
 
 const Login = () => {
+  const [login, { data, error: requestError, isLoading, isError, isSuccess }] =
+    useLoginMutation();
+  const navigate = useNavigate();
   const {
     touched,
     errors,
@@ -27,10 +32,18 @@ const Login = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
-      console.log({ values });
-      resetForm();
+      await login({ body: values });
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+      createNotification(`Welcome ${data?.user?.name}`, "success", 2000);
+      navigate("/");
+    }
+  }, [isSuccess]);
+
   return (
     <>
       <MainWrapper>
@@ -68,6 +81,10 @@ const Login = () => {
               <button className="form-button" type="submit">
                 Login
               </button>
+
+              {isError && (
+                <div className="error">{requestError?.data?.msg}</div>
+              )}
             </div>
           </MainCardForm>
           <MainCardImage url="./images/login.jpg">

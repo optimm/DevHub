@@ -26,7 +26,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 //*******************************
 
 //middlewares
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

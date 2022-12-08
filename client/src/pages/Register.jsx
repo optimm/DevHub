@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegisterMutation } from "../services/authApi";
+import { useRegisterMutation } from "../app/services/authApi";
 import {
   MainCard,
   MainCardForm,
@@ -35,7 +35,7 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
-      await register({ data: values });
+      await register({ body: values });
     },
   });
 
@@ -43,7 +43,7 @@ const Register = () => {
     if (isSuccess) {
       resetForm();
       createNotification(data.msg, "success", 2000);
-      navigate("/login");
+      // navigate("/login");
     }
   }, [isSuccess]);
 
