@@ -22,7 +22,7 @@ const getSingleProject = async (req, res) => {
   const { id } = req.params;
   const project = await Project.findById(id).populate(
     "owner",
-    "name email avatar"
+    "name username email avatar"
   );
   if (!project) {
     throw new NotFoundError("Project not found");

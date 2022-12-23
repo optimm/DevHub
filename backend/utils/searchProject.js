@@ -17,7 +17,7 @@ const searchProject = async (req, res, searchQuery) => {
 
   let mongoQuery = Project.find(queryObject).populate(
     "owner",
-    "name email avatar"
+    "name username email avatar"
   );
 
   let data = await paginate(req, res, mongoQuery);
@@ -28,7 +28,7 @@ const searchProject = async (req, res, searchQuery) => {
       (item) =>
         item.title.includes(q) ||
         item.owner.name.includes(q) ||
-        item.owner.email.includes(q)
+        item.owner.username.includes(q)
     );
   }
   const total = data.length;

@@ -93,7 +93,7 @@ const checkMyAuth = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
-  const { name, email, about, profiles, bio } = req.body;
+  const { name, username, email, about, profiles, bio } = req.body;
   const me = await User.findById(userId);
   if (email) {
     const user = await User.findOne({ email });
@@ -101,6 +101,13 @@ const updateProfile = async (req, res) => {
       throw new BadRequestError("Email already in use");
     }
     me.email = email;
+  }
+  if (username) {
+    const user = await User.findOne({ username });
+    if (user) {
+      throw new BadRequestError("Username already in use");
+    }
+    me.username = username;
   }
   if (name) me.name = name;
   if (about) me.about = about;

@@ -18,7 +18,6 @@ export const userApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data.data);
           dispatch(authenticateMe({ isAuthenticated: true, data: data?.data }));
         } catch (error) {
           dispatch(authenticateMe({ isAuthenticated: false, myData: {} }));

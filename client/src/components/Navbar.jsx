@@ -11,24 +11,26 @@ import {
 } from "../styles/navbarStyles";
 
 const Navbar = () => {
-  const { isAuthenticated } = useSelector((state) => state.me);
+  const { isAuthenticated, myData } = useSelector((state) => state.me);
   return (
     <NavContainerMain>
       <Logo>
         <Link to="/">DevHub</Link>
       </Logo>
       <Item>
-        <Link to="/">Projects</Link>
+        <Link to="/projects">Projects</Link>
       </Item>
       <Item>
-        <Link to="/">Developers</Link>
+        <Link to="/users">Developers</Link>
       </Item>
       <Item>
         <Link to="/about">About</Link>
       </Item>
       <NavContainerRight>
         {isAuthenticated ? (
-          <Avatar sx={{ width: 35, height: 35 }} />
+          <Link to={`/users/${myData._id}`}>
+            <Avatar sx={{ width: 35, height: 35 }} />
+          </Link>
         ) : (
           <>
             <Item>

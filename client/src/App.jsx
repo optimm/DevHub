@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
+import AllProjects from "./pages/AllProjects";
+import AllUsers from "./pages/AllUsers";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -38,11 +40,30 @@ const App = () => {
               />
               <Route path={"/register"} element={<Register />} />
               <Route
-                path="/user/:id"
+                path="/users"
+                element={
+                  <>
+                    <Navbar />
+                    <AllUsers />
+                  </>
+                }
+              />
+              <Route
+                path="/users/:id"
                 element={
                   <>
                     <Navbar />
                     <Profile />
+                  </>
+                }
+              />
+
+              <Route
+                path="/projects"
+                element={
+                  <>
+                    <Navbar />
+                    <AllProjects />
                   </>
                 }
               />
