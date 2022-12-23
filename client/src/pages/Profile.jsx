@@ -28,6 +28,7 @@ const Profile = () => {
             <div className="user-data">
               <div className="name-section">
                 <div className="name">{data?.data?.name}</div>
+                <div className="username">{data?.data?.username}</div>
                 <div className="bio">{data?.data?.bio}</div>
               </div>
               <div className="sepration" />

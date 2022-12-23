@@ -4,7 +4,6 @@ import { backgroundGeneral } from "./globalStyle";
 export const UserCardWrapper = styled.div`
   height: 280px;
   width: 100%;
-  // background: var(--primary-color-light);
   .image-section {
     width: 100%;
     height: 200px;
@@ -16,7 +15,12 @@ export const UserCardWrapper = styled.div`
     height: 100%;
     padding: 10px 0px;
   }
+  .name {
+    margin-top: 5px;
+    font-size: 16px;
+  }
   .user-name {
+    font-weight: 600;
     font-size: 16px;
   }
   .user-button {
