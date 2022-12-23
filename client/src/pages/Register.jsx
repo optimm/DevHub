@@ -30,6 +30,7 @@ const Register = () => {
   } = useFormik({
     initialValues: {
       name: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -46,6 +47,16 @@ const Register = () => {
       // navigate("/login");
     }
   }, [isSuccess]);
+
+  const errorState =
+    touched.name &&
+    errors.name &&
+    touched.username &&
+    errors.username &&
+    touched.email &&
+    errors.email &&
+    touched.password &&
+    errors.password;
 
   return (
     <>
@@ -65,7 +76,7 @@ const Register = () => {
               </Link>
             </MainCardOverLay>
           </MainCardImage>
-          <MainCardForm onSubmit={handleSubmit}>
+          <MainCardForm onSubmit={handleSubmit} errorState={errorState}>
             <div className="inner">
               <div className="form-head">Register</div>
               <TextField
@@ -79,6 +90,20 @@ const Register = () => {
                 onBlur={handleBlur}
                 error={touched.name && errors.name ? true : false}
                 helperText={touched.name && errors.name ? errors.name : null}
+              />
+              <TextField
+                name="username"
+                label="Username"
+                variant="standard"
+                color="secondary"
+                className="form-input"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.username && errors.username ? true : false}
+                helperText={
+                  touched.username && errors.username ? errors.username : null
+                }
               />
               <TextField
                 name="email"

@@ -11,7 +11,9 @@ const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
   const { name, email, password, username } = req.body;
   if (!email || !name || !password || !username) {
-    throw new BadRequestError("Please provide name,email and password");
+    throw new BadRequestError(
+      "Please provide name,username,email and password"
+    );
   }
   let user = await User.findOne({ email });
   if (user) {

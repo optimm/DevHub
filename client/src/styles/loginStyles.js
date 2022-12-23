@@ -28,13 +28,15 @@ export const MainCardForm = styled.form`
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${(props) => (props.login ? "30px" : "25px")};
+    gap: ${(props) =>
+      props.login ? "30px" : props.errorState ? "6px" : "10px"};
   }
   .form-head {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-3);
     margin-top: ${(props) => props.login && "10px"};
+    margin-bottom: ${(props) => (props.errorState ? "0px" : "5px")};
   }
   .form-button {
     height: 35px;
@@ -43,6 +45,7 @@ export const MainCardForm = styled.form`
     color: white;
     font-size: 0.88rem;
     font-weight: 600;
+    margin-top: ${(props) => (props.login ? "0px" : "15px")};
   }
 
   .MuiFormHelperText-root {
