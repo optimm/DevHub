@@ -19,12 +19,12 @@ export const ProfileMainWrapper = styled.div`
     justify-content: space-between;
   }
   .name {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
     font-weight: 700;
   }
   .username {
     margin-top: 10px;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 600;
   }
   .bio {

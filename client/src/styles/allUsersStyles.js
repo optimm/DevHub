@@ -5,7 +5,6 @@ export const SearchBarWrapper = styled.div`
   width: 40%;
   margin: auto;
   height: 50px;
-  background: black;
   margin-top: 2%;
 `;
 export const AllUsersCardWrapper = styled.div`

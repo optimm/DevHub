@@ -1,11 +1,23 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexcv } from "./globalStyle";
+import { backgroundGeneral, flexch, flexcv } from "./globalStyle";
 
 export const MainWrapper = styled.div`
   ${flexcv}
   height: 100vh;
   width: 100vw;
   background: var(--primary-color-light);
+`;
+
+export const MainHomeButton = styled.div`
+  ${flexch}
+  height:45px;
+  width: 45px;
+  background: var(--primary-color);
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  color: white;
+  border-radius: 50%;
 `;
 
 export const MainCard = styled.div`

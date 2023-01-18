@@ -31,11 +31,11 @@ const UserSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    max: [200, "About cannot be more than 500 characters"],
+    max: [500, "About cannot be more than 500 characters"],
   },
   bio: {
     type: String,
-    max: [200, "Bio cannot be more than 150 characters"],
+    max: [200, "Bio cannot be more than 200 characters"],
   },
   profiles: [
     {

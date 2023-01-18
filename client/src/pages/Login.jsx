@@ -9,9 +9,11 @@ import {
   MainCardForm,
   MainCardImage,
   MainCardOverLay,
+  MainHomeButton,
   MainWrapper,
 } from "../styles/loginStyles";
 import loginSchema from "../validationSchemas/login";
+import { AiFillHome } from "react-icons/ai";
 
 const Login = () => {
   const [login, { data, error: requestError, isLoading, isError, isSuccess }] =
@@ -47,6 +49,11 @@ const Login = () => {
   return (
     <>
       <MainWrapper>
+        <MainHomeButton>
+          <Link to="/">
+            <AiFillHome />
+          </Link>
+        </MainHomeButton>
         <MainCard>
           <MainCardForm onSubmit={handleSubmit} login>
             <div className="inner">

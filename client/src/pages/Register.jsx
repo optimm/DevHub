@@ -3,11 +3,13 @@ import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../app/services/authApi";
+import { AiFillHome } from "react-icons/ai";
 import {
   MainCard,
   MainCardForm,
   MainCardImage,
   MainCardOverLay,
+  MainHomeButton,
   MainWrapper,
 } from "../styles/loginStyles";
 import registerSchema from "../validationSchemas/register";
@@ -44,23 +46,20 @@ const Register = () => {
     if (isSuccess) {
       resetForm();
       createNotification(data.msg, "success", 2000);
-      // navigate("/login");
+      navigate("/login");
     }
   }, [isSuccess]);
 
-  const errorState =
-    touched.name &&
-    errors.name &&
-    touched.username &&
-    errors.username &&
-    touched.email &&
-    errors.email &&
-    touched.password &&
-    errors.password;
+  console.log(requestError);
 
   return (
     <>
       <MainWrapper>
+        <MainHomeButton>
+          <Link to="/">
+            <AiFillHome />
+          </Link>
+        </MainHomeButton>
         <MainCard>
           <MainCardImage url="/images/register.jpg">
             <MainCardOverLay>
@@ -76,7 +75,7 @@ const Register = () => {
               </Link>
             </MainCardOverLay>
           </MainCardImage>
-          <MainCardForm onSubmit={handleSubmit} errorState={errorState}>
+          <MainCardForm onSubmit={handleSubmit}>
             <div className="inner">
               <div className="form-head">Register</div>
               <TextField

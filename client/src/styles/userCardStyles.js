@@ -13,15 +13,15 @@ export const UserCardWrapper = styled.div`
   .data-section {
     width: 100%;
     height: 100%;
-    padding: 10px 0px;
+    padding: 10px 5px;
   }
   .name {
     margin-top: 5px;
-    font-size: 16px;
+    font-size: 14px;
   }
   .user-name {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
   }
   .user-button {
     margin-top: 5px;
