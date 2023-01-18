@@ -10,6 +10,7 @@ import {
   RiMailOpenLine,
   RiUserUnfollowLine,
   RiEditFill,
+  RiLogoutBoxRLine,
 } from "react-icons/ri";
 import { useGetSingleUserQuery } from "../app/services/userApi";
 
@@ -49,9 +50,14 @@ const Profile = () => {
 
               <div className="button-section">
                 {data?.isMe ? (
-                  <button>
-                    <RiEditFill /> Profile
-                  </button>
+                  <>
+                    <button>
+                      <RiEditFill /> Profile
+                    </button>
+                    <button>
+                      <RiLogoutBoxRLine /> Logout
+                    </button>
+                  </>
                 ) : (
                   <>
                     {data?.isFollowing ? (

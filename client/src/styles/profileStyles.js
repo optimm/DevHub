@@ -28,9 +28,8 @@ export const ProfileMainWrapper = styled.div`
     font-weight: 600;
   }
   .bio {
-    margin-top: 5px;
-    width: 75%;
-    font-size: 1.2rem;
+    margin-top: 10px;
+    font-size: 1.1rem;
     color: var(--text-2);
   }
   span {

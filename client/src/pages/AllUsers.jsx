@@ -16,7 +16,7 @@ const AllUsers = () => {
     <>
       <SearchBarWrapper>
         <Paper
-          elevation={2}
+          elevation={1}
           component="form"
           sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}
           className="search-bar-paper"
