@@ -64,7 +64,7 @@ const Register = () => {
         <MainCard>
           <MainCardImage url="/images/register.jpg">
             <MainCardOverLay>
-              <div className="heading">Join DevHub Today.</div>
+              <div className="heading">Dive into DevHub Today.</div>
               <div className="text">
                 Devhub is a free platform to display your projects. Create a
                 free account today to interact with developers from across the

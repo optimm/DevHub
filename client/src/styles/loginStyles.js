@@ -9,8 +9,8 @@ export const MainWrapper = styled.div`
 `;
 
 export const MainCard = styled.div`
-  height: 450px;
-  width: 800px;
+  height: 480px;
+  width: 850px;
   background: white;
   margin: auto;
   display: flex;
@@ -28,15 +28,12 @@ export const MainCardForm = styled.form`
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${(props) =>
-      props.login ? "30px" : props.errorState ? "6px" : "10px"};
+    gap: ${(props) => (props.login ? "20px" : "10px")};
   }
   .form-head {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-3);
-    margin-top: ${(props) => props.login && "10px"};
-    margin-bottom: ${(props) => (props.errorState ? "0px" : "5px")};
   }
   .form-button {
     height: 35px;
@@ -45,7 +42,8 @@ export const MainCardForm = styled.form`
     color: white;
     font-size: 0.88rem;
     font-weight: 600;
-    margin-top: ${(props) => (props.login ? "0px" : "15px")};
+    margin-top: 15px;
+    margin-top: ${(props) => (props.login ? "15px" : "20px")};
   }
 
   .MuiFormHelperText-root {
@@ -71,13 +69,13 @@ export const MainCardImage = styled.div`
 export const MainCardOverLay = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 40px;
   height: 100%;
   width: 100%;
   background: var(--primary-color-glass);
   padding: 50px 40px;
   .heading {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--text-white);
   }
