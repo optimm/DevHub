@@ -1,17 +1,12 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "./baseApi";
 import { authenticateMe } from "../../features/meSlice";
 
-export const userApi = createApi({
-  reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BACKEND_URL}/user/`,
-    credentials: "include",
-  }),
+export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     checkMyAuth: builder.query({
       query: () => {
         return {
-          url: "me",
+          url: "user/me",
           method: "GET",
         };
       },
@@ -27,18 +22,20 @@ export const userApi = createApi({
     getAllUser: builder.query({
       query: () => {
         return {
-          url: ``,
+          url: `user`,
           method: "GET",
         };
       },
+      providesTags: ["AllUsers"],
     }),
     getSingleUser: builder.query({
       query: ({ id }) => {
         return {
-          url: `${id}`,
+          url: `user/${id}`,
           method: "GET",
         };
       },
+      providesTags: ["SingleUser"],
     }),
   }),
 });
