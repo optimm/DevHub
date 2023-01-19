@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  MoreDataWrapper,
   ProfileImageWrapper,
   ProfileMainWrapper,
 } from "../styles/profileStyles";
-
 import {
   RiUserFollowLine,
   RiMailOpenLine,
@@ -12,9 +12,34 @@ import {
   RiEditFill,
   RiLogoutBoxRLine,
 } from "react-icons/ri";
+import {
+  AiFillInstagram,
+  AiFillGithub,
+  AiFillLinkedin,
+  AiFillTwitterCircle,
+  AiFillFacebook,
+} from "react-icons/ai";
 import { useGetSingleUserQuery } from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
+
+const ProfileIcon = ({ platform }) => {
+  if (platform === "github") {
+    return <AiFillGithub />;
+  }
+  if (platform === "instagram") {
+    return <AiFillInstagram />;
+  }
+  if (platform === "linkedin") {
+    return <AiFillLinkedin />;
+  }
+  if (platform === "facebook") {
+    return <AiFillFacebook />;
+  }
+  if (platform === "twitter") {
+    return <AiFillTwitterCircle />;
+  }
+};
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -45,66 +70,88 @@ const Profile = () => {
       {isLoading || isFetching ? (
         <>Loading</>
       ) : (
-        <ProfileMainWrapper>
-          <div className="main-left">
-            <div className="user-data">
-              <div className="name-section">
-                <div className="name">{data?.data?.name}</div>
-                <div className="username">{data?.data?.username}</div>
-                <div className="bio">{data?.data?.bio}</div>
-              </div>
-              <div className="sepration" />
-              <div className="numbers-section">
-                <div className="posts">
-                  <span>{data?.data?.total_projects}</span> Projects
+        <>
+          <ProfileMainWrapper>
+            <div className="main-left">
+              <div className="user-data">
+                <div className="name-section">
+                  <div className="name">{data?.data?.name}</div>
+                  <div className="username">{data?.data?.username}</div>
+                  <div className="bio">{data?.data?.bio}</div>
                 </div>
-                <div className="follower-section">
-                  <div>
-                    <span>{data?.data?.total_followers}</span> Followers
+                <div className="sepration" />
+                <div className="numbers-section">
+                  <div className="posts">
+                    <span>{data?.data?.total_projects}</span> Projects
                   </div>
-                  <div>
-                    <span>{data?.data?.total_following}</span> Following
+                  <div className="follower-section">
+                    <div>
+                      <span>{data?.data?.total_followers}</span> Followers
+                    </div>
+                    <div>
+                      <span>{data?.data?.total_following}</span> Following
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="sepration" />
+                <div className="sepration" />
 
-              <div className="button-section">
-                {data?.isMe ? (
-                  <>
-                    <button>
-                      <RiEditFill /> Profile
-                    </button>
-                    <button onClick={handleLogout}>
-                      <RiLogoutBoxRLine /> Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {data?.isFollowing ? (
+                <div className="button-section">
+                  {data?.isMe ? (
+                    <>
                       <button>
-                        Unfollow <RiUserUnfollowLine />
+                        <RiEditFill /> Profile
                       </button>
-                    ) : (
+                      <button onClick={handleLogout}>
+                        <RiLogoutBoxRLine /> Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {data?.isFollowing ? (
+                        <button>
+                          Unfollow <RiUserUnfollowLine />
+                        </button>
+                      ) : (
+                        <button>
+                          Follow <RiUserFollowLine />
+                        </button>
+                      )}
                       <button>
-                        Follow <RiUserFollowLine />
+                        Contact <RiMailOpenLine />
                       </button>
-                    )}
-                    <button>
-                      Contact <RiMailOpenLine />
-                    </button>
-                  </>
-                )}
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="main-right">
-            <ProfileImageWrapper url="/images/login.jpg">
-              <div className="profile-back"></div>
-              <div className="profile-image"></div>
-            </ProfileImageWrapper>
-          </div>
-        </ProfileMainWrapper>
+            <div className="main-right">
+              <ProfileImageWrapper url="/images/login.jpg">
+                <div className="profile-back"></div>
+                <div className="profile-image"></div>
+              </ProfileImageWrapper>
+            </div>
+          </ProfileMainWrapper>
+          <MoreDataWrapper>
+            <div className="sepration"></div>
+            <div className="about-head">About</div>
+            <div className="about">{data?.data?.about}</div>
+            <div className="profiles-section">
+              {data?.data?.profiles &&
+                data?.data?.profiles?.length > 0 &&
+                data?.data?.profiles?.map((item, index) => {
+                  console.log(item);
+                  return (
+                    <div
+                      className="profile"
+                      onClick={() => window.open(item?.link)}
+                    >
+                      <ProfileIcon platform={item?.platform} />
+                    </div>
+                  );
+                })}
+            </div>
+          </MoreDataWrapper>
+        </>
       )}
     </>
   );

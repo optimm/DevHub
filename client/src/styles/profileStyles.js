@@ -88,3 +88,36 @@ export const ProfileImageWrapper = styled.div`
     left: 10%;
   }
 `;
+
+export const MoreDataWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0% 6%;
+  .about-head {
+    margin-top: 40px;
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+  .about {
+    width: 85%;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+  .profiles-section {
+    display: flex;
+    gap: 25px;
+    margin-top: 40px;
+  }
+  .profile {
+    ${flexch}
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    background: var(--primary-color-light);
+    color: var(--primary-color);
+    cursor: pointer;
+  }
+`;
