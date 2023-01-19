@@ -22,6 +22,7 @@ import {
 import { useGetSingleUserQuery } from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
+import { linkProcessor } from "../util/linkProcessor";
 
 const ProfileIcon = ({ platform }) => {
   if (platform === "github") {
@@ -138,17 +139,14 @@ const Profile = () => {
             <div className="profiles-section">
               {data?.data?.profiles &&
                 data?.data?.profiles?.length > 0 &&
-                data?.data?.profiles?.map((item, index) => {
-                  console.log(item);
-                  return (
-                    <div
-                      className="profile"
-                      onClick={() => window.open(item?.link)}
-                    >
-                      <ProfileIcon platform={item?.platform} />
-                    </div>
-                  );
-                })}
+                data?.data?.profiles?.map((item, index) => (
+                  <div
+                    className="profile"
+                    onClick={() => window.open(linkProcessor(item?.link))}
+                  >
+                    <ProfileIcon platform={item?.platform} />
+                  </div>
+                ))}
             </div>
           </MoreDataWrapper>
         </>
