@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ProfileImageWrapper,
   ProfileMainWrapper,
@@ -13,11 +13,32 @@ import {
   RiLogoutBoxRLine,
 } from "react-icons/ri";
 import { useGetSingleUserQuery } from "../app/services/userApi";
+import { useLogoutQuery } from "../app/services/authApi";
+import { createNotification } from "../components/Notification";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
-  const { data, isError, isSuccess, isLoading, isFetching } =
-    useGetSingleUserQuery({ id });
+  const { data, isLoading, isFetching } = useGetSingleUserQuery({ id });
+
+  const [skip, setSkip] = useState(true);
+  const { isError: isLogoutError, isSuccess: isLogoutSuccess } = useLogoutQuery(
+    "",
+    { skip }
+  );
+
+  useEffect(() => {
+    if (isLogoutError) {
+      createNotification(`Something went wrong`, "error", 2000);
+    } else if (isLogoutSuccess) {
+      createNotification(`Logged out successfully`, "success", 2000);
+      navigate("/");
+    }
+  }, [isLogoutError, isLogoutSuccess]);
+
+  const handleLogout = () => {
+    setSkip(false);
+  };
 
   return (
     <>
@@ -54,7 +75,7 @@ const Profile = () => {
                     <button>
                       <RiEditFill /> Profile
                     </button>
-                    <button>
+                    <button onClick={handleLogout}>
                       <RiLogoutBoxRLine /> Logout
                     </button>
                   </>

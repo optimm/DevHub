@@ -31,7 +31,16 @@ export const authApi = createApi({
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
     }),
+    logout: builder.query({
+      query: (name) => {
+        return {
+          url: `logout`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation, useLogoutQuery } =
+  authApi;
