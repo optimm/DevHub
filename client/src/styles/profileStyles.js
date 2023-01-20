@@ -37,12 +37,16 @@ export const ProfileMainWrapper = styled.div`
   }
   .posts {
     font-size: 1.1rem;
+    cursor: pointer;
   }
   .follower-section {
     font-size: 1.1rem;
     margin-top: 15px;
     display: flex;
     gap: 20px;
+  }
+  .follower-section-sub {
+    cursor: pointer;
   }
   .button-section {
     display: flex;

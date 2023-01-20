@@ -28,6 +28,7 @@ import { createNotification } from "../components/Notification";
 import { linkProcessor } from "../util/linkProcessor";
 import { useDispatch, useSelector } from "react-redux";
 import { baseApi } from "../app/services/baseApi";
+import FollowerModal from "../components/FollowerModal";
 
 const ProfileIcon = ({ platform }) => {
   if (platform === "github") {
@@ -54,6 +55,7 @@ const Profile = () => {
 
   const { isAuthenticated } = useSelector((state) => state.me);
   const [skip, setSkip] = useState(true);
+  const [fmodal, setFmodal] = useState(false);
   //queries
   const { data, isLoading, isFetching } = useGetSingleUserQuery({
     id,
@@ -121,10 +123,13 @@ const Profile = () => {
                     <span>{data?.data?.total_projects}</span> Projects
                   </div>
                   <div className="follower-section">
-                    <div>
+                    <div
+                      className="follower-section-sub"
+                      onClick={() => setFmodal(true)}
+                    >
                       <span>{data?.data?.total_followers}</span> Followers
                     </div>
-                    <div>
+                    <div className="follower-section-sub">
                       <span>{data?.data?.total_following}</span> Following
                     </div>
                   </div>
@@ -202,6 +207,8 @@ const Profile = () => {
                 ))}
             </div>
           </MoreDataWrapper>
+          {/* modals */}
+          <FollowerModal show={fmodal} setShow={setFmodal} />
         </>
       )}
     </>
