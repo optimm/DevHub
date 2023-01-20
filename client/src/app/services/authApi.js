@@ -38,7 +38,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
         dispatch(
-          baseApi.util.invalidateTags(["AllUsers", "SingleUser", "FollowUser"])
+          baseApi.util.invalidateTags([
+            "AllUsers",
+            "SingleUser",
+            "FollowUser",
+            "Followers",
+          ])
         );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       },

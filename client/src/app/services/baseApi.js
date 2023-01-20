@@ -6,6 +6,6 @@ export const baseApi = createApi({
     baseUrl: `${process.env.REACT_APP_BACKEND_URL}/`,
     credentials: "include",
   }),
-  tagTypes: ["SingleUser","AllUsers"],
+  tagTypes: ["SingleUser", "AllUsers", "Followers"],
   endpoints: () => ({}),
 });

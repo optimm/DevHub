@@ -37,6 +37,7 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["SingleUser"],
     }),
+    //followers following
     followUser: builder.mutation({
       query: ({ id }) => {
         return {
@@ -44,7 +45,16 @@ export const userApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["SingleUser"],
+      invalidatesTags: ["SingleUser", "Followers"],
+    }),
+    getFollowersFollowing: builder.query({
+      query: ({ id, category }) => {
+        return {
+          url: `user/${id}/${category}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Followers"],
     }),
   }),
 });
@@ -54,4 +64,5 @@ export const {
   useGetAllUserQuery,
   useGetSingleUserQuery,
   useFollowUserMutation,
+  useGetFollowersFollowingQuery,
 } = userApi;

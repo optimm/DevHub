@@ -21,6 +21,7 @@ export const ProfileMainWrapper = styled.div`
   .name {
     font-size: 2.4rem;
     font-weight: 700;
+    text-transform: capitalize;
   }
   .username {
     margin-top: 10px;
