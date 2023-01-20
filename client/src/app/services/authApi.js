@@ -11,7 +11,7 @@ export const authApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllUsers", "SingleUser"],
+      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser"],
     }),
     login: builder.mutation({
       query: ({ body }) => {
@@ -26,10 +26,10 @@ export const authApi = baseApi.injectEndpoints({
         const { data: user } = data;
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
-      invalidatesTags: ["SingleUser", "AllUsers"],
+      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser"],
     }),
     logout: builder.query({
-      query: (name) => {
+      query: ({ id }) => {
         return {
           url: `auth/logout`,
           method: "GET",
@@ -37,7 +37,9 @@ export const authApi = baseApi.injectEndpoints({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        dispatch(baseApi.util.invalidateTags(["AllUsers", "SingleUser"]));
+        dispatch(
+          baseApi.util.invalidateTags(["AllUsers", "SingleUser", "FollowUser"])
+        );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       },
     }),

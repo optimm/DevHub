@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   MoreDataWrapper,
@@ -19,10 +19,15 @@ import {
   AiFillTwitterCircle,
   AiFillFacebook,
 } from "react-icons/ai";
-import { useGetSingleUserQuery } from "../app/services/userApi";
+import {
+  useFollowUserMutation,
+  useGetSingleUserQuery,
+} from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
 import { linkProcessor } from "../util/linkProcessor";
+import { useDispatch, useSelector } from "react-redux";
+import { baseApi } from "../app/services/baseApi";
 
 const ProfileIcon = ({ platform }) => {
   if (platform === "github") {
@@ -44,14 +49,28 @@ const ProfileIcon = ({ platform }) => {
 
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const { data, isLoading, isFetching } = useGetSingleUserQuery({ id });
 
+  const { isAuthenticated } = useSelector((state) => state.me);
   const [skip, setSkip] = useState(true);
+  //queries
+  const { data, isLoading, isFetching } = useGetSingleUserQuery({
+    id,
+  });
   const { isError: isLogoutError, isSuccess: isLogoutSuccess } = useLogoutQuery(
-    "",
+    { id },
     { skip }
   );
+  const [
+    followFunction,
+    {
+      data: followData,
+      isLoading: isFollowLoading,
+      isError: isFollowError,
+      isSuccess: isFollowSuccess,
+    },
+  ] = useFollowUserMutation();
 
   useEffect(() => {
     if (isLogoutError) {
@@ -62,8 +81,24 @@ const Profile = () => {
     }
   }, [isLogoutError, isLogoutSuccess]);
 
+  useEffect(() => {
+    if (isFollowError) {
+      createNotification(`Something went wrong`, "error", 2000);
+    } else if (isFollowSuccess) {
+      createNotification(followData?.msg, "success", 2000);
+    }
+  }, [isFollowError, isFollowSuccess]);
+
   const handleLogout = () => {
     setSkip(false);
+  };
+  const handleFollow = async () => {
+    if (!isAuthenticated) {
+      createNotification(`Please Login First`, "error", 2000);
+      navigate("/login");
+    } else {
+      await followFunction({ id });
+    }
   };
 
   return (
@@ -109,12 +144,30 @@ const Profile = () => {
                   ) : (
                     <>
                       {data?.isFollowing ? (
-                        <button>
-                          Unfollow <RiUserUnfollowLine />
+                        <button
+                          disabled={isFollowLoading}
+                          onClick={handleFollow}
+                        >
+                          {isFollowLoading ? (
+                            "Loading.."
+                          ) : (
+                            <>
+                              Unfollow <RiUserUnfollowLine />
+                            </>
+                          )}
                         </button>
                       ) : (
-                        <button>
-                          Follow <RiUserFollowLine />
+                        <button
+                          disabled={isFollowLoading}
+                          onClick={handleFollow}
+                        >
+                          {isFollowLoading ? (
+                            "Loading.."
+                          ) : (
+                            <>
+                              Follow <RiUserFollowLine />
+                            </>
+                          )}
                         </button>
                       )}
                       <button>

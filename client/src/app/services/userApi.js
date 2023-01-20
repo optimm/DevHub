@@ -37,6 +37,15 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["SingleUser"],
     }),
+    followUser: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `user/${id}/follow`,
+          method: "GET",
+        };
+      },
+      invalidatesTags: ["SingleUser"],
+    }),
   }),
 });
 
@@ -44,4 +53,5 @@ export const {
   useCheckMyAuthQuery,
   useGetAllUserQuery,
   useGetSingleUserQuery,
+  useFollowUserMutation,
 } = userApi;
