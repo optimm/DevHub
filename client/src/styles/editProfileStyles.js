@@ -41,6 +41,42 @@ export const EditInner = styled.div`
     flex-direction: column;
     gap: 25px;
   }
+  .profiles-section {
+    margin-top: 20px;
+  }
+  .profile-head {
+    font-size: 1.2rem;
+    color: var(--text-3);
+    font-weight: 700;
+  }
+  .profiles {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .profile-indv {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+  }
+  .profile-icon {
+    width: 25px;
+    font-size: 1.3rem;
+  }
+  .profile-link {
+    width: calc(100% - 80px);
+    font-size: 0.88rem;
+  }
+  .delete-button {
+    width: 20px;
+    cursor: pointer;
+    color: red;
+    font-size: 1.2rem;
+    ${flexch}
+  }
 `;
 
 export const EditForm = styled.form``;

@@ -18,6 +18,10 @@ import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";
 import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
+import ProfileIcon from "./ProfileIcon";
+import { AiFillDelete } from "react-icons/ai";
+import { lineProcessor } from "../util/lineProcessor";
+import { linkProcessor } from "../util/linkProcessor";
 
 const EditProfileModal = ({ show, setShow }) => {
   const navigate = useNavigate();
@@ -39,6 +43,9 @@ const EditProfileModal = ({ show, setShow }) => {
   ] = useEditProfileMutation();
 
   const [errorText, setErrorText] = useState("");
+  const [profiles, setProfiles] = useState([]);
+
+  const handleProfileChange = () => {};
 
   const {
     touched,
@@ -77,6 +84,7 @@ const EditProfileModal = ({ show, setShow }) => {
       temp?.email && setFieldValue("email", temp?.email);
       temp?.bio && setFieldValue("bio", temp?.bio);
       temp?.about && setFieldValue("about", temp?.about);
+      temp?.profiles && setProfiles([...temp.profiles]);
     }
   }, [data]);
 
@@ -187,6 +195,29 @@ const EditProfileModal = ({ show, setShow }) => {
                         touched.about && errors.about ? errors.about : null
                       }
                     />
+                  </div>
+                  <div className="profiles-section">
+                    <div className="profile-head">Profiles</div>
+                    <div className="profiles">
+                      {profiles?.map((item, index) => (
+                        <div className="profile-indv" key={index}>
+                          <div className="profile-icon">
+                            <ProfileIcon platform={item?.platform} />
+                          </div>
+                          <a
+                            className="profile-link linkreq"
+                            target={"_blank"}
+                            href={linkProcessor(item?.link)}
+                          >
+                            {lineProcessor(item?.link, 40)}
+                          </a>
+                          <div className="delete-button">
+                            <AiFillDelete />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* <button>Add Profile</button> */}
                   </div>
                 </EditInner>
               </>

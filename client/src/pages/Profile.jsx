@@ -13,13 +13,7 @@ import {
   RiEditFill,
   RiLogoutBoxRLine,
 } from "react-icons/ri";
-import {
-  AiFillInstagram,
-  AiFillGithub,
-  AiFillLinkedin,
-  AiFillTwitterCircle,
-  AiFillFacebook,
-} from "react-icons/ai";
+
 import {
   useFollowUserMutation,
   useGetSingleUserQuery,
@@ -31,24 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { baseApi } from "../app/services/baseApi";
 import FModal from "../components/FModal";
 import EditProfileModal from "../components/EditProfileModal";
-
-const ProfileIcon = ({ platform }) => {
-  if (platform === "github") {
-    return <AiFillGithub />;
-  }
-  if (platform === "instagram") {
-    return <AiFillInstagram />;
-  }
-  if (platform === "linkedin") {
-    return <AiFillLinkedin />;
-  }
-  if (platform === "facebook") {
-    return <AiFillFacebook />;
-  }
-  if (platform === "twitter") {
-    return <AiFillTwitterCircle />;
-  }
-};
+import ProfileIcon from "../components/ProfileIcon";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -226,7 +203,7 @@ const Profile = () => {
                   <div
                     className="profile"
                     key={index}
-                    onClick={() => window.open(linkProcessor(item?.link))}
+                    onClick={() => window.open(linkProcessor(item?.link, 20))}
                   >
                     <ProfileIcon platform={item?.platform} />
                   </div>
