@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   LoadingWrapper,
@@ -20,16 +20,14 @@ import {
 } from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
-import { linkProcessor } from "../util/linkProcessor";
 import { useDispatch, useSelector } from "react-redux";
-import { baseApi } from "../app/services/baseApi";
 import FModal from "../components/FModal";
 import EditProfileModal from "../components/EditProfileModal";
 import ProfileIcon from "../components/ProfileIcon";
+import { linkProcessor } from "../util/utilFunctions";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { id } = useParams();
 
   const { isAuthenticated } = useSelector((state) => state.me);

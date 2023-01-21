@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/modal.css";
 import { Modal } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   useEditProfileMutation,
@@ -18,13 +18,11 @@ import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";
 import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
-import ProfileIcon from "./ProfileIcon";
-import { AiFillDelete } from "react-icons/ai";
-import { lineProcessor } from "../util/lineProcessor";
-import { linkProcessor } from "../util/linkProcessor";
+import { arraysEqual, capitalizeString } from "../util/utilFunctions";
+
+import { platformOptions } from "../util/platformOptions";
 
 const EditProfileModal = ({ show, setShow }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const handleClose = () => setShow(false);
@@ -45,8 +43,6 @@ const EditProfileModal = ({ show, setShow }) => {
   const [errorText, setErrorText] = useState("");
   const [profiles, setProfiles] = useState([]);
 
-  const handleProfileChange = () => {};
-
   const {
     touched,
     errors,
@@ -64,7 +60,8 @@ const EditProfileModal = ({ show, setShow }) => {
         me?.username === values?.username &&
         me?.email === values?.email &&
         me?.bio === values?.bio &&
-        me?.about === values?.about
+        me?.about === values?.about &&
+        arraysEqual(me?.profiles, values?.profiles)
       ) {
         createNotification("Nothing to update", "error", 2000);
       } else {
@@ -75,16 +72,16 @@ const EditProfileModal = ({ show, setShow }) => {
       }
     },
   });
+
   useEffect(() => {
     if (data?.success) {
       let temp = data?.data;
-      console.log(temp);
       temp?.name && setFieldValue("name", temp?.name);
       temp?.username && setFieldValue("username", temp?.username);
       temp?.email && setFieldValue("email", temp?.email);
       temp?.bio && setFieldValue("bio", temp?.bio);
       temp?.about && setFieldValue("about", temp?.about);
-      temp?.profiles && setProfiles([...temp.profiles]);
+      temp?.profiles && setFieldValue("profiles", temp?.profiles);
     }
   }, [data]);
 
@@ -95,6 +92,14 @@ const EditProfileModal = ({ show, setShow }) => {
       dispatch(baseApi.util.invalidateTags(["SingleUser"]));
     }
   }, [isUpdateSuccess]);
+
+  const linkToProfile = (plt) => {
+    let str = "";
+    values?.profiles?.map((e) => {
+      if (e?.platform === plt) str = e?.link;
+    });
+    return str;
+  };
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -199,25 +204,52 @@ const EditProfileModal = ({ show, setShow }) => {
                   <div className="profiles-section">
                     <div className="profile-head">Profiles</div>
                     <div className="profiles">
-                      {profiles?.map((item, index) => (
-                        <div className="profile-indv" key={index}>
-                          <div className="profile-icon">
-                            <ProfileIcon platform={item?.platform} />
-                          </div>
-                          <a
-                            className="profile-link linkreq"
-                            target={"_blank"}
-                            href={linkProcessor(item?.link)}
-                          >
-                            {lineProcessor(item?.link, 40)}
-                          </a>
-                          <div className="delete-button">
-                            <AiFillDelete />
-                          </div>
-                        </div>
+                      {platformOptions.map((item, index) => (
+                        <TextField
+                          key={index}
+                          name={item}
+                          label={capitalizeString(item)}
+                          variant="outlined"
+                          color="secondary"
+                          className="form-input"
+                          fullWidth
+                          value={linkToProfile(item)}
+                          onChange={(e) => {
+                            let temp = [...values?.profiles];
+                            let flag = false;
+                            if (!e.target.value || e.target.value === "") {
+                              let ind = -1;
+                              temp.map((x, i) => {
+                                if (x?.platform === item) {
+                                  ind = i;
+                                }
+                              });
+                              if (ind > -1) {
+                                temp.splice(ind, 1);
+                              }
+                              setFieldValue("profiles", temp);
+                              return;
+                            }
+                            temp.map((x, i) => {
+                              if (x?.platform === item) {
+                                flag = true;
+                                let newObj = { ...temp[i] };
+                                newObj.link = e.target.value;
+                                temp[i] = newObj;
+                              }
+                            });
+
+                            if (!flag) {
+                              temp = [
+                                ...temp,
+                                { platform: item, link: e.target.value },
+                              ];
+                            }
+                            setFieldValue("profiles", temp);
+                          }}
+                        />
                       ))}
                     </div>
-                    {/* <button>Add Profile</button> */}
                   </div>
                 </EditInner>
               </>

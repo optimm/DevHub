@@ -5,6 +5,7 @@ import {
   AiFillLinkedin,
   AiFillTwitterCircle,
   AiFillFacebook,
+  AiFillRedditCircle,
 } from "react-icons/ai";
 
 const ProfileIcon = ({ platform }) => {
@@ -22,6 +23,9 @@ const ProfileIcon = ({ platform }) => {
   }
   if (platform === "twitter") {
     return <AiFillTwitterCircle />;
+  }
+  if (platform === "reddit") {
+    return <AiFillRedditCircle />;
   }
 };
 

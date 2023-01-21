@@ -50,32 +50,10 @@ export const EditInner = styled.div`
     font-weight: 700;
   }
   .profiles {
-    margin-top: 10px;
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-  }
-  .profile-indv {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 1rem;
-  }
-  .profile-icon {
-    width: 25px;
-    font-size: 1.3rem;
-  }
-  .profile-link {
-    width: calc(100% - 80px);
-    font-size: 0.88rem;
-  }
-  .delete-button {
-    width: 20px;
-    cursor: pointer;
-    color: red;
-    font-size: 1.2rem;
-    ${flexch}
+    gap: 15px;
   }
 `;
 
