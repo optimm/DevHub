@@ -131,12 +131,15 @@ const deleteProfile = async (req, res) => {
   await Project.deleteMany({ owner: userId });
 
   // Removing user from other's followers whom this user follows
-  await User.updateMany({ follower: userId }, { $pull: { followers: userId } });
+  await User.updateMany(
+    { followers: userId },
+    { $pull: { followers: userId }, $inc: { total_followers: -1 } }
+  );
 
   // Removing user from other's following
   await User.updateMany(
     { following: userId },
-    { $pull: { following: userId } }
+    { $pull: { following: userId }, $inc: { total_following: -1 } }
   );
 
   //removing likes of this user from posts
