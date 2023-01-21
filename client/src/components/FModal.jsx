@@ -3,12 +3,11 @@ import { Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetFollowersFollowingQuery } from "../app/services/userApi";
-import { FAllWrapper, FIndvWrapper } from "../styles/FmodalStyles";
+import { FAllWrapper, FIndvWrapper } from "../styles/components/FmodalStyles";
 import "../styles/modal.css";
 
 const FModal = ({ show, setShow, category }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { id } = useParams();
 
   const handleClose = () => setShow(false);

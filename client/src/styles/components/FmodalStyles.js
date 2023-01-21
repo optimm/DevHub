@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral } from "./globalStyle";
+import { backgroundGeneral } from "../globalStyle";
 
 export const FAllWrapper = styled.div`
   width: 100%;

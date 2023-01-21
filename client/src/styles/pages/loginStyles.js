@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch, flexcv } from "./globalStyle";
+import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const MainWrapper = styled.div`
   ${flexcv}

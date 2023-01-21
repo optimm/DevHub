@@ -11,7 +11,7 @@ import {
   MainCardOverLay,
   MainHomeButton,
   MainWrapper,
-} from "../styles/loginStyles";
+} from "../styles/pages/loginStyles";
 import registerSchema from "../validationSchemas/register";
 import { createNotification } from "../components/Notification";
 

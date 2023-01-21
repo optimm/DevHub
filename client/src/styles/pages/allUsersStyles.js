@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as mq from "./mediaQueries";
+import * as mq from "../mediaQueries";
 
 export const SearchBarWrapper = styled.div`
   width: 40%;

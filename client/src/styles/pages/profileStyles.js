@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch, flexcv } from "./globalStyle";
+import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProfileMainWrapper = styled.div`
   height: calc(100vh - 70px);
@@ -125,6 +125,22 @@ export const MoreDataWrapper = styled.div`
     background: var(--primary-color-light);
     color: var(--primary-color);
     cursor: pointer;
+  }
+  .extra-options {
+    display: flex;
+    margin-top: 40px;
+    gap: 20px;
+    justify-content: flex-end;
+  }
+  .extra-button {
+    height: 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    width: 200px;
+  }
+  .delete {
+    color: red;
   }
 `;
 export const LoadingWrapper = styled.div`

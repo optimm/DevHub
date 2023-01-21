@@ -11,7 +11,7 @@ import {
   MainCardOverLay,
   MainHomeButton,
   MainWrapper,
-} from "../styles/loginStyles";
+} from "../styles/pages/loginStyles";
 import loginSchema from "../validationSchemas/login";
 import { AiFillHome } from "react-icons/ai";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { LandingContainer, LandingOverlay } from "../styles/homeStyles";
+import { LandingContainer, LandingOverlay } from "../styles/pages/homeStyles";
 
 const Home = () => {
   return (

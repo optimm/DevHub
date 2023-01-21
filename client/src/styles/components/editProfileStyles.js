@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch } from "./globalStyle";
+import { backgroundGeneral, flexch } from "../globalStyle";
 
 export const EditWrapper = styled.div`
   width: 100%;
@@ -70,7 +70,6 @@ export const Footer = styled.div`
     color: red;
   }
   .submit-button {
-    ${flexch}
     font-size: 0.88rem;
     width: 115px;
     height: 35px;

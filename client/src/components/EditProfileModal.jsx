@@ -12,7 +12,7 @@ import {
   EditInner,
   EditWrapper,
   Footer,
-} from "../styles/editProfileStyles";
+} from "../styles/components/editProfileStyles";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";

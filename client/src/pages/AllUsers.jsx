@@ -4,7 +4,7 @@ import UserCard from "../components/UserCard";
 import {
   AllUsersCardWrapper,
   SearchBarWrapper,
-} from "../styles/allUsersStyles";
+} from "../styles/pages/allUsersStyles";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import { AiOutlineSearch } from "react-icons/ai";
 

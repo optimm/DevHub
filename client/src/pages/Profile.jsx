@@ -5,7 +5,7 @@ import {
   MoreDataWrapper,
   ProfileImageWrapper,
   ProfileMainWrapper,
-} from "../styles/profileStyles";
+} from "../styles/pages/profileStyles";
 import {
   RiUserFollowLine,
   RiMailOpenLine,
@@ -25,6 +25,7 @@ import FModal from "../components/FModal";
 import EditProfileModal from "../components/EditProfileModal";
 import ProfileIcon from "../components/ProfileIcon";
 import { linkProcessor } from "../util/utilFunctions";
+import ChangePassword from "../components/ChangePassword";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const Profile = () => {
   const [fmodalcat, setFmodalCat] = useState("");
   const [editProfile, setEditProfile] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
+  const [changep, setChangep] = useState(false);
   //queries
   const { data, isLoading, isFetching, isSuccess, isError } =
     useGetSingleUserQuery({
@@ -207,12 +209,24 @@ const Profile = () => {
                   </div>
                 ))}
             </div>
+            {data?.isMe && (
+              <div className="extra-options">
+                <button
+                  className="extra-button"
+                  onClick={() => setChangep(true)}
+                >
+                  Change Password
+                </button>
+                <button className="extra-button delete">Delete Account</button>
+              </div>
+            )}
           </MoreDataWrapper>
 
           <FModal show={fmodal} setShow={setFmodal} category={fmodalcat} />
           {editProfile && (
             <EditProfileModal show={editProfile} setShow={setEditProfile} />
           )}
+          {changep && <ChangePassword show={changep} setShow={setChangep} />}
         </>
       )}
     </>

@@ -8,7 +8,7 @@ import {
   NavButton,
   NavContainerMain,
   NavContainerRight,
-} from "../styles/navbarStyles";
+} from "../styles/components/navbarStyles";
 
 const Navbar = () => {
   const { isAuthenticated, myData } = useSelector((state) => state.me);
