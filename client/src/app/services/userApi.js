@@ -29,6 +29,14 @@ export const userApi = baseApi.injectEndpoints({
         };
       },
     }),
+    deleteProfile: builder.mutation({
+      query: () => {
+        return {
+          url: "user/me",
+          method: "DELETE",
+        };
+      },
+    }),
     getAllUser: builder.query({
       query: () => {
         return {
@@ -76,4 +84,5 @@ export const {
   useGetSingleUserQuery,
   useFollowUserMutation,
   useGetFollowersFollowingQuery,
+  useDeleteProfileMutation,
 } = userApi;

@@ -26,6 +26,7 @@ import EditProfileModal from "../components/EditProfileModal";
 import ProfileIcon from "../components/ProfileIcon";
 import { linkProcessor } from "../util/utilFunctions";
 import ChangePassword from "../components/ChangePassword";
+import DeleteAccount from "../components/DeleteAccount";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
   const [changep, setChangep] = useState(false);
+  const [del, setDel] = useState(false);
   //queries
   const { data, isLoading, isFetching, isSuccess, isError } =
     useGetSingleUserQuery({
@@ -217,7 +219,12 @@ const Profile = () => {
                 >
                   Change Password
                 </button>
-                <button className="extra-button delete">Delete Account</button>
+                <button
+                  className="extra-button delete"
+                  onClick={() => setDel(true)}
+                >
+                  Delete Account
+                </button>
               </div>
             )}
           </MoreDataWrapper>
@@ -227,6 +234,7 @@ const Profile = () => {
             <EditProfileModal show={editProfile} setShow={setEditProfile} />
           )}
           {changep && <ChangePassword show={changep} setShow={setChangep} />}
+          {del && <DeleteAccount show={del} setShow={setDel} />}
         </>
       )}
     </>
