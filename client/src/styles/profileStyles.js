@@ -96,6 +96,7 @@ export const ProfileImageWrapper = styled.div`
 
 export const MoreDataWrapper = styled.div`
   width: 100%;
+  min-height: 30px;
   margin-bottom: 30px;
   padding: 0% 6%;
   .about-head {
@@ -125,4 +126,10 @@ export const MoreDataWrapper = styled.div`
     color: var(--primary-color);
     cursor: pointer;
   }
+`;
+export const LoadingWrapper = styled.div`
+  ${flexch}
+  height: calc(100vh - 69px);
+  font-size: 30px;
+  width: 100%;
 `;

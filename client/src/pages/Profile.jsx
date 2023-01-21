@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  LoadingWrapper,
   MoreDataWrapper,
   ProfileImageWrapper,
   ProfileMainWrapper,
@@ -29,6 +30,7 @@ import { linkProcessor } from "../util/linkProcessor";
 import { useDispatch, useSelector } from "react-redux";
 import { baseApi } from "../app/services/baseApi";
 import FModal from "../components/FModal";
+import EditProfileModal from "../components/EditProfileModal";
 
 const ProfileIcon = ({ platform }) => {
   if (platform === "github") {
@@ -57,10 +59,13 @@ const Profile = () => {
   const [skip, setSkip] = useState(true);
   const [fmodal, setFmodal] = useState(false);
   const [fmodalcat, setFmodalCat] = useState("");
+  const [editProfile, setEditProfile] = useState(false);
+  const [blankLoader, setBlankLoader] = useState(true);
   //queries
-  const { data, isLoading, isFetching } = useGetSingleUserQuery({
-    id,
-  });
+  const { data, isLoading, isFetching, isSuccess, isError } =
+    useGetSingleUserQuery({
+      id,
+    });
   const { isError: isLogoutError, isSuccess: isLogoutSuccess } = useLogoutQuery(
     { id },
     { skip }
@@ -74,6 +79,16 @@ const Profile = () => {
       isSuccess: isFollowSuccess,
     },
   ] = useFollowUserMutation();
+
+  useEffect(() => {
+    if (isFetching) {
+      setBlankLoader(true);
+    } else if (!isFetching && data?.success) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 500);
+    }
+  }, [isFetching]);
 
   useEffect(() => {
     if (isLogoutError) {
@@ -106,8 +121,8 @@ const Profile = () => {
 
   return (
     <>
-      {isLoading || isFetching ? (
-        <>Loading</>
+      {isLoading || isFetching || blankLoader ? (
+        <LoadingWrapper>Loading...</LoadingWrapper>
       ) : (
         <>
           <ProfileMainWrapper>
@@ -149,7 +164,7 @@ const Profile = () => {
                 <div className="button-section">
                   {data?.isMe ? (
                     <>
-                      <button>
+                      <button onClick={() => setEditProfile(true)}>
                         <RiEditFill /> Profile
                       </button>
                       <button onClick={handleLogout}>
@@ -210,6 +225,7 @@ const Profile = () => {
                 data?.data?.profiles?.map((item, index) => (
                   <div
                     className="profile"
+                    key={index}
                     onClick={() => window.open(linkProcessor(item?.link))}
                   >
                     <ProfileIcon platform={item?.platform} />
@@ -217,8 +233,11 @@ const Profile = () => {
                 ))}
             </div>
           </MoreDataWrapper>
-          {/* modals */}
+
           <FModal show={fmodal} setShow={setFmodal} category={fmodalcat} />
+          {editProfile && (
+            <EditProfileModal show={editProfile} setShow={setEditProfile} />
+          )}
         </>
       )}
     </>

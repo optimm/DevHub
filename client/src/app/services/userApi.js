@@ -3,6 +3,7 @@ import { authenticateMe } from "../../features/meSlice";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //profile and account
     checkMyAuth: builder.query({
       query: () => {
         return {
@@ -17,6 +18,15 @@ export const userApi = baseApi.injectEndpoints({
         } catch (error) {
           dispatch(authenticateMe({ isAuthenticated: false, myData: {} }));
         }
+      },
+    }),
+    editProfile: builder.mutation({
+      query: ({ body }) => {
+        return {
+          url: "user/me",
+          method: "PATCH",
+          body,
+        };
       },
     }),
     getAllUser: builder.query({
@@ -61,6 +71,7 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useCheckMyAuthQuery,
+  useEditProfileMutation,
   useGetAllUserQuery,
   useGetSingleUserQuery,
   useFollowUserMutation,

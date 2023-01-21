@@ -2,3 +2,10 @@
   text-transform: capitalize;
   padding: 10px 16px !important;
 }
+.modal-footer {
+  padding: 10px 16px !important;
+}
+
+.fade.modal.show {
+  max-height: 100vh !important;
+}

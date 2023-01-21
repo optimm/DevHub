@@ -96,15 +96,16 @@ const checkMyAuth = async (req, res) => {
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
   const { name, username, email, about, profiles, bio } = req.body;
+  console.log(req.body);
   const me = await User.findById(userId);
-  if (email) {
+  if (email && email !== me.email) {
     const user = await User.findOne({ email });
     if (user) {
       throw new BadRequestError("Email already in use");
     }
     me.email = email;
   }
-  if (username) {
+  if (username && username !== me.username) {
     const user = await User.findOne({ username });
     if (user) {
       throw new BadRequestError("Username already in use");

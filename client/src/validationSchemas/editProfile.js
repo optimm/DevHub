@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-let registerSchema = yup.object().shape({
+let editProfileSchema = yup.object().shape({
   name: yup
     .string()
     .required("Name is required")
@@ -12,10 +12,8 @@ let registerSchema = yup.object().shape({
     .min(2, "Username must be atleast 2 characters")
     .max(10, "Username cannot be more than 10 characters"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup
-    .string()
-    .required("Password is required")
-    .min(6, "Password must be atleast 6 characters"),
+  bio: yup.string().max(200, "Bio cannot be more than 200 characters"),
+  about: yup.string().max(1000, "About cannot be more than 1000 characters"),
 });
 
-export default registerSchema;
+export default editProfileSchema;

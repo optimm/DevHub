@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetFollowersFollowingQuery } from "../app/services/userApi";
@@ -14,7 +14,7 @@ const FModal = ({ show, setShow, category }) => {
   const handleClose = () => setShow(false);
 
   const { data, isLoading, isFetching, isError, isSuccess, error } =
-    useGetFollowersFollowingQuery({ id, category });
+    useGetFollowersFollowingQuery({ id, category }, { skip: category === "" });
 
   const followers = data?.data?.data;
 
