@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
 import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
+import { CreateProject } from "./pages/CreateProject";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -64,6 +65,16 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllProjects />
+                  </>
+                }
+              />
+
+              <Route
+                path="/projects/add"
+                element={
+                  <>
+                    <Navbar />
+                    <CreateProject />
                   </>
                 }
               />

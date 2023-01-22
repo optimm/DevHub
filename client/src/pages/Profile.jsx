@@ -27,6 +27,7 @@ import ProfileIcon from "../components/ProfileIcon";
 import { linkProcessor } from "../util/utilFunctions";
 import ChangePassword from "../components/ChangePassword";
 import DeleteAccount from "../components/DeleteAccount";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -134,7 +135,17 @@ const Profile = () => {
                 <div className="sepration" />
                 <div className="numbers-section">
                   <div className="posts">
-                    <span>{data?.data?.total_projects}</span> Projects
+                    <div>
+                      <span>{data?.data?.total_projects}</span> Projects
+                    </div>
+                    {data?.isMe && (
+                      <div
+                        className="add-project"
+                        onClick={() => navigate("/projects/add")}
+                      >
+                        Add <AiOutlinePlus />
+                      </div>
+                    )}
                   </div>
                   <div className="follower-section">
                     <div

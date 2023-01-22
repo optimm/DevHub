@@ -41,8 +41,25 @@ export const ProfileMainWrapper = styled.div`
     font-weight: 700;
   }
   .posts {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 1.1rem;
     cursor: pointer;
+  }
+  .numbers-section {
+    width: 100%;
+  }
+  .add-project {
+    font-size: 0.88rem;
+    height: 30px;
+    width: 100px;
+    background: var(--primary-color-glass);
+    border-radius: 5px;
+    color: white;
+    ${flexch}
+    gap:5px;
+    font-weight: 500;
   }
   .follower-section {
     font-size: 1.1rem;
