@@ -20,7 +20,7 @@ import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
 import { arraysEqual, capitalizeString } from "../util/utilFunctions";
 
-import { platformOptions } from "../util/platformOptions";
+import { platformOptions } from "../util/options";
 
 const EditProfileModal = ({ show, setShow }) => {
   const dispatch = useDispatch();

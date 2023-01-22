@@ -82,7 +82,7 @@ const App = () => {
                       <CreateProject />
                     </>
                   ) : (
-                    <Navigate replace to="/users" />
+                    <Navigate replace to="/login" />
                   )
                 }
               />

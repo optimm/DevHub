@@ -6,3 +6,12 @@ export const platformOptions = [
   "twitter",
   "reddit",
 ];
+
+export const tags = [
+  "Javascript",
+  "NodeJs",
+  "Express",
+  "MongoDb",
+  "ReactJs",
+  "Redux",
+];
