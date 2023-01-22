@@ -5,7 +5,7 @@ const ProjectSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, "Please provide a title"],
-    max: [50, "Descripition cannot be more than 50 characters"],
+    max: [100, "Title cannot be more than 50 characters"],
   },
   image: {
     public_id: String,
@@ -13,7 +13,7 @@ const ProjectSchema = new mongoose.Schema({
   },
   desc: {
     type: String,
-    max: [200, "Descripition cannot be more than 300 characters"],
+    max: [500, "Descripition cannot be more than 500 characters"],
   },
   tags: [{ type: String }],
   github_link: {

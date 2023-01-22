@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
@@ -14,7 +14,7 @@ import Register from "./pages/Register";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { isLoading, isFetching } = useCheckMyAuthQuery();
+  const { data, isLoading, isFetching } = useCheckMyAuthQuery();
 
   return (
     <>
@@ -36,7 +36,11 @@ const App = () => {
               <Route
                 path={"/login"}
                 element={
-                  isAuthenticated ? <Navigate replace to="/" /> : <Login />
+                  data?.success || isAuthenticated ? (
+                    <Navigate replace to="/" />
+                  ) : (
+                    <Login />
+                  )
                 }
               />
               <Route path={"/register"} element={<Register />} />
@@ -72,10 +76,14 @@ const App = () => {
               <Route
                 path="/projects/add"
                 element={
-                  <>
-                    <Navbar />
-                    <CreateProject />
-                  </>
+                  data?.success || isAuthenticated ? (
+                    <>
+                      <Navbar />
+                      <CreateProject />
+                    </>
+                  ) : (
+                    <Navigate replace to="/users" />
+                  )
                 }
               />
             </Routes>

@@ -36,6 +36,18 @@ export const userApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+        dispatch(
+          baseApi.util.invalidateTags([
+            "AllUsers",
+            "SingleUser",
+            "FollowUser",
+            "Followers",
+          ])
+        );
+        dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
+      },
     }),
     getAllUser: builder.query({
       query: () => {

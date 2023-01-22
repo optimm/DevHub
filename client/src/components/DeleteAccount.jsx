@@ -24,15 +24,6 @@ const DeleteAccount = ({ show, setShow }) => {
     if (isSuccess) {
       createNotification("Account permanently deleted", "info", 2000);
       setShow(false);
-      dispatch(
-        baseApi.util.invalidateTags([
-          "AllUsers",
-          "SingleUser",
-          "FollowUser",
-          "Followers",
-        ])
-      );
-      dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       navigate("/");
     } else if (isError) {
       createNotification("Something went wrong", "error", 2000);

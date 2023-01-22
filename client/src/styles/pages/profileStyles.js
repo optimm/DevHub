@@ -19,13 +19,13 @@ export const ProfileMainWrapper = styled.div`
     justify-content: space-between;
   }
   .name {
-    font-size: 2.4rem;
+    font-size: 2.5rem;
     font-weight: 700;
     text-transform: capitalize;
   }
   .username {
     margin-top: 10px;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 600;
   }
   .bio {
@@ -44,7 +44,7 @@ export const ProfileMainWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
   }
   .numbers-section {
@@ -62,7 +62,7 @@ export const ProfileMainWrapper = styled.div`
     font-weight: 500;
   }
   .follower-section {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     margin-top: 15px;
     display: flex;
     gap: 20px;
@@ -98,7 +98,7 @@ export const ProfileMainWrapper = styled.div`
   }
 `;
 export const ProfileImageWrapper = styled.div`
-  width: 55%;
+  width: 60%;
   height: 70%;
   position: relative;
   margin-top: 18%;

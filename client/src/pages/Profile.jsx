@@ -221,7 +221,8 @@ const Profile = () => {
                     {!complete &&
                       data?.isMe &&
                       "Complete your profile so that other's can know you better"}
-                    {data?.data?.profiles?.length < 6 &&
+                    {complete &&
+                      data?.data?.profiles?.length < 6 &&
                       data?.isMe &&
                       "Add more profile links to be more reachable"}
                   </div>
