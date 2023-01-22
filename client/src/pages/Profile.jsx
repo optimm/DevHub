@@ -34,12 +34,15 @@ const Profile = () => {
 
   const { isAuthenticated } = useSelector((state) => state.me);
   const [skip, setSkip] = useState(true);
+  const [blankLoader, setBlankLoader] = useState(true);
+  //modals
   const [fmodal, setFmodal] = useState(false);
   const [fmodalcat, setFmodalCat] = useState("");
   const [editProfile, setEditProfile] = useState(false);
-  const [blankLoader, setBlankLoader] = useState(true);
   const [changep, setChangep] = useState(false);
   const [del, setDel] = useState(false);
+  //
+  const [complete, setComplete] = useState(false);
   //queries
   const { data, isLoading, isFetching, isSuccess, isError } =
     useGetSingleUserQuery({
@@ -63,6 +66,19 @@ const Profile = () => {
     if (isFetching) {
       setBlankLoader(true);
     } else if (!isFetching && data?.success) {
+      let tdata = data?.data;
+      if (
+        !tdata?.about ||
+        tdata.about === "" ||
+        !tdata?.bio ||
+        tdata?.bio === "" ||
+        !tdata?.profiles ||
+        tdata?.profiles.length == 0
+      ) {
+        setComplete(false);
+      } else {
+        setComplete(true);
+      }
       setTimeout(() => {
         setBlankLoader(false);
       }, 500);
@@ -111,6 +127,9 @@ const Profile = () => {
                   <div className="name">{data?.data?.name}</div>
                   <div className="username">{data?.data?.username}</div>
                   <div className="bio">{data?.data?.bio}</div>
+                  {/* <a className="website" href={linkProcessor("google.com")}>
+                    Website
+                  </a> */}
                 </div>
                 <div className="sepration" />
                 <div className="numbers-section">
@@ -141,49 +160,60 @@ const Profile = () => {
                 <div className="sepration" />
 
                 <div className="button-section">
-                  {data?.isMe ? (
-                    <>
-                      <button onClick={() => setEditProfile(true)}>
-                        <RiEditFill /> Profile
-                      </button>
-                      <button onClick={handleLogout}>
-                        <RiLogoutBoxRLine /> Logout
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      {data?.isFollowing ? (
-                        <button
-                          disabled={isFollowLoading}
-                          onClick={handleFollow}
-                        >
-                          {isFollowLoading ? (
-                            "Loading.."
-                          ) : (
-                            <>
-                              Unfollow <RiUserUnfollowLine />
-                            </>
-                          )}
+                  <div className="button-inner">
+                    {data?.isMe ? (
+                      <>
+                        <button onClick={() => setEditProfile(true)}>
+                          <RiEditFill /> Profile
                         </button>
-                      ) : (
-                        <button
-                          disabled={isFollowLoading}
-                          onClick={handleFollow}
-                        >
-                          {isFollowLoading ? (
-                            "Loading.."
-                          ) : (
-                            <>
-                              Follow <RiUserFollowLine />
-                            </>
-                          )}
+                        <button onClick={handleLogout}>
+                          <RiLogoutBoxRLine /> Logout
                         </button>
-                      )}
-                      <button>
-                        Contact <RiMailOpenLine />
-                      </button>
-                    </>
-                  )}
+                      </>
+                    ) : (
+                      <>
+                        {data?.isFollowing ? (
+                          <button
+                            disabled={isFollowLoading}
+                            onClick={handleFollow}
+                          >
+                            {isFollowLoading ? (
+                              "Loading.."
+                            ) : (
+                              <>
+                                Unfollow <RiUserUnfollowLine />
+                              </>
+                            )}
+                          </button>
+                        ) : (
+                          <button
+                            disabled={isFollowLoading}
+                            onClick={handleFollow}
+                          >
+                            {isFollowLoading ? (
+                              "Loading.."
+                            ) : (
+                              <>
+                                Follow <RiUserFollowLine />
+                              </>
+                            )}
+                          </button>
+                        )}
+                        <button>
+                          Contact <RiMailOpenLine />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="complete-profile">
+                    {!complete &&
+                      data?.isMe &&
+                      "Complete your profile so that other's can know you better"}
+                    {data?.data?.profiles?.length < 6 &&
+                      data?.isMe &&
+                      "Add more profile links to be more reachable"}
+                  </div>
                 </div>
               </div>
             </div>

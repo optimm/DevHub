@@ -12,8 +12,8 @@ export const ProfileMainWrapper = styled.div`
   }
   .user-data {
     width: 100%;
-    height: 65%;
-    margin-top: 18%;
+    height: 75%;
+    margin-top: 14%;
     ${flexcv}
     align-items:flex-start;
     justify-content: space-between;
@@ -33,6 +33,10 @@ export const ProfileMainWrapper = styled.div`
     font-size: 1.1rem;
     color: var(--text-2);
   }
+  .website {
+    font-size: 1rem;
+    font-weight: 500;
+  }
   span {
     font-weight: 700;
   }
@@ -49,7 +53,7 @@ export const ProfileMainWrapper = styled.div`
   .follower-section-sub {
     cursor: pointer;
   }
-  .button-section {
+  .button-inner {
     display: flex;
     gap: 20px;
   }
@@ -69,10 +73,16 @@ export const ProfileMainWrapper = styled.div`
     ${flexch}
     align-items:flex-start;
   }
+  .complete-profile {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: green;
+  }
 `;
 export const ProfileImageWrapper = styled.div`
   width: 55%;
-  height: 65%;
+  height: 70%;
   position: relative;
   margin-top: 18%;
   .profile-image {
@@ -89,8 +99,8 @@ export const ProfileImageWrapper = styled.div`
     position: absolute;
     background: var(--primary-color-glass);
     z-index: -1;
-    top: -10%;
-    left: 10%;
+    top: -8%;
+    left: 15%;
   }
 `;
 
