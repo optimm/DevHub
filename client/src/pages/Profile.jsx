@@ -20,7 +20,7 @@ import {
 } from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import FModal from "../components/FModal";
 import EditProfileModal from "../components/EditProfileModal";
 import ProfileIcon from "../components/ProfileIcon";

@@ -1,6 +1,8 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
+import { useEffect } from "react";
+import { useCreateProjectMutation } from "../app/services/projectApi";
 import {
   MainForm,
   MainLeft,
@@ -9,8 +11,11 @@ import {
 } from "../styles/pages/createProjectStyles";
 import { tags } from "../util/options";
 import createProjectSchema from "../validationSchemas/createProject";
+import { createNotification } from "../components/Notification";
 
 export const CreateProject = () => {
+  const [create, { data, isLoading, isError, isSuccess, error }] =
+    useCreateProjectMutation();
   const {
     touched,
     errors,
@@ -33,9 +38,20 @@ export const CreateProject = () => {
       if (temp.live_link === "") delete temp["live_link"];
       if (temp.github_link === "") delete temp["github_link"];
       if (temp?.tags?.length === 0) delete temp["tags"];
-      console.log({ temp });
+      await create({ body: temp });
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      createNotification(data?.msg, "success", 2000);
+      resetForm();
+    }
+    if (isError) {
+      createNotification(error?.msg, "error", 2000);
+    }
+  }, [isSuccess, isError]);
+
   return (
     <MainWrapper>
       <MainLeft>
@@ -55,6 +71,7 @@ export const CreateProject = () => {
               onBlur={handleBlur}
               error={touched.title && errors.title ? true : false}
               helperText={touched.title && errors.title ? errors.title : null}
+              readOnly={isLoading}
             />
             <TextField
               name="desc"
@@ -69,6 +86,7 @@ export const CreateProject = () => {
               onBlur={handleBlur}
               error={touched.desc && errors.desc ? true : false}
               helperText={touched.desc && errors.desc ? errors.desc : null}
+              readOnly={isLoading}
             />
             <TextField
               name="github_link"
@@ -81,6 +99,7 @@ export const CreateProject = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.github_link && errors.github_link ? true : false}
+              readOnly={isLoading}
               helperText={
                 touched.github_link && errors.github_link
                   ? errors.github_link
@@ -98,6 +117,7 @@ export const CreateProject = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.live_link && errors.live_link ? true : false}
+              readOnly={isLoading}
               helperText={
                 touched.live_link && errors.live_link ? errors.live_link : null
               }
@@ -117,10 +137,15 @@ export const CreateProject = () => {
               renderInput={(params) => (
                 <TextField {...params} label="Tags" placeholder="Tag" />
               )}
+              readOnly={isLoading}
             />
 
-            <button className="submit-button" type="submit">
-              Add Project
+            <button
+              className="submit-button"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Add Project"}
             </button>
           </div>
         </MainForm>
