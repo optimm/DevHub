@@ -3,6 +3,15 @@ import { authenticateMe } from "../../features/meSlice";
 
 export const projectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllProjects: builder.query({
+      query: () => {
+        return {
+          url: "project",
+          method: "GET",
+        };
+      },
+      providesTags: ["AllProjects"],
+    }),
     createProject: builder.mutation({
       query: ({ body }) => {
         return {
@@ -11,9 +20,9 @@ export const projectApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllProjects","SingleUser"],
+      invalidatesTags: ["AllProjects", "SingleUser"],
     }),
   }),
 });
 
-export const { useCreateProjectMutation } = projectApi;
+export const { useCreateProjectMutation,useGetAllProjectsQuery } = projectApi;
