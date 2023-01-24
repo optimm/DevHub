@@ -28,7 +28,7 @@ export const ProjectMainWrapper = styled.div`
   }
 
   .title {
-    margin-top: 30px;
+    margin-top: 40px;
     font-size: 1.5rem;
     font-weight: 700;
     width: 90%;
@@ -43,6 +43,7 @@ export const ProjectMainWrapper = styled.div`
   }
 
   .likes-data {
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
   }
@@ -55,8 +56,25 @@ export const ProjectMainWrapper = styled.div`
     font-size: 1.3rem;
   }
   .tags {
+    display: flex;
+    gap: 20px;
     margin-top: 5px;
   }
+  .view-more {
+    color: blue;
+    cursor: pointer;
+  }
+  .links-section {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+  }
+  .edit-button {
+    height: 35px;
+    width: 120px;
+    gap: 5px;
+  }
+
   .main-right {
     width: 50%;
     height: 100%;
@@ -70,7 +88,7 @@ export const ProjectMainWrapper = styled.div`
     gap: 30px;
   }
   .likes-indv {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     color: var(--text-2);
     display: flex;
     align-items: center;
@@ -81,9 +99,9 @@ export const ProjectMainWrapper = styled.div`
 
 export const ProjectImageWrapper = styled.div`
   width: 92%;
-  height: 60%;
+  height: 55%;
   position: relative;
-  margin-top: 8%;
+  margin-top: 10%;
 
   .project-image {
     border-radius: 5px;

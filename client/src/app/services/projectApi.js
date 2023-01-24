@@ -12,6 +12,14 @@ export const projectApi = baseApi.injectEndpoints({
       },
       providesTags: ["AllProjects"],
     }),
+    getSingleProject: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}`,
+          method: "GET",
+        };
+      },
+    }),
     createProject: builder.mutation({
       query: ({ body }) => {
         return {
@@ -25,4 +33,8 @@ export const projectApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateProjectMutation,useGetAllProjectsQuery } = projectApi;
+export const {
+  useCreateProjectMutation,
+  useGetAllProjectsQuery,
+  useGetSingleProjectQuery,
+} = projectApi;

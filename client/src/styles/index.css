@@ -39,6 +39,14 @@ button {
   width: 100%;
   height: 1px;
 }
+.flex-justify {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.red {
+  color: red;
+}
 
 @keyframes fadeIn {
   0% {

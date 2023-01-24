@@ -4,7 +4,9 @@ import {
   LoadingWrapper,
   MoreDataWrapper,
   ProfileImageWrapper,
+  ProfileIndv,
   ProfileMainWrapper,
+  SoloButton,
 } from "../styles/pages/profileStyles";
 import {
   RiUserFollowLine,
@@ -174,17 +176,17 @@ const Profile = () => {
                   <div className="button-inner">
                     {data?.isMe ? (
                       <>
-                        <button onClick={() => setEditProfile(true)}>
+                        <SoloButton onClick={() => setEditProfile(true)}>
                           <RiEditFill /> Profile
-                        </button>
-                        <button onClick={handleLogout}>
+                        </SoloButton>
+                        <SoloButton onClick={handleLogout}>
                           <RiLogoutBoxRLine /> Logout
-                        </button>
+                        </SoloButton>
                       </>
                     ) : (
                       <>
                         {data?.isFollowing ? (
-                          <button
+                          <SoloButton
                             disabled={isFollowLoading}
                             onClick={handleFollow}
                           >
@@ -195,9 +197,9 @@ const Profile = () => {
                                 Unfollow <RiUserUnfollowLine />
                               </>
                             )}
-                          </button>
+                          </SoloButton>
                         ) : (
-                          <button
+                          <SoloButton
                             disabled={isFollowLoading}
                             onClick={handleFollow}
                           >
@@ -208,11 +210,11 @@ const Profile = () => {
                                 Follow <RiUserFollowLine />
                               </>
                             )}
-                          </button>
+                          </SoloButton>
                         )}
-                        <button>
+                        <SoloButton>
                           Contact <RiMailOpenLine />
-                        </button>
+                        </SoloButton>
                       </>
                     )}
                   </div>
@@ -244,13 +246,13 @@ const Profile = () => {
               {data?.data?.profiles &&
                 data?.data?.profiles?.length > 0 &&
                 data?.data?.profiles?.map((item, index) => (
-                  <div
+                  <ProfileIndv
                     className="profile"
                     key={index}
-                    onClick={() => window.open(linkProcessor(item?.link, 20))}
+                    onClick={() => window.open(linkProcessor(item?.link))}
                   >
                     <ProfileIcon platform={item?.platform} />
-                  </div>
+                  </ProfileIndv>
                 ))}
             </div>
             {data?.isMe && (
@@ -262,7 +264,7 @@ const Profile = () => {
                   Change Password
                 </button>
                 <button
-                  className="extra-button delete"
+                  className="extra-button red"
                   onClick={() => setDel(true)}
                 >
                   Delete Account

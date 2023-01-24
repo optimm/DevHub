@@ -31,3 +31,11 @@ export const objectsEqual = (o1, o2) =>
     ? Object.keys(o1).length === Object.keys(o2).length &&
       Object.keys(o1).every((p) => objectsEqual(o1[p], o2[p]))
     : o1 === o2;
+
+// "2023-01-23T14:58:34.072Z"
+export const timeProcessor = (str) => {
+  const d = new Date(str);
+  const dt = d.toDateString();
+  const st = d.toLocaleTimeString();
+  return dt + ", at " + st;
+};

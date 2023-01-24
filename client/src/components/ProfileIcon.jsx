@@ -7,6 +7,7 @@ import {
   AiFillFacebook,
   AiFillRedditCircle,
 } from "react-icons/ai";
+import { SiWebmoney } from "react-icons/si";
 
 const ProfileIcon = ({ platform }) => {
   if (platform === "github") {
@@ -27,6 +28,7 @@ const ProfileIcon = ({ platform }) => {
   if (platform === "reddit") {
     return <AiFillRedditCircle />;
   }
+  return <SiWebmoney />;
 };
 
 export default ProfileIcon;

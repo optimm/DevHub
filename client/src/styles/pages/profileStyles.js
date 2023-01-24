@@ -74,15 +74,6 @@ export const ProfileMainWrapper = styled.div`
     display: flex;
     gap: 20px;
   }
-  button {
-    font-size: 1.1rem;
-    height: 45px;
-    width: 130px;
-    gap: 7px;
-    border-radius: 5px;
-    color: var(--text-white);
-    background: var(--primary-color);
-  }
 
   .main-right {
     width: 50%;
@@ -96,6 +87,16 @@ export const ProfileMainWrapper = styled.div`
     font-weight: 500;
     color: green;
   }
+`;
+
+export const SoloButton = styled.button`
+  font-size: 1rem;
+  height: 40px;
+  width: 130px;
+  gap: 7px;
+  border-radius: 5px;
+  color: var(--text-white);
+  background: var(--primary-color);
 `;
 export const ProfileImageWrapper = styled.div`
   width: 60%;
@@ -143,16 +144,7 @@ export const MoreDataWrapper = styled.div`
     gap: 25px;
     margin-top: 40px;
   }
-  .profile {
-    ${flexch}
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    font-size: 1.4rem;
-    background: var(--primary-color-light);
-    color: var(--primary-color);
-    cursor: pointer;
-  }
+
   .extra-options {
     display: flex;
     margin-top: 40px;
@@ -166,13 +158,21 @@ export const MoreDataWrapper = styled.div`
     border-radius: 5px;
     width: 200px;
   }
-  .delete {
-    color: red;
-  }
 `;
 export const LoadingWrapper = styled.div`
   ${flexch}
   height: calc(100vh - 69px);
   font-size: 30px;
   width: 100%;
+`;
+
+export const ProfileIndv = styled.div`
+  ${flexch}
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  background: var(--primary-color-light);
+  color: var(--primary-color);
+  cursor: pointer;
 `;
