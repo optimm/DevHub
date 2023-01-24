@@ -19,6 +19,7 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["SingleProject"],
     }),
     createProject: builder.mutation({
       query: ({ body }) => {
@@ -30,6 +31,15 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllProjects", "SingleUser"],
     }),
+    likeUnlikeProject: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}/like`,
+          method: "GET",
+        };
+      },
+      invalidatesTags: ["AllProjects", "SingleProject"],
+    }),
   }),
 });
 
@@ -37,4 +47,5 @@ export const {
   useCreateProjectMutation,
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
+  useLikeUnlikeProjectMutation,
 } = projectApi;

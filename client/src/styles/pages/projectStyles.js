@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import AllTagsModal from "../../components/AllTagsModal";
 import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProjectMainWrapper = styled.div`
@@ -57,10 +58,12 @@ export const ProjectMainWrapper = styled.div`
   }
   .tags {
     display: flex;
+    align-items: center;
     gap: 20px;
     margin-top: 5px;
   }
   .view-more {
+    font-size: 0.88rem;
     color: blue;
     cursor: pointer;
   }
@@ -120,4 +123,16 @@ export const ProjectImageWrapper = styled.div`
     top: -12%;
     left: 8%;
   }
+`;
+
+export const AllTagsWrapper = styled.div`
+  max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0px 10px;
+`;
+
+export const TagSingle = styled.div`
+  font-size: 0.88rem;
 `;

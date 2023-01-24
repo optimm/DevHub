@@ -161,7 +161,8 @@ export const MoreDataWrapper = styled.div`
 `;
 export const LoadingWrapper = styled.div`
   ${flexch}
-  height: calc(100vh - 69px);
+  height: ${(props) =>
+    props.project ? "calc(100vh - 70px);" : "calc(100vh - 69px);"}
   font-size: 30px;
   width: 100%;
 `;

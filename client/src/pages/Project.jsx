@@ -15,21 +15,37 @@ import {
   SoloButton,
 } from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
-import { useGetSingleProjectQuery } from "../app/services/projectApi";
+import {
+  useGetSingleProjectQuery,
+  useLikeUnlikeProjectMutation,
+} from "../app/services/projectApi";
 import { linkProcessor, timeProcessor } from "../util/utilFunctions";
+import { useSelector } from "react-redux";
+import AllTagsModal from "../components/AllTagsModal";
+import { createNotification } from "../components/Notification";
 
 const Project = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isAuthenticated } = useSelector((state) => state.me);
   const { data, isLoading, isFetching, isSuccess, error, isError } =
     useGetSingleProjectQuery({ id });
   const projectData = data?.data;
 
+  const [likeUnlike, {}] = useLikeUnlikeProjectMutation();
+
   const [tagsString, setTagsString] = useState("");
   const [tagMore, setTagMore] = useState(false);
+  const [viewAllTags, setViewAllTags] = useState(false);
+  const [blankLoader, setBlankLoader] = useState(true);
 
   useEffect(() => {
-    if (data?.success) {
+    if (isFetching) {
+      setBlankLoader(true);
+    } else if (!isFetching && data?.success) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 500);
       let temp = "";
       console.log(data?.data?.tags?.length);
       if (data?.data?.tags?.length > 0) {
@@ -51,12 +67,26 @@ const Project = () => {
         setTagsString(temp);
       }
     }
-  }, [data]);
+  }, [isFetching]);
+
+  const handleLikeUnlike = async () => {
+    if (!isAuthenticated) {
+      createNotification(`Please Login First`, "error", 2000);
+      navigate("/login");
+    } else {
+      const { data: likeData, error: likeError } = await likeUnlike({ id });
+      if (likeData?.success) {
+        createNotification(likeData?.msg, "success", 2000);
+      } else if (!likeError?.success) {
+        createNotification(likeError?.msg, "error", 2000);
+      }
+    }
+  };
 
   return (
     <>
-      {isLoading || isFetching ? (
-        <LoadingWrapper>Loading...</LoadingWrapper>
+      {isLoading || isFetching || blankLoader ? (
+        <LoadingWrapper project>Loading...</LoadingWrapper>
       ) : (
         <>
           <ProjectMainWrapper>
@@ -82,7 +112,12 @@ const Project = () => {
                   <div className="tags-head">Tags</div>
                   <div className="tags">
                     {tagsString}
-                    <div className="view-more">View All</div>
+                    <div
+                      className="view-more"
+                      onClick={() => setViewAllTags(true)}
+                    >
+                      View All
+                    </div>
                   </div>
                 </div>
                 <div className="links-section">
@@ -115,7 +150,7 @@ const Project = () => {
 
               <div className="flex-justify">
                 <div className="likes-section">
-                  <div className="likes-indv">
+                  <div className="likes-indv" onClick={handleLikeUnlike}>
                     <AiFillLike />
                   </div>
                   <div className="likes-indv">
@@ -128,14 +163,16 @@ const Project = () => {
                     <RiBookmarkFill />
                   </div>
                 </div>
-                <div className="likes-section">
-                  <button className="edit-button">
-                    Edit <RiEditFill />
-                  </button>
-                  <button className="edit-button red">
-                    Delete <AiOutlineDelete />
-                  </button>
-                </div>
+                {isAuthenticated && (
+                  <div className="likes-section">
+                    <button className="edit-button">
+                      Edit <RiEditFill />
+                    </button>
+                    <button className="edit-button red">
+                      Delete <AiOutlineDelete />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="likes-section">
@@ -145,6 +182,13 @@ const Project = () => {
               </div>
             </div>
           </ProjectMainWrapper>
+          {viewAllTags && (
+            <AllTagsModal
+              show={viewAllTags}
+              setShow={setViewAllTags}
+              tags={data?.data?.tags}
+            />
+          )}
         </>
       )}
     </>
