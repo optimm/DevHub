@@ -11,7 +11,7 @@ export const authApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser"],
+      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser", "AllProjects"],
     }),
     login: builder.mutation({
       query: ({ body }) => {
@@ -26,7 +26,7 @@ export const authApi = baseApi.injectEndpoints({
         const { data: user } = data;
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
-      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser"],
+      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser", "AllProjects"],
     }),
     logout: builder.query({
       query: ({ id }) => {
@@ -43,6 +43,7 @@ export const authApi = baseApi.injectEndpoints({
             "SingleUser",
             "FollowUser",
             "Followers",
+            "AllProjects",
           ])
         );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
@@ -60,5 +61,9 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutQuery,useChangePasswordMutation } =
-  authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutQuery,
+  useChangePasswordMutation,
+} = authApi;

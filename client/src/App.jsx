@@ -10,6 +10,7 @@ import { CreateProject } from "./pages/CreateProject";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import Project from "./pages/Project";
 import Register from "./pages/Register";
 
 const App = () => {
@@ -69,6 +70,15 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllProjects />
+                  </>
+                }
+              />
+              <Route
+                path="/projects/:id"
+                element={
+                  <>
+                    <Navbar />
+                    <Project />
                   </>
                 }
               />
