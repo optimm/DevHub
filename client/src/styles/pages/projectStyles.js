@@ -64,7 +64,7 @@ export const ProjectMainWrapper = styled.div`
   }
   .view-more {
     font-size: 0.88rem;
-    color: blue;
+    color: var(--blue);
     cursor: pointer;
   }
   .links-section {
@@ -88,18 +88,24 @@ export const ProjectMainWrapper = styled.div`
   .likes-section {
     margin-top: 20px;
     display: flex;
-    gap: 30px;
-  }
-  .likes-indv {
-    font-size: 1.4rem;
-    color: var(--text-2);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
+    gap: 25px;
   }
 `;
 
+export const LikesIndv = styled.div`
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: ${(props) => (props?.checked ? "var(--blue)" : "var(--text-2)")};
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover {
+    background: rgb(0, 0, 0, 0.1);
+  }
+`;
 export const ProjectImageWrapper = styled.div`
   width: 92%;
   height: 55%;

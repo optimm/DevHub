@@ -26,10 +26,11 @@ const ProjectCard = ({
           </div>
           <div className="likes-right">
             <div className="like-indv">
-              {project?.total_likes} <BiComment />
+              {project?.total_likes} <AiFillLike />
             </div>
+
             <div className="like-indv">
-              {project?.total_comments} <AiFillLike />
+              {project?.total_comments} <BiComment />
             </div>
           </div>
         </div>

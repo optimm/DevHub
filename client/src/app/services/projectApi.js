@@ -40,6 +40,15 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllProjects", "SingleProject"],
     }),
+    saveUnsaveProject: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}/save`,
+          method: "GET",
+        };
+      },
+      invalidatesTags: ["AllProjects", "SingleProject"],
+    }),
   }),
 });
 
@@ -48,4 +57,5 @@ export const {
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
   useLikeUnlikeProjectMutation,
+  useSaveUnsaveProjectMutation,
 } = projectApi;

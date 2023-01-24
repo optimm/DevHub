@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  LikesIndv,
   ProjectImageWrapper,
   ProjectMainWrapper,
 } from "../styles/pages/projectStyles";
@@ -18,6 +19,7 @@ import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
   useLikeUnlikeProjectMutation,
+  useSaveUnsaveProjectMutation,
 } from "../app/services/projectApi";
 import { linkProcessor, timeProcessor } from "../util/utilFunctions";
 import { useSelector } from "react-redux";
@@ -33,6 +35,7 @@ const Project = () => {
   const projectData = data?.data;
 
   const [likeUnlike, {}] = useLikeUnlikeProjectMutation();
+  const [saveUnsave, {}] = useSaveUnsaveProjectMutation();
 
   const [tagsString, setTagsString] = useState("");
   const [tagMore, setTagMore] = useState(false);
@@ -47,7 +50,6 @@ const Project = () => {
         setBlankLoader(false);
       }, 500);
       let temp = "";
-      console.log(data?.data?.tags?.length);
       if (data?.data?.tags?.length > 0) {
         let arr = data?.data?.tags;
         for (let i = 0; i < arr.length; i++) {
@@ -79,6 +81,19 @@ const Project = () => {
         createNotification(likeData?.msg, "success", 2000);
       } else if (!likeError?.success) {
         createNotification(likeError?.msg, "error", 2000);
+      }
+    }
+  };
+  const handleSaveUnsave = async () => {
+    if (!isAuthenticated) {
+      createNotification(`Please Login First`, "error", 2000);
+      navigate("/login");
+    } else {
+      const { data: saveData, error: saveError } = await saveUnsave({ id });
+      if (saveData?.success) {
+        createNotification(saveData?.msg, "success", 2000);
+      } else if (!saveError?.success) {
+        createNotification(saveError?.msg, "error", 2000);
       }
     }
   };
@@ -150,20 +165,20 @@ const Project = () => {
 
               <div className="flex-justify">
                 <div className="likes-section">
-                  <div className="likes-indv" onClick={handleLikeUnlike}>
+                  <LikesIndv onClick={handleLikeUnlike} checked={data?.isLiked}>
                     <AiFillLike />
-                  </div>
-                  <div className="likes-indv">
+                  </LikesIndv>
+                  <LikesIndv>
                     <BiComment />
-                  </div>
-                  <div className="likes-indv">
+                  </LikesIndv>
+                  <LikesIndv>
                     <BiShareAlt />
-                  </div>
-                  <div className="likes-indv">
+                  </LikesIndv>
+                  <LikesIndv onClick={handleSaveUnsave} checked={data?.isSaved}>
                     <RiBookmarkFill />
-                  </div>
+                  </LikesIndv>
                 </div>
-                {isAuthenticated && (
+                {isAuthenticated && data?.isMine && (
                   <div className="likes-section">
                     <button className="edit-button">
                       Edit <RiEditFill />
@@ -177,8 +192,15 @@ const Project = () => {
 
               <div className="likes-section">
                 <div className="likes-data">
-                  Liked by {projectData?.total_likes} Users
+                  Liked by {projectData?.total_likes}{" "}
+                  {projectData?.total_likes === 1 ? "User" : "Users"}
                 </div>
+                {isAuthenticated && data?.isMine && (
+                  <div className="likes-data">
+                    Saved by {projectData?.total_saves}{" "}
+                    {projectData?.total_saves === 1 ? "User" : "Users"}
+                  </div>
+                )}
               </div>
             </div>
           </ProjectMainWrapper>
