@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexcv } from "./globalStyle";
+import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const MainWrapper = styled.div`
   ${flexcv}
@@ -8,9 +8,21 @@ export const MainWrapper = styled.div`
   background: var(--primary-color-light);
 `;
 
+export const MainHomeButton = styled.div`
+  ${flexch}
+  height:45px;
+  width: 45px;
+  background: var(--primary-color);
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  color: white;
+  border-radius: 50%;
+`;
+
 export const MainCard = styled.div`
-  height: 450px;
-  width: 800px;
+  height: 480px;
+  width: 850px;
   background: white;
   margin: auto;
   display: flex;
@@ -28,13 +40,12 @@ export const MainCardForm = styled.form`
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${(props) => (props.login ? "30px" : "25px")};
+    gap: ${(props) => (props.login ? "20px" : "10px")};
   }
   .form-head {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-3);
-    margin-top: ${(props) => props.login && "10px"};
   }
   .form-button {
     height: 35px;
@@ -43,6 +54,8 @@ export const MainCardForm = styled.form`
     color: white;
     font-size: 0.88rem;
     font-weight: 600;
+    margin-top: 15px;
+    margin-top: ${(props) => (props.login ? "15px" : "20px")};
   }
 
   .MuiFormHelperText-root {
@@ -68,13 +81,13 @@ export const MainCardImage = styled.div`
 export const MainCardOverLay = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 40px;
   height: 100%;
   width: 100%;
   background: var(--primary-color-glass);
   padding: 50px 40px;
   .heading {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--text-white);
   }

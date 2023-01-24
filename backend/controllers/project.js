@@ -20,14 +20,28 @@ const getAllProjects = async (req, res) => {
 
 const getSingleProject = async (req, res) => {
   const { id } = req.params;
+  let isLiked = false;
+  let isMine = false;
+  let isSaved = false;
   const project = await Project.findById(id).populate(
     "owner",
-    "name email avatar"
+    "name username email avatar"
   );
   if (!project) {
     throw new NotFoundError("Project not found");
   }
-  res.status(StatusCodes.OK).json({ success: true, data: project });
+  if (req?.user?.userId) {
+    const userId = req?.user?.userId.toString();
+    if (userId === project?.owner?._id.toString()) isMine = true;
+
+    if (project?.likes?.some((e) => e.toString() === userId)) isLiked = true;
+
+    if (project?.saved?.some((e) => e.toString() === userId)) isSaved = true;
+  }
+
+  res
+    .status(StatusCodes.OK)
+    .json({ success: true, data: project, isMine, isLiked, isSaved });
 };
 
 const getProjectsOfUser = async (req, res) => {

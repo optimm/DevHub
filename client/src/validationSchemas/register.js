@@ -5,7 +5,12 @@ let registerSchema = yup.object().shape({
     .string()
     .required("Name is required")
     .min(2, "Name must be atleast 2 characters")
-    .max(20, "Name cannot be more than 20 characters"),
+    .max(40, "Name cannot be more than 40 characters"),
+  username: yup
+    .string()
+    .required("Username is required")
+    .min(2, "Username must be atleast 2 characters")
+    .max(10, "Username cannot be more than 10 characters"),
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup
     .string()

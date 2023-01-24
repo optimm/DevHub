@@ -10,12 +10,14 @@ const searchUser = async (req, res, searchQuery) => {
     const userQuery = {
       $or: [
         { name: { $regex: q, $options: "i" } },
-        { email: { $regex: q, $options: "i" } },
+        { username: { $regex: q, $options: "i" } },
       ],
     };
     queryObject = { ...queryObject, ...userQuery };
   }
-  const mongoQuery = User.find(queryObject).select("name email avatar");
+  const mongoQuery = User.find(queryObject).select(
+    "name username email avatar"
+  );
   const data = await paginate(req, res, mongoQuery);
   const total = await User.countDocuments(queryObject);
   return { data, total };

@@ -51,7 +51,7 @@ const start = async () => {
     await connectDb();
     console.log("Connected to Database...\n");
     app.listen(port, () => {
-      console.log(`Server for jobs is running on port ${port} `);
+      console.log(`Devhub Server is running on port ${port} `);
     });
   } catch (error) {
     console.log(error);

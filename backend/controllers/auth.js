@@ -9,15 +9,23 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!email || !name || !password) {
-    throw new BadRequestError("Please provide name,email and password");
+  const { name, email, password, username } = req.body;
+  if (!email || !name || !password || !username) {
+    throw new BadRequestError(
+      "Please provide name,username,email and password"
+    );
   }
   let user = await User.findOne({ email });
   if (user) {
     throw new BadRequestError("Email address already in use");
   }
-  user = await User.create({ name, email, password });
+
+  user = await User.findOne({ username });
+  if (user) {
+    throw new BadRequestError("Username already in use");
+  }
+
+  user = await User.create({ name, email, username, password });
   res
     .status(StatusCodes.CREATED)
     .json({ success: true, msg: "User registered" });

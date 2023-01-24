@@ -9,6 +9,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide a name"],
   },
+  username: {
+    type: String,
+    required: [true, "Please provide a username"],
+    unique: [true, "Username already in use"],
+  },
   email: {
     type: String,
     required: [true, "Please provide an email"],
@@ -26,11 +31,11 @@ const UserSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    max: [200, "About cannot be more than 500 characters"],
+    max: [500, "About cannot be more than 500 characters"],
   },
   bio: {
     type: String,
-    max: [200, "Bio cannot be more than 150 characters"],
+    max: [200, "Bio cannot be more than 200 characters"],
   },
   profiles: [
     {

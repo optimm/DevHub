@@ -1,39 +1,100 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "./baseApi";
 import { authenticateMe } from "../../features/meSlice";
 
-export const userApi = createApi({
-  reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BACKEND_URL}/user/`,
-    credentials: "include",
-  }),
+export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //profile and account
     checkMyAuth: builder.query({
       query: () => {
         return {
-          url: "me",
+          url: "user/me",
           method: "GET",
         };
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data.data);
           dispatch(authenticateMe({ isAuthenticated: true, data: data?.data }));
         } catch (error) {
           dispatch(authenticateMe({ isAuthenticated: false, myData: {} }));
         }
       },
     }),
-    getSingleUser: builder.query({
-      query: ({ id }) => {
+    editProfile: builder.mutation({
+      query: ({ body }) => {
         return {
-          url: `${id}`,
+          url: "user/me",
+          method: "PATCH",
+          body,
+        };
+      },
+    }),
+    deleteProfile: builder.mutation({
+      query: () => {
+        return {
+          url: "user/me",
+          method: "DELETE",
+        };
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+        dispatch(
+          baseApi.util.invalidateTags([
+            "AllUsers",
+            "SingleUser",
+            "FollowUser",
+            "Followers",
+          ])
+        );
+        dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
+      },
+    }),
+    getAllUser: builder.query({
+      query: () => {
+        return {
+          url: `user`,
           method: "GET",
         };
       },
+      providesTags: ["AllUsers"],
+    }),
+    getSingleUser: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `user/${id}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["SingleUser"],
+    }),
+    //followers following
+    followUser: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `user/${id}/follow`,
+          method: "GET",
+        };
+      },
+      invalidatesTags: ["SingleUser", "Followers"],
+    }),
+    getFollowersFollowing: builder.query({
+      query: ({ id, category }) => {
+        return {
+          url: `user/${id}/${category}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Followers"],
     }),
   }),
 });
 
-export const { useCheckMyAuthQuery, useGetSingleUserQuery } = userApi;
+export const {
+  useCheckMyAuthQuery,
+  useEditProfileMutation,
+  useGetAllUserQuery,
+  useGetSingleUserQuery,
+  useFollowUserMutation,
+  useGetFollowersFollowingQuery,
+  useDeleteProfileMutation,
+} = userApi;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexch } from "./globalStyle";
+import { flexch } from "../globalStyle";
 
 export const NavContainerMain = styled.div`
   display: flex;

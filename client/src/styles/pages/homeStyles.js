@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexcv } from "./globalStyle";
+import { backgroundGeneral, flexcv } from "../globalStyle";
 
 export const LandingContainer = styled.div`
   height: calc(100vh - 70px);

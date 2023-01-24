@@ -1,26 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "./baseApi";
 import { authenticateMe } from "../../features/meSlice";
 
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BACKEND_URL}/auth/`,
-    credentials: "include",
-  }),
+export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: ({ body }) => {
         return {
-          url: "register",
+          url: "auth/register",
           method: "POST",
           body,
         };
       },
+      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser", "AllProjects"],
     }),
     login: builder.mutation({
       query: ({ body }) => {
         return {
-          url: "login",
+          url: "auth/login",
           method: "POST",
           body,
         };
@@ -30,8 +26,44 @@ export const authApi = createApi({
         const { data: user } = data;
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
+      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser", "AllProjects"],
+    }),
+    logout: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `auth/logout`,
+          method: "GET",
+        };
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+        dispatch(
+          baseApi.util.invalidateTags([
+            "AllUsers",
+            "SingleUser",
+            "FollowUser",
+            "Followers",
+            "AllProjects",
+          ])
+        );
+        dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
+      },
+    }),
+    changePassword: builder.mutation({
+      query: ({ body }) => {
+        return {
+          url: `auth/change-password`,
+          method: "PUT",
+          body,
+        };
+      },
     }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutQuery,
+  useChangePasswordMutation,
+} = authApi;

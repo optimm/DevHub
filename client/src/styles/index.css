@@ -1,18 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&family=Zen+Dots&display=swap");
+@import "bootstrap/dist/css/bootstrap.min.css";
 
 html,
 body {
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
   font-family: "Montserrat", sans-serif;
 }
 html {
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+a.linkreq {
+  color: blue !important;
+  text-decoration: underline !important;
 }
 
 * {
@@ -26,13 +31,34 @@ button {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .sepration {
   background: var(--sepration);
-  width: 90%;
+  width: 100%;
   height: 1px;
 }
+.flex-justify {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.red {
+  color: red;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+/* bootstrap settings */
+
 /* setting up colors */
 
 :root {
@@ -41,9 +67,10 @@ button {
   --primary-color-glass: #16003ba1;
   --glass-morph: rgb(255, 255, 255, 0.2);
   --back-drop: #04000cb7;
+  --blue: rgb(0, 127, 255);
 
   /* borders and seprations */
-  --sepration: rgb(204, 204, 204);
+  --sepration: rgb(228, 228, 228);
 
   /* text */
   --text-1: #000;

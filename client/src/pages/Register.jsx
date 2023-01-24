@@ -3,13 +3,15 @@ import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../app/services/authApi";
+import { AiFillHome } from "react-icons/ai";
 import {
   MainCard,
   MainCardForm,
   MainCardImage,
   MainCardOverLay,
+  MainHomeButton,
   MainWrapper,
-} from "../styles/loginStyles";
+} from "../styles/pages/loginStyles";
 import registerSchema from "../validationSchemas/register";
 import { createNotification } from "../components/Notification";
 
@@ -30,6 +32,7 @@ const Register = () => {
   } = useFormik({
     initialValues: {
       name: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -43,17 +46,24 @@ const Register = () => {
     if (isSuccess) {
       resetForm();
       createNotification(data.msg, "success", 2000);
-      // navigate("/login");
+      navigate("/login");
     }
   }, [isSuccess]);
+
+  console.log(requestError);
 
   return (
     <>
       <MainWrapper>
+        <MainHomeButton>
+          <Link to="/">
+            <AiFillHome />
+          </Link>
+        </MainHomeButton>
         <MainCard>
           <MainCardImage url="/images/register.jpg">
             <MainCardOverLay>
-              <div className="heading">Join DevHub Today.</div>
+              <div className="heading">Dive into DevHub Today.</div>
               <div className="text">
                 Devhub is a free platform to display your projects. Create a
                 free account today to interact with developers from across the
@@ -79,6 +89,20 @@ const Register = () => {
                 onBlur={handleBlur}
                 error={touched.name && errors.name ? true : false}
                 helperText={touched.name && errors.name ? errors.name : null}
+              />
+              <TextField
+                name="username"
+                label="Username"
+                variant="standard"
+                color="secondary"
+                className="form-input"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.username && errors.username ? true : false}
+                helperText={
+                  touched.username && errors.username ? errors.username : null
+                }
               />
               <TextField
                 name="email"

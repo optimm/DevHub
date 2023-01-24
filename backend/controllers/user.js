@@ -87,20 +87,30 @@ const getFollowing = async (req, res) => {
 
 //To check my auth and send back my data
 const checkMyAuth = async (req, res) => {
-  const me = await User.findById(req.user.userId).select("name email avatar");
+  const me = await User.findById(req.user.userId).select(
+    "name username email avatar"
+  );
   res.status(StatusCodes.OK).json({ success: true, data: me });
 };
 
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
-  const { name, email, about, profiles, bio } = req.body;
+  const { name, username, email, about, profiles, bio } = req.body;
+  console.log(req.body);
   const me = await User.findById(userId);
-  if (email) {
+  if (email && email !== me.email) {
     const user = await User.findOne({ email });
     if (user) {
       throw new BadRequestError("Email already in use");
     }
     me.email = email;
+  }
+  if (username && username !== me.username) {
+    const user = await User.findOne({ username });
+    if (user) {
+      throw new BadRequestError("Username already in use");
+    }
+    me.username = username;
   }
   if (name) me.name = name;
   if (about) me.about = about;
@@ -121,12 +131,15 @@ const deleteProfile = async (req, res) => {
   await Project.deleteMany({ owner: userId });
 
   // Removing user from other's followers whom this user follows
-  await User.updateMany({ follower: userId }, { $pull: { followers: userId } });
+  await User.updateMany(
+    { followers: userId },
+    { $pull: { followers: userId }, $inc: { total_followers: -1 } }
+  );
 
   // Removing user from other's following
   await User.updateMany(
     { following: userId },
-    { $pull: { following: userId } }
+    { $pull: { following: userId }, $inc: { total_following: -1 } }
   );
 
   //removing likes of this user from posts

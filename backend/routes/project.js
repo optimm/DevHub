@@ -18,7 +18,7 @@ const {
 router.route("/").get(ifAuthenticated, getAllProjects);
 router
   .route("/:id")
-  .get(getSingleProject)
+  .get(ifAuthenticated, getSingleProject)
   .patch(authMiddleware, updateProject)
   .delete(authMiddleware, deleteProject);
 
