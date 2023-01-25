@@ -10,10 +10,10 @@ const User = require("../models/User");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
-  if (req.user) {
-    const authUserQuery = { owner: { $ne: req.user.userId } };
-    searchQuery = { ...authUserQuery };
-  }
+  // if (req.user) {
+  //   const authUserQuery = { owner: { $ne: req.user.userId } };
+  //   searchQuery = { ...authUserQuery };
+  // }
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
@@ -23,10 +23,9 @@ const getSingleProject = async (req, res) => {
   let isLiked = false;
   let isMine = false;
   let isSaved = false;
-  const project = await Project.findById(id).populate(
-    "owner",
-    "name username email avatar"
-  );
+  const project = await Project.findById(id)
+    .select("-comments")
+    .populate("owner", "name username email avatar");
   if (!project) {
     throw new NotFoundError("Project not found");
   }
@@ -228,6 +227,19 @@ const deleteComment = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Comment Deleted" });
 };
 
+const getComments = async (req, res) => {
+  const { id: pId } = req.params;
+  const project = await Project.findById(pId);
+
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  let comments = project.comments;
+  res
+    .status(StatusCodes.OK)
+    .json({ success: true, data: { _id: project?._id, comments } });
+};
+
 module.exports = {
   getAllProjects,
   getSingleProject,
@@ -239,5 +251,6 @@ module.exports = {
   saveProject,
   commentOnProject,
   deleteComment,
+  getComments,
   getProjectsOfUser,
 };

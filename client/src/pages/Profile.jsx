@@ -66,9 +66,7 @@ const Profile = () => {
   ] = useFollowUserMutation();
 
   useEffect(() => {
-    if (isFetching) {
-      setBlankLoader(true);
-    } else if (!isFetching && data?.success) {
+    if (!isFetching && data?.success) {
       let tdata = data?.data;
       if (
         !tdata?.about ||
@@ -82,11 +80,18 @@ const Profile = () => {
       } else {
         setComplete(true);
       }
+    }
+  }, [isFetching]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setBlankLoader(true);
+    } else if (!isLoading && data?.success) {
       setTimeout(() => {
         setBlankLoader(false);
       }, 500);
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   useEffect(() => {
     if (isLogoutError) {
@@ -119,7 +124,7 @@ const Profile = () => {
 
   return (
     <>
-      {isLoading || isFetching || blankLoader ? (
+      {isLoading || blankLoader ? (
         <LoadingWrapper>Loading...</LoadingWrapper>
       ) : (
         <>

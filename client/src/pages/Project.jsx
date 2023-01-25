@@ -43,12 +43,7 @@ const Project = () => {
   const [blankLoader, setBlankLoader] = useState(true);
 
   useEffect(() => {
-    if (isFetching) {
-      setBlankLoader(true);
-    } else if (!isFetching && data?.success) {
-      setTimeout(() => {
-        setBlankLoader(false);
-      }, 500);
+    if (!isFetching && data?.success) {
       let temp = "";
       if (data?.data?.tags?.length > 0) {
         let arr = data?.data?.tags;
@@ -70,6 +65,16 @@ const Project = () => {
       }
     }
   }, [isFetching]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setBlankLoader(true);
+    } else if (!isLoading && data?.success) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 500);
+    }
+  }, [isLoading]);
 
   const handleLikeUnlike = async () => {
     if (!isAuthenticated) {
@@ -100,7 +105,7 @@ const Project = () => {
 
   return (
     <>
-      {isLoading || isFetching || blankLoader ? (
+      {isLoading || blankLoader ? (
         <LoadingWrapper project>Loading...</LoadingWrapper>
       ) : (
         <>

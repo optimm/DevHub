@@ -6,6 +6,7 @@ export const ProfileMainWrapper = styled.div`
   width: 100%;
   display: flex;
   padding: 0% 6%;
+  position: relative;
   .main-left {
     width: 50%;
     height: 100%;
@@ -164,7 +165,6 @@ export const LoadingWrapper = styled.div`
   height: ${(props) =>
     props.project ? "calc(100vh - 70px);" : "calc(100vh - 69px);"}
   font-size: 30px;
-  width: 100%;
 `;
 
 export const ProfileIndv = styled.div`
