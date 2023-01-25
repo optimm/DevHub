@@ -15,7 +15,9 @@ const searchProject = async (req, res, searchQuery) => {
     queryObject = { ...queryObject, ...tagQuery };
   }
 
-  let mongoQuery = Project.find(queryObject);
+  let mongoQuery = Project.find(queryObject)
+    .populate("owner", "name username email avatar")
+    .select("-likes -comments -saved");
 
   let data = await paginate(req, res, mongoQuery);
 

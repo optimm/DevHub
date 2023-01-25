@@ -26,7 +26,8 @@ const getSingleProject = async (req, res) => {
   const project = await Project.findById(id)
     .select("-comments")
     .populate("owner", "name username email avatar")
-    .populate("likes", "name username email avatar");
+    .populate("likes", "name username email avatar")
+    .populate("saved", "name username email avatar");
   if (!project) {
     throw new NotFoundError("Project not found");
   }
@@ -37,7 +38,8 @@ const getSingleProject = async (req, res) => {
     if (project?.likes?.some((e) => e._id.toString() === userId))
       isLiked = true;
 
-    if (project?.saved?.some((e) => e.toString() === userId)) isSaved = true;
+    if (project?.saved?.some((e) => e._id.toString() === userId))
+      isSaved = true;
   }
 
   res

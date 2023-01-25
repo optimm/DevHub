@@ -10,11 +10,7 @@ import { BiComment, BiShareAlt } from "react-icons/bi";
 import { AiFillLike, AiOutlineDelete } from "react-icons/ai";
 import { RiBookmarkFill, RiEditFill } from "react-icons/ri";
 
-import {
-  LoadingWrapper,
-  ProfileIndv,
-  SoloButton,
-} from "../styles/pages/profileStyles";
+import { LoadingWrapper, ProfileIndv } from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
@@ -23,9 +19,9 @@ import {
 } from "../app/services/projectApi";
 import { linkProcessor, timeProcessor } from "../util/utilFunctions";
 import { useSelector } from "react-redux";
-import AllTagsModal from "../components/AllTagsModal";
 import { createNotification } from "../components/Notification";
-import LikesModal from "../components/LikesModal";
+import AllTagsModal from "../components/AllTagsModal";
+import LikesSavesModal from "../components/LikesSavesModal";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -43,6 +39,7 @@ const Project = () => {
   const [viewAllTags, setViewAllTags] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
   const [likesShow, setLikesShow] = useState(false);
+  const [savesShow, setSavesShow] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -103,6 +100,11 @@ const Project = () => {
         createNotification(saveError?.msg, "error", 2000);
       }
     }
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    createNotification("Url copied to clipboard", "success", 2000);
   };
 
   return (
@@ -178,7 +180,7 @@ const Project = () => {
                   <LikesIndv>
                     <BiComment />
                   </LikesIndv>
-                  <LikesIndv>
+                  <LikesIndv onClick={handleShare}>
                     <BiShareAlt />
                   </LikesIndv>
                   <LikesIndv onClick={handleSaveUnsave} checked={data?.isSaved}>
@@ -203,7 +205,10 @@ const Project = () => {
                   {projectData?.total_likes === 1 ? "User" : "Users"}
                 </div>
                 {isAuthenticated && data?.isMine && (
-                  <div className="likes-data">
+                  <div
+                    className="likes-data"
+                    onClick={() => setSavesShow(true)}
+                  >
                     Saved by {projectData?.total_saves}{" "}
                     {projectData?.total_saves === 1 ? "User" : "Users"}
                   </div>
@@ -219,10 +224,17 @@ const Project = () => {
             />
           )}
           {likesShow && (
-            <LikesModal
+            <LikesSavesModal
               show={likesShow}
               setShow={setLikesShow}
-              likes={projectData?.likes}
+              array={projectData?.likes}
+            />
+          )}
+          {savesShow && (
+            <LikesSavesModal
+              show={savesShow}
+              setShow={setSavesShow}
+              array={projectData?.saved}
             />
           )}
         </>

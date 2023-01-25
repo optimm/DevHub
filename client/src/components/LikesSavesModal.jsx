@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FAllWrapper, FIndvWrapper } from "../styles/components/FmodalStyles";
 
-const LikesModal = ({ show, setShow, likes }) => {
+const LikesSavesModal = ({ show, setShow, array }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const handleClose = () => setShow(false);
@@ -16,11 +16,11 @@ const LikesModal = ({ show, setShow, likes }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Likes</Modal.Title>
+        <Modal.Title>array</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <FAllWrapper>
-          {likes?.map((item, index) => (
+          {array?.map((item, index) => (
             <FIndvWrapper url="/images/login.jpg" key={index}>
               <Link to={`/users/${item._id}`}>
                 <div className="profile-image" onClick={handleNavigate}></div>
@@ -37,4 +37,4 @@ const LikesModal = ({ show, setShow, likes }) => {
   );
 };
 
-export default LikesModal;
+export default LikesSavesModal;
