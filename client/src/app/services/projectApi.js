@@ -49,6 +49,25 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllProjects", "SingleProject"],
     }),
+    getComments: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "GET",
+        };
+      },
+      providesTags: ["AllComments"],
+    }),
+    addComment: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "POST",
+          body,
+        };
+      },
+      invalidatesTags: ["AllComments"],
+    }),
   }),
 });
 
@@ -58,4 +77,6 @@ export const {
   useGetSingleProjectQuery,
   useLikeUnlikeProjectMutation,
   useSaveUnsaveProjectMutation,
+  useGetCommentsQuery,
+  useAddCommentMutation,
 } = projectApi;

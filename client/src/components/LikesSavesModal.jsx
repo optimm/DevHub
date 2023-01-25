@@ -2,8 +2,9 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FAllWrapper, FIndvWrapper } from "../styles/components/FmodalStyles";
+import "../styles/modal.css";
 
-const LikesSavesModal = ({ show, setShow, array }) => {
+const LikesSavesModal = ({ show, setShow, array, heading }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const handleClose = () => setShow(false);
@@ -16,7 +17,7 @@ const LikesSavesModal = ({ show, setShow, array }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>array</Modal.Title>
+        <Modal.Title>{heading}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <FAllWrapper>

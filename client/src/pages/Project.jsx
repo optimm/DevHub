@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { createNotification } from "../components/Notification";
 import AllTagsModal from "../components/AllTagsModal";
 import LikesSavesModal from "../components/LikesSavesModal";
+import CommentsModal from "../components/CommentsModal";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const Project = () => {
   const [blankLoader, setBlankLoader] = useState(true);
   const [likesShow, setLikesShow] = useState(false);
   const [savesShow, setSavesShow] = useState(false);
+  const [comment, setComment] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -177,7 +179,7 @@ const Project = () => {
                   <LikesIndv onClick={handleLikeUnlike} checked={data?.isLiked}>
                     <AiFillLike />
                   </LikesIndv>
-                  <LikesIndv>
+                  <LikesIndv onClick={() => setComment(true)}>
                     <BiComment />
                   </LikesIndv>
                   <LikesIndv onClick={handleShare}>
@@ -228,6 +230,7 @@ const Project = () => {
               show={likesShow}
               setShow={setLikesShow}
               array={projectData?.likes}
+              heading="Likes"
             />
           )}
           {savesShow && (
@@ -235,6 +238,14 @@ const Project = () => {
               show={savesShow}
               setShow={setSavesShow}
               array={projectData?.saved}
+              heading="Saved By"
+            />
+          )}
+          {comment && (
+            <CommentsModal
+              show={comment}
+              setShow={setComment}
+              isMine={data?.isMine}
             />
           )}
         </>

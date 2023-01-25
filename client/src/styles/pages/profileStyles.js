@@ -97,7 +97,8 @@ export const SoloButton = styled.button`
   gap: 7px;
   border-radius: 5px;
   color: var(--text-white);
-  background: var(--primary-color);
+  background: ${(props) =>
+    props?.notActive ? "var(--primary-color-glass)" : "var(--primary-color)"};
 `;
 export const ProfileImageWrapper = styled.div`
   width: 60%;

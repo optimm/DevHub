@@ -195,7 +195,7 @@ const commentOnProject = async (req, res) => {
   }
   project.comments.push({ user: userId, comment });
   await project.save();
-  res.status(StatusCodes.OK).json({ success: true, message: "Comment added" });
+  res.status(StatusCodes.OK).json({ success: true, msg: "Comment added" });
 };
 
 const deleteComment = async (req, res) => {
@@ -233,7 +233,10 @@ const deleteComment = async (req, res) => {
 
 const getComments = async (req, res) => {
   const { id: pId } = req.params;
-  const project = await Project.findById(pId);
+  const project = await Project.findById(pId).populate({
+    path: "comments",
+    populate: { path: "user", select: "name username email avatar" },
+  });
 
   if (!project) {
     throw new NotFoundError("Project not found");

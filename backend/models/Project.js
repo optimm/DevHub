@@ -50,7 +50,12 @@ const ProjectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-      comment: { type: String, required: [true, "Please provide a comment"] },
+
+      comment: {
+        type: String,
+        required: [true, "Please provide a comment"],
+        max: [200, "Comment cannot be more than 200 characters"],
+      },
     },
   ],
   saved: [
