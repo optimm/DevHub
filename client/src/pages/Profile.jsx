@@ -190,33 +190,23 @@ const Profile = () => {
                       </>
                     ) : (
                       <>
-                        {data?.isFollowing ? (
-                          <SoloButton
-                            disabled={isFollowLoading}
-                            onClick={handleFollow}
-                          >
-                            {isFollowLoading ? (
-                              "Loading.."
-                            ) : (
-                              <>
-                                Unfollow <RiUserUnfollowLine />
-                              </>
-                            )}
-                          </SoloButton>
-                        ) : (
-                          <SoloButton
-                            disabled={isFollowLoading}
-                            onClick={handleFollow}
-                          >
-                            {isFollowLoading ? (
-                              "Loading.."
-                            ) : (
-                              <>
-                                Follow <RiUserFollowLine />
-                              </>
-                            )}
-                          </SoloButton>
-                        )}
+                        <SoloButton
+                          disabled={isFollowLoading}
+                          onClick={handleFollow}
+                        >
+                          {isFollowLoading || isFetching ? (
+                            "Loading.."
+                          ) : data?.isFollowing ? (
+                            <>
+                              Unfollow <RiUserUnfollowLine />
+                            </>
+                          ) : (
+                            <>
+                              Follow <RiUserFollowLine />
+                            </>
+                          )}
+                        </SoloButton>
+
                         <SoloButton>
                           Contact <RiMailOpenLine />
                         </SoloButton>

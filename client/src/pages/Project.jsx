@@ -25,6 +25,7 @@ import { linkProcessor, timeProcessor } from "../util/utilFunctions";
 import { useSelector } from "react-redux";
 import AllTagsModal from "../components/AllTagsModal";
 import { createNotification } from "../components/Notification";
+import LikesModal from "../components/LikesModal";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const Project = () => {
   const [tagMore, setTagMore] = useState(false);
   const [viewAllTags, setViewAllTags] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
+  const [likesShow, setLikesShow] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -196,7 +198,7 @@ const Project = () => {
               </div>
 
               <div className="likes-section">
-                <div className="likes-data">
+                <div className="likes-data" onClick={() => setLikesShow(true)}>
                   Liked by {projectData?.total_likes}{" "}
                   {projectData?.total_likes === 1 ? "User" : "Users"}
                 </div>
@@ -214,6 +216,13 @@ const Project = () => {
               show={viewAllTags}
               setShow={setViewAllTags}
               tags={data?.data?.tags}
+            />
+          )}
+          {likesShow && (
+            <LikesModal
+              show={likesShow}
+              setShow={setLikesShow}
+              likes={projectData?.likes}
             />
           )}
         </>
