@@ -68,6 +68,16 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllComments"],
     }),
+    deleteComment: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "DELETE",
+          body,
+        };
+      },
+      invalidatesTags: ["AllComments"],
+    }),
   }),
 });
 
@@ -79,4 +89,5 @@ export const {
   useSaveUnsaveProjectMutation,
   useGetCommentsQuery,
   useAddCommentMutation,
+  useDeleteCommentMutation,
 } = projectApi;

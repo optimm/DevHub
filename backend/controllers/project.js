@@ -193,7 +193,7 @@ const commentOnProject = async (req, res) => {
   if (!project) {
     throw new NotFoundError("Project not found");
   }
-  project.comments.push({ user: userId, comment });
+  project.comments.unshift({ user: userId, comment });
   await project.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Comment added" });
 };

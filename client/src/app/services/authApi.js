@@ -11,7 +11,13 @@ export const authApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser", "AllProjects"],
+      invalidatesTags: [
+        "AllUsers",
+        "SingleUser",
+        "FollowUser",
+        "AllProjects",
+        "SingleProject",
+      ],
     }),
     login: builder.mutation({
       query: ({ body }) => {
@@ -26,7 +32,13 @@ export const authApi = baseApi.injectEndpoints({
         const { data: user } = data;
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
-      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser", "AllProjects"],
+      invalidatesTags: [
+        "SingleUser",
+        "AllUsers",
+        "FollowUser",
+        "AllProjects",
+        "SingleProject",
+      ],
     }),
     logout: builder.query({
       query: ({ id }) => {
@@ -44,6 +56,7 @@ export const authApi = baseApi.injectEndpoints({
             "FollowUser",
             "Followers",
             "AllProjects",
+            "SingleProject",
           ])
         );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));

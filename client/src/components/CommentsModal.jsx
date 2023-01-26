@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAddCommentMutation,
+  useDeleteCommentMutation,
   useGetCommentsQuery,
 } from "../app/services/projectApi";
 import {
@@ -33,6 +34,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     handleBlur,
     handleChange,
     resetForm,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       comment: "",
@@ -43,28 +45,34 @@ const CommentsModal = ({ show, setShow, isMine }) => {
         createNotification(`Please Login First`, "error", 2000);
         navigate("/login");
       }
-      const { data: commentData, error: commentError } = await addComment({
-        id,
-        body: values,
-      });
-      console.log({ commentData });
-      if (commentData?.success) {
-        createNotification(commentData?.msg, "success", 2000);
-        resetForm();
-      } else if (!commentError?.success) {
-        createNotification(commentError?.msg, "error", 2000);
+      if (editComment) {
+      } else {
+        const { data: commentData, error: commentError } = await addComment({
+          id,
+          body: values,
+        });
+
+        if (commentData?.success) {
+          createNotification(commentData?.msg, "success", 2000);
+          resetForm();
+        } else if (!commentError?.success) {
+          createNotification(commentError?.msg, "error", 2000);
+        }
       }
     },
   });
 
-  const { isAuthenticated } = useSelector((state) => state.me);
+  const { isAuthenticated, myData } = useSelector((state) => state.me);
   const { data, isLoading, isFetching, isSuccess, isError, error } =
     useGetCommentsQuery({ id });
 
   const [addComment, {}] = useAddCommentMutation();
+  const [deleteComment, {}] = useDeleteCommentMutation();
   const comments = data?.data?.comments;
 
   const [blankLoader, setBlankLoader] = useState(false);
+  const [editComment, setEditComment] = useState(false);
+  const [editCommentId, setEditCommentId] = useState("");
   const handleClose = () => {
     setShow(false);
   };
@@ -79,6 +87,26 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    console.log(values, values.comment, values.comment.length);
+  }, []);
+
+  const handleDeleteComment = async ({ commentId }) => {
+    const { data: deleteCommentData, error: deleteCommentError } =
+      await deleteComment({ id, body: { commentId } });
+    if (deleteCommentData?.success) {
+      createNotification(deleteCommentData?.msg, "success", 2000);
+      resetForm();
+    } else if (!deleteCommentError?.success) {
+      createNotification(deleteCommentError?.msg, "error", 2000);
+    }
+  };
+  const handleEditComment = ({ commentId, commentText }) => {
+    setEditComment(true);
+    setEditCommentId(commentId);
+    setFieldValue("comment", commentText);
+  };
+
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
@@ -89,25 +117,48 @@ const CommentsModal = ({ show, setShow, isMine }) => {
           <LoadingCommentWrapper>Loading...</LoadingCommentWrapper>
         ) : (
           <CommentsWrapper auth={isAuthenticated}>
-            {comments?.map((item, index) => (
-              <CommentSingle className="flex-justify">
-                <div className="image-section">
-                  <Avatar sx={{ width: 30, height: 30 }} />
-                </div>
-                <div className="text-section">
-                  <span>{item?.user?.username}</span>
-                  {item?.comment}
-                </div>
-                <div className="action-section flex-justify">
-                  <button className="action-button">
-                    <AiOutlineDelete />
-                  </button>
-                  <button className="action-button">
-                    <RiEditFill />
-                  </button>
-                </div>
-              </CommentSingle>
-            ))}
+            {comments?.map((item, index) => {
+              let isMyComment = false;
+              if (isAuthenticated) {
+                if (myData?._id === item?.user?._id) isMyComment = true;
+              }
+              return (
+                <CommentSingle className="flex-justify">
+                  <div className="image-section">
+                    <Avatar sx={{ width: 30, height: 30 }} />
+                  </div>
+                  <div className="text-section">
+                    <span>{item?.user?.username}</span>
+                    {item?.comment}
+                  </div>
+                  <div className="action-section flex-justify">
+                    {(isMine || isMyComment) && (
+                      <button
+                        className="action-button"
+                        onClick={() =>
+                          handleDeleteComment({ commentId: item?._id })
+                        }
+                      >
+                        <AiOutlineDelete />
+                      </button>
+                    )}
+                    {isMyComment && (
+                      <button
+                        className="action-button"
+                        onClick={() =>
+                          handleEditComment({
+                            commentId: item?._id,
+                            commentText: item?.comment,
+                          })
+                        }
+                      >
+                        <RiEditFill />
+                      </button>
+                    )}
+                  </div>
+                </CommentSingle>
+              );
+            })}
           </CommentsWrapper>
         )}
       </Modal.Body>
@@ -125,19 +176,18 @@ const CommentsModal = ({ show, setShow, isMine }) => {
                 value={values.comment}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={touched.comment && errors.comment ? true : false}
-                helperText={
-                  touched.comment && errors.comment ? errors.comment : null
-                }
+                inputProps={{ maxLength: 200 }}
               />
             </div>
             <div className="button-section">
               <SoloButton
-                notActive={errors?.comment ? true : false}
+                notActive={
+                  errors?.comment || values.comment?.length < 1 ? true : false
+                }
                 type="submit"
                 disabled={errors?.comment}
               >
-                Add
+                {editComment ? "Update" : "ADD"}
               </SoloButton>
             </div>
           </AddCommentSection>

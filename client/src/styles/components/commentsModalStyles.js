@@ -39,7 +39,10 @@ export const CommentSingle = styled.div`
 `;
 
 export const AddCommentSection = styled.form`
-  height: 70px;
+  height: 60px;
+  ${flexch}
+  justify-content:space-between;
+
   .input-section {
     width: 75%;
   }
