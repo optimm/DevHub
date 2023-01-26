@@ -20,7 +20,6 @@ import {
   useFollowUserMutation,
   useGetSingleUserQuery,
 } from "../app/services/userApi";
-import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import FModal from "../components/FModal";
@@ -31,6 +30,7 @@ import ChangePassword from "../components/ChangePassword";
 import DeleteAccountProject from "../components/DeleteAccountProject";
 import { AiOutlinePlus } from "react-icons/ai";
 import { baseApi } from "../app/services/baseApi";
+import { useLogoutMutation } from "../app/services/authApi";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ const Profile = () => {
   const { id } = useParams();
 
   const { isAuthenticated } = useSelector((state) => state.me);
-  const [skip, setSkip] = useState(true);
   const [blankLoader, setBlankLoader] = useState(true);
   //modals
   const [fmodal, setFmodal] = useState(false);
@@ -49,15 +48,13 @@ const Profile = () => {
   //
   const [complete, setComplete] = useState(false);
   //queries
-  const { isError: isLogoutError, isSuccess: isLogoutSuccess } = useLogoutQuery(
-    { id },
-    { skip }
-  );
+  const [logoutFn, {}] = useLogoutMutation();
   const { data, isLoading, isFetching, isSuccess, isError } =
     useGetSingleUserQuery(
       {
         id,
       },
+      { skip: del }
     );
 
   const [
@@ -99,15 +96,6 @@ const Profile = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (isLogoutError) {
-      createNotification(`Something went wrong`, "error", 2000);
-    } else if (isLogoutSuccess) {
-      createNotification(`Logged out successfully`, "success", 2000);
-      navigate("/");
-    }
-  }, [isLogoutError, isLogoutSuccess]);
-
-  useEffect(() => {
     if (isFollowError) {
       createNotification(`Something went wrong`, "error", 2000);
     } else if (isFollowSuccess) {
@@ -115,9 +103,20 @@ const Profile = () => {
     }
   }, [isFollowError, isFollowSuccess]);
 
-  const handleLogout = () => {
-    setSkip(false);
+  const handleLogout = async () => {
+    const { data: logoutData, error: logoutError } = await logoutFn();
+    if (logoutData?.success) {
+      createNotification(logoutData?.msg || "Logged out", "info", 2000);
+      navigate("/");
+    } else {
+      createNotification(
+        logoutError?.data?.msg || "Something went wrong",
+        "error",
+        2000
+      );
+    }
   };
+
   const handleFollow = async () => {
     if (!isAuthenticated) {
       createNotification(`Please Login First`, "error", 2000);

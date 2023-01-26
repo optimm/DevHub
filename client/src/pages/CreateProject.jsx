@@ -28,6 +28,7 @@ export const CreateProject = () => {
   } = useFormik({
     initialValues: {
       title: "",
+      desc: "",
       live_link: "",
       github_link: "",
       tags: [],
@@ -38,6 +39,7 @@ export const CreateProject = () => {
       if (temp.live_link === "") delete temp["live_link"];
       if (temp.github_link === "") delete temp["github_link"];
       if (temp?.tags?.length === 0) delete temp["tags"];
+      if (temp?.desc?.length === 0) delete temp["desc"];
       await create({ body: temp });
     },
   });

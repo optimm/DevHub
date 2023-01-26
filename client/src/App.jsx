@@ -34,7 +34,7 @@ const App = () => {
   return (
     <>
       {isLoading || isFetching || blankLoader ? (
-        <LoadingWrapper>Loading...</LoadingWrapper>
+        <LoadingWrapper allWeb>Loading...</LoadingWrapper>
       ) : (
         <>
           <BrowserRouter>
