@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useAddCommentMutation,
   useDeleteCommentMutation,
+  useEditCommentMutation,
   useGetCommentsQuery,
 } from "../app/services/projectApi";
 import {
@@ -46,6 +47,19 @@ const CommentsModal = ({ show, setShow, isMine }) => {
         navigate("/login");
       }
       if (editComment) {
+        const { data: editCommentData, error: editCommentError } =
+          await editCommentFn({
+            id,
+            body: { commentId: editCommentId, commentText: values.comment },
+          });
+
+        if (editCommentData?.success) {
+          createNotification(editCommentData?.msg, "success", 2000);
+          resetForm();
+        } else if (!editCommentError?.success) {
+          createNotification(editCommentError?.msg, "error", 2000);
+        }
+        setEditComment(false);
       } else {
         const { data: commentData, error: commentError } = await addComment({
           id,
@@ -68,6 +82,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
 
   const [addComment, {}] = useAddCommentMutation();
   const [deleteComment, {}] = useDeleteCommentMutation();
+  const [editCommentFn, {}] = useEditCommentMutation();
   const comments = data?.data?.comments;
 
   const [blankLoader, setBlankLoader] = useState(false);
@@ -121,6 +136,9 @@ const CommentsModal = ({ show, setShow, isMine }) => {
               let isMyComment = false;
               if (isAuthenticated) {
                 if (myData?._id === item?.user?._id) isMyComment = true;
+              }
+              if (editComment && editCommentId === item?._id) {
+                return <></>;
               }
               return (
                 <CommentSingle className="flex-justify">

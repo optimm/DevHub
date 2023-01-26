@@ -195,6 +195,7 @@ const commentOnProject = async (req, res) => {
     throw new NotFoundError("Project not found");
   }
   project.comments.unshift({ user: userId, comment });
+  project.total_comments += 1;
   await project.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Comment added" });
 };
@@ -228,6 +229,8 @@ const deleteComment = async (req, res) => {
   project.comments = project.comments.filter(
     (item) => item._id.toString() !== commentId.toString()
   );
+  project.total_comments -= 1;
+
   await project.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Comment Deleted" });
 };
