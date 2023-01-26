@@ -56,8 +56,8 @@ const CommentsModal = ({ show, setShow, isMine }) => {
         if (editCommentData?.success) {
           createNotification(editCommentData?.msg, "success", 2000);
           resetForm();
-        } else if (!editCommentError?.success) {
-          createNotification(editCommentError?.msg, "error", 2000);
+        } else if (!editCommentError?.data?.success) {
+          createNotification(editCommentError?.data?.msg, "error", 2000);
         }
         setEditComment(false);
       } else {
@@ -69,8 +69,8 @@ const CommentsModal = ({ show, setShow, isMine }) => {
         if (commentData?.success) {
           createNotification(commentData?.msg, "success", 2000);
           resetForm();
-        } else if (!commentError?.success) {
-          createNotification(commentError?.msg, "error", 2000);
+        } else if (!commentError?.data?.success) {
+          createNotification(commentError?.data?.msg, "error", 2000);
         }
       }
     },
@@ -112,8 +112,8 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     if (deleteCommentData?.success) {
       createNotification(deleteCommentData?.msg, "success", 2000);
       resetForm();
-    } else if (!deleteCommentError?.success) {
-      createNotification(deleteCommentError?.msg, "error", 2000);
+    } else if (!deleteCommentError?.data?.success) {
+      createNotification(deleteCommentError?.data?.msg, "error", 2000);
     }
   };
   const handleEditComment = ({ commentId, commentText }) => {

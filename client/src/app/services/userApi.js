@@ -11,6 +11,7 @@ export const userApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["CheckAuth"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -36,16 +37,16 @@ export const userApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
+      invalidatesTags: [
+        "AllUsers",
+        "SingleUser",
+        "SingleProject",
+        "AllProjects",
+        "AllComments",
+        "CheckAuth",
+      ],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        dispatch(
-          baseApi.util.invalidateTags([
-            "AllUsers",
-            "SingleUser",
-            "FollowUser",
-            "Followers",
-          ])
-        );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       },
     }),

@@ -12,15 +12,29 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Project from "./pages/Project";
 import Register from "./pages/Register";
+import { LoadingWrapper } from "./styles/pages/profileStyles";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { data, isLoading, isFetching } = useCheckMyAuthQuery();
+  const { data, isLoading, error, isFetching } = useCheckMyAuthQuery();
+  const [blankLoader, setBlankLoader] = useState(true);
+  useEffect(() => {
+    if (isFetching) {
+      setBlankLoader(true);
+    } else if (
+      !isFetching &&
+      (data?.success === true || error?.data?.success === false)
+    ) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 1000);
+    }
+  }, [isFetching]);
 
   return (
     <>
-      {isLoading || isFetching ? (
-        <>Loading...</>
+      {isLoading || isFetching || blankLoader ? (
+        <LoadingWrapper>Loading...</LoadingWrapper>
       ) : (
         <>
           <BrowserRouter>

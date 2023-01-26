@@ -50,7 +50,6 @@ const Register = () => {
     }
   }, [isSuccess]);
 
-  console.log(requestError);
 
   return (
     <>

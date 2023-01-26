@@ -22,17 +22,19 @@ import {
 } from "../app/services/userApi";
 import { useLogoutQuery } from "../app/services/authApi";
 import { createNotification } from "../components/Notification";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FModal from "../components/FModal";
 import EditProfileModal from "../components/EditProfileModal";
 import ProfileIcon from "../components/ProfileIcon";
 import { linkProcessor } from "../util/utilFunctions";
 import ChangePassword from "../components/ChangePassword";
-import DeleteAccount from "../components/DeleteAccount";
+import DeleteAccountProject from "../components/DeleteAccountProject";
 import { AiOutlinePlus } from "react-icons/ai";
+import { baseApi } from "../app/services/baseApi";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
 
   const { isAuthenticated } = useSelector((state) => state.me);
@@ -47,14 +49,17 @@ const Profile = () => {
   //
   const [complete, setComplete] = useState(false);
   //queries
-  const { data, isLoading, isFetching, isSuccess, isError } =
-    useGetSingleUserQuery({
-      id,
-    });
   const { isError: isLogoutError, isSuccess: isLogoutSuccess } = useLogoutQuery(
     { id },
     { skip }
   );
+  const { data, isLoading, isFetching, isSuccess, isError } =
+    useGetSingleUserQuery(
+      {
+        id,
+      },
+    );
+
   const [
     followFunction,
     {
@@ -273,7 +278,7 @@ const Profile = () => {
             <EditProfileModal show={editProfile} setShow={setEditProfile} />
           )}
           {changep && <ChangePassword show={changep} setShow={setChangep} />}
-          {del && <DeleteAccount show={del} setShow={setDel} />}
+          {del && <DeleteAccountProject show={del} setShow={setDel} />}
         </>
       )}
     </>

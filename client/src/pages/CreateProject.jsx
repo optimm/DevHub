@@ -48,7 +48,7 @@ export const CreateProject = () => {
       resetForm();
     }
     if (isError) {
-      createNotification(error?.msg, "error", 2000);
+      createNotification(error?.data?.msg, "error", 2000);
     }
   }, [isSuccess, isError]);
 

@@ -23,6 +23,7 @@ import { createNotification } from "../components/Notification";
 import AllTagsModal from "../components/AllTagsModal";
 import LikesSavesModal from "../components/LikesSavesModal";
 import CommentsModal from "../components/CommentsModal";
+import DeleteAccountProject from "../components/DeleteAccountProject";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const Project = () => {
   const [likesShow, setLikesShow] = useState(false);
   const [savesShow, setSavesShow] = useState(false);
   const [comment, setComment] = useState(false);
+  const [deleteProject, setDeleteProject] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -85,8 +87,8 @@ const Project = () => {
       const { data: likeData, error: likeError } = await likeUnlike({ id });
       if (likeData?.success) {
         createNotification(likeData?.msg, "success", 2000);
-      } else if (!likeError?.success) {
-        createNotification(likeError?.msg, "error", 2000);
+      } else if (!likeError?.data?.success) {
+        createNotification(likeError?.data?.LikesIndvmsg, "error", 2000);
       }
     }
   };
@@ -194,7 +196,10 @@ const Project = () => {
                     <button className="edit-button">
                       Edit <RiEditFill />
                     </button>
-                    <button className="edit-button red">
+                    <button
+                      className="edit-button red"
+                      onClick={() => setDeleteProject(true)}
+                    >
                       Delete <AiOutlineDelete />
                     </button>
                   </div>
@@ -246,6 +251,13 @@ const Project = () => {
               show={comment}
               setShow={setComment}
               isMine={data?.isMine}
+            />
+          )}
+          {deleteProject && (
+            <DeleteAccountProject
+              show={deleteProject}
+              setShow={setDeleteProject}
+              project={true}
             />
           )}
         </>

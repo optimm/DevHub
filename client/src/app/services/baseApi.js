@@ -13,6 +13,7 @@ export const baseApi = createApi({
     "AllProjects",
     "SingleProject",
     "AllComments",
+    "CheckAuth",
   ],
   endpoints: () => ({}),
 });

@@ -31,6 +31,15 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllProjects", "SingleUser"],
     }),
+    deleteProject: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["AllProjects", "SingleUser"],
+    }),
     likeUnlikeProject: builder.mutation({
       query: ({ id }) => {
         return {
@@ -93,6 +102,7 @@ export const projectApi = baseApi.injectEndpoints({
 
 export const {
   useCreateProjectMutation,
+  useDeleteProjectMutation,
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
   useLikeUnlikeProjectMutation,
