@@ -7,6 +7,7 @@ const {
 } = require("../errors");
 const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
+const { default: mongoose } = require("mongoose");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
@@ -247,6 +248,44 @@ const getComments = async (req, res) => {
     .json({ success: true, data: { _id: project?._id, comments } });
 };
 
+const editComment = async (req, res) => {
+  const { userId } = req.user;
+  const { id: pId } = req.params;
+  let { commentId, commentText } = req.body;
+  const project = await Project.findById(pId);
+  commentId = mongoose.Types.ObjectId(commentId);
+
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  let comments = project.comments;
+  comments = comments.filter(
+    (item) => item._id.toString() === commentId.toString()
+  );
+
+  if (comments.length < 1) {
+    throw new NotFoundError("Comment not found");
+  }
+  const comment = comments[0];
+  if (
+    !(
+      comment.user.toString() === userId.toString() ||
+      project.owner.toString() === userId.toString()
+    )
+  ) {
+    throw new UnauthenticatedError("Not authorized to delete comment");
+  }
+  await Project.updateOne(
+    { "comments._id": commentId },
+    {
+      $set: {
+        "comments.$.comment": commentText,
+      },
+    }
+  );
+  res.status(StatusCodes.OK).json({ success: true, msg: "Comment Updated" });
+};
+
 module.exports = {
   getAllProjects,
   getSingleProject,
@@ -259,5 +298,6 @@ module.exports = {
   commentOnProject,
   deleteComment,
   getComments,
+  editComment,
   getProjectsOfUser,
 };
