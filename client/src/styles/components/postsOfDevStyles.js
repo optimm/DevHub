@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const PostWrapper = styled.div`
-  height: 300px;
+  margin-top: 5vh;
+  min-height: 300px;
   width: 100%;
 `;

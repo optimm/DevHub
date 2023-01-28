@@ -109,6 +109,7 @@ const App = () => {
                     <>
                       <Navbar />
                       <CreateProject />
+                      <Footer />
                     </>
                   ) : (
                     <Navigate replace to="/login" />

@@ -87,6 +87,15 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["Followers"],
     }),
+    getProjectOfUser: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `user/${id}/projects`,
+          method: "GET",
+        };
+      },
+      providesTags: ["ProjectOfUser"],
+    }),
   }),
 });
 
@@ -98,4 +107,5 @@ export const {
   useFollowUserMutation,
   useGetFollowersFollowingQuery,
   useDeleteProfileMutation,
+  useGetProjectOfUserQuery,
 } = userApi;

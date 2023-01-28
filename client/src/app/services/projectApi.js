@@ -29,7 +29,7 @@ export const projectApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllProjects", "SingleUser"],
+      invalidatesTags: ["AllProjects", "SingleUser", "ProjectOfUser"],
     }),
     deleteProject: builder.mutation({
       query: ({ id }) => {
@@ -38,7 +38,7 @@ export const projectApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleUser"],
+      invalidatesTags: ["AllProjects", "SingleUser", "ProjectOfUser"],
     }),
     likeUnlikeProject: builder.mutation({
       query: ({ id }) => {
@@ -47,7 +47,7 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject"],
+      invalidatesTags: ["AllProjects", "SingleProject", "ProjectOfUser"],
     }),
     saveUnsaveProject: builder.mutation({
       query: ({ id }) => {
@@ -56,7 +56,7 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject"],
+      invalidatesTags: ["AllProjects", "SingleProject", "ProjectOfUser"],
     }),
     getComments: builder.query({
       query: ({ id }) => {
@@ -75,7 +75,12 @@ export const projectApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject", "AllComments"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "AllComments",
+        "ProjectOfUser",
+      ],
     }),
     deleteComment: builder.mutation({
       query: ({ id, body }) => {
@@ -85,7 +90,12 @@ export const projectApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject", "AllComments"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "AllComments",
+        "ProjectOfUser",
+      ],
     }),
     editComment: builder.mutation({
       query: ({ id, body }) => {
