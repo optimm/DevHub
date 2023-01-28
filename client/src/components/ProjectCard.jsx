@@ -11,7 +11,7 @@ const ProjectCard = ({ project }) => {
     <ProjectCardWrapper image="/images/login.jpg">
       <div
         className="image-section"
-        onClick={() => navigate(`${project?._id}`)}
+        onClick={() => navigate(`/projects/${project?._id}`)}
       >
         <div className="image-overlay">
           <div className="title">{project?.title}</div>

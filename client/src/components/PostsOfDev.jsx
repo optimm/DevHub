@@ -7,7 +7,7 @@ import { AllProjectCardWrapper } from "../styles/pages/allProjectsStyles";
 import { ExtraButton } from "../styles/pages/profileStyles";
 import ProjectCard from "./ProjectCard";
 
-const PostsOfDev = () => {
+const PostsOfDev = ({ isMe }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isFetching, isSuccess, isError, error } =
@@ -16,9 +16,11 @@ const PostsOfDev = () => {
 
   return (
     <PostWrapper>
-      <ExtraButton primary onClick={() => navigate("/projects/add")}>
-        Add Project
-      </ExtraButton>
+      {isMe && (
+        <ExtraButton primary onClick={() => navigate("/projects/add")}>
+          Add Project
+        </ExtraButton>
+      )}
       <AllProjectCardWrapper>
         {isLoading ? (
           <>Loading...</>
