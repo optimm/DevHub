@@ -5,7 +5,11 @@ let createProjectSchema = yup.object().shape({
     .string()
     .required("Title is required")
     .min(2, "Title should be atleast 2 characters")
-    .max(50, "Title cannot be more than 50 characters"),
+    .max(50, "Title cannot be more than 50 characters")
+    .test("title", "Title is required", (val) => {
+      if (!val || (val && !val.trim().length)) return false;
+      return true;
+    }),
   desc: yup.string().max(500, "Description cannot be more than 500 characters"),
   github_link: yup
     .string()
