@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+//styles
 import {
   ButtonWrapper,
   ExtraButton,
@@ -9,30 +11,33 @@ import {
   ProfileWrapper,
   TopWrapper,
 } from "../styles/pages/profileStyles";
+//apis
+import {
+  useFollowUserMutation,
+  useGetSingleUserQuery,
+} from "../app/services/userApi";
+import { useLogoutMutation } from "../app/services/authApi";
+//components and utils
+import FModal from "../components/FModal";
+import EditProfileModal from "../components/EditProfileModal";
+import DeleteAccountProject from "../components/DeleteAccountProject";
+import ChangePassword from "../components/ChangePassword";
+import { linkProcessor } from "../util/utilFunctions";
+import { createNotification } from "../components/Notification";
+import ProfileIcon from "../components/ProfileIcon";
+import PostsOfDev from "../components/PostsOfDev";
+//icons
+import { BsGridFill } from "react-icons/bs";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import {
   RiUserFollowLine,
   RiMailOpenLine,
   RiUserUnfollowLine,
   RiLogoutBoxRLine,
   RiUserFill,
+  RiBookmarkFill,
 } from "react-icons/ri";
-
-import {
-  useFollowUserMutation,
-  useGetSingleUserQuery,
-} from "../app/services/userApi";
-import { createNotification } from "../components/Notification";
-import { useDispatch, useSelector } from "react-redux";
-import FModal from "../components/FModal";
-import EditProfileModal from "../components/EditProfileModal";
-import ProfileIcon from "../components/ProfileIcon";
-import { linkProcessor } from "../util/utilFunctions";
-import ChangePassword from "../components/ChangePassword";
-import DeleteAccountProject from "../components/DeleteAccountProject";
-import { useLogoutMutation } from "../app/services/authApi";
-import PostsOfDev from "../components/PostsOfDev";
-import { BsGridFill } from "react-icons/bs";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import SavedProjects from "../components/SavedProjects";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -222,8 +227,15 @@ const Profile = () => {
                 className={`wrapper-button ${active == 2 && "active"}`}
                 onClick={() => setActive(2)}
               >
-                Posts
+                Projects
                 <BsGridFill />
+              </button>
+              <button
+                className={`wrapper-button ${active == 3 && "active"}`}
+                onClick={() => setActive(3)}
+              >
+                Saved
+                <RiBookmarkFill />
               </button>
             </ButtonWrapper>
 
@@ -272,8 +284,10 @@ const Profile = () => {
                   </div>
                 )}
               </MoreDataWrapper>
-            ) : (
+            ) : active === 2 ? (
               <PostsOfDev isMe={data?.isMe} />
+            ) : (
+              <SavedProjects />
             )}
           </ProfileWrapper>
 

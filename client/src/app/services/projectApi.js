@@ -38,7 +38,12 @@ export const projectApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleUser", "ProjectOfUser"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleUser",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
     }),
     likeUnlikeProject: builder.mutation({
       query: ({ id }) => {
@@ -47,7 +52,12 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject", "ProjectOfUser"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
     }),
     saveUnsaveProject: builder.mutation({
       query: ({ id }) => {
@@ -56,7 +66,12 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject", "ProjectOfUser"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
     }),
     getComments: builder.query({
       query: ({ id }) => {
@@ -80,6 +95,7 @@ export const projectApi = baseApi.injectEndpoints({
         "SingleProject",
         "AllComments",
         "ProjectOfUser",
+        "SavedProjects",
       ],
     }),
     deleteComment: builder.mutation({
@@ -95,6 +111,7 @@ export const projectApi = baseApi.injectEndpoints({
         "SingleProject",
         "AllComments",
         "ProjectOfUser",
+        "SavedProjects",
       ],
     }),
     editComment: builder.mutation({

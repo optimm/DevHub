@@ -44,6 +44,8 @@ export const userApi = baseApi.injectEndpoints({
         "AllProjects",
         "AllComments",
         "CheckAuth",
+        "SavedProjects",
+        "ProjectOfUser",
       ],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
@@ -96,6 +98,16 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["ProjectOfUser"],
     }),
+
+    getSavedProjects: builder.query({
+      query: () => {
+        return {
+          url: `user/me/saved`,
+          method: "GET",
+        };
+      },
+      providesTags: ["SavedProjects"],
+    }),
   }),
 });
 
@@ -108,4 +120,5 @@ export const {
   useGetFollowersFollowingQuery,
   useDeleteProfileMutation,
   useGetProjectOfUserQuery,
+  useGetSavedProjectsQuery,
 } = userApi;
