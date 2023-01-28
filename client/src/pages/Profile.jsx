@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  ButtonWrapper,
+  ExtraButton,
   LoadingWrapper,
   MoreDataWrapper,
-  ProfileImageWrapper,
   ProfileIndv,
-  ProfileMainWrapper,
-  SoloButton,
+  ProfileWrapper,
+  TopWrapper,
 } from "../styles/pages/profileStyles";
 import {
   RiUserFollowLine,
   RiMailOpenLine,
   RiUserUnfollowLine,
-  RiEditFill,
   RiLogoutBoxRLine,
+  RiUserFill,
 } from "react-icons/ri";
 
 import {
@@ -28,9 +29,10 @@ import ProfileIcon from "../components/ProfileIcon";
 import { linkProcessor } from "../util/utilFunctions";
 import ChangePassword from "../components/ChangePassword";
 import DeleteAccountProject from "../components/DeleteAccountProject";
-import { AiOutlinePlus } from "react-icons/ai";
-import { baseApi } from "../app/services/baseApi";
 import { useLogoutMutation } from "../app/services/authApi";
+import PostsOfDev from "../components/PostsOfDev";
+import { BsGridFill } from "react-icons/bs";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState(false);
   const [changep, setChangep] = useState(false);
   const [del, setDel] = useState(false);
+  const [active, setActive] = useState(1);
   //
   const [complete, setComplete] = useState(false);
   //queries
@@ -132,16 +135,156 @@ const Profile = () => {
         <LoadingWrapper>Loading...</LoadingWrapper>
       ) : (
         <>
-          <ProfileMainWrapper>
+          <ProfileWrapper>
+            <TopWrapper url="/images/login.jpg">
+              <div className="image-section"></div>
+              <div className="text-section">
+                <div className="username-section">
+                  <div className="username">{data?.data?.username}</div>
+                  {data?.isMe ? (
+                    <ExtraButton onClick={() => setEditProfile(true)}>
+                      Edit Profile
+                    </ExtraButton>
+                  ) : (
+                    <ExtraButton
+                      disabled={isFollowLoading}
+                      onClick={handleFollow}
+                      primary={data?.isFollowing === false}
+                    >
+                      {isFollowLoading || isFetching ? (
+                        "Loading.."
+                      ) : data?.isFollowing ? (
+                        <>
+                          Unfollow <RiUserUnfollowLine />
+                        </>
+                      ) : (
+                        <>
+                          Follow <RiUserFollowLine />
+                        </>
+                      )}
+                    </ExtraButton>
+                  )}
+                </div>
+                <div className="followers-section">
+                  <div>
+                    <span>{data?.data?.total_projects}</span> Posts
+                  </div>
+                  <div
+                    onClick={() => {
+                      setFmodalCat("followers");
+                      setFmodal(true);
+                    }}
+                    className="follower-section-sub"
+                  >
+                    <span>{data?.data?.total_followers}</span> Followers
+                  </div>
+                  <div
+                    onClick={() => {
+                      setFmodalCat("following");
+                      setFmodal(true);
+                    }}
+                    className="follower-section-sub"
+                  >
+                    <span>{data?.data?.total_following}</span> Following
+                  </div>
+                </div>
+                <div className="name-section">
+                  <div className="name">{data?.data?.name}</div>
+                  <div className="bio">{data?.data?.bio}</div>
+                </div>
+                <div className="complete-profile">
+                  {!complete &&
+                    data?.isMe &&
+                    "Complete your profile so that other's can know you better"}
+                  {complete &&
+                    data?.data?.profiles?.length < 6 &&
+                    data?.isMe &&
+                    "Add more profile links to be more reachable"}
+                  {complete &&
+                    data?.data?.profiles?.length === 6 &&
+                    data?.isMe && (
+                      <>
+                        Complete Profile <AiOutlineCheckCircle />
+                      </>
+                    )}
+                </div>
+              </div>
+            </TopWrapper>
+            <ButtonWrapper>
+              <button
+                className={`wrapper-button ${active == 1 && "active"}`}
+                onClick={() => setActive(1)}
+              >
+                About
+                <RiUserFill />
+              </button>
+              <button
+                className={`wrapper-button ${active == 2 && "active"}`}
+                onClick={() => setActive(2)}
+              >
+                Posts
+                <BsGridFill />
+              </button>
+            </ButtonWrapper>
+
+            {active == 1 ? (
+              <MoreDataWrapper>
+                {data?.data?.about?.length > 0 && (
+                  <>
+                    <div className="about-head">About</div>
+                    <div className="about">{data?.data?.about}</div>
+                  </>
+                )}
+
+                {data?.data?.profiles?.length > 0 && (
+                  <>
+                    <div className="about-head">Profiles</div>
+                    <div className="profiles-section">
+                      {data?.data?.profiles?.map((item, index) => (
+                        <ProfileIndv
+                          className="profile"
+                          key={index}
+                          onClick={() => window.open(linkProcessor(item?.link))}
+                        >
+                          <ProfileIcon platform={item?.platform} />
+                        </ProfileIndv>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {data?.isMe ? (
+                  <div className="extra-options">
+                    <ExtraButton onClick={handleLogout} primary>
+                      <RiLogoutBoxRLine /> Logout
+                    </ExtraButton>
+                    <ExtraButton onClick={() => setChangep(true)}>
+                      Change Password
+                    </ExtraButton>
+                    <ExtraButton className="red" onClick={() => setDel(true)}>
+                      Delete Account
+                    </ExtraButton>
+                  </div>
+                ) : (
+                  <div className="extra-options">
+                    <ExtraButton primary>
+                      Contact <RiMailOpenLine />
+                    </ExtraButton>
+                  </div>
+                )}
+              </MoreDataWrapper>
+            ) : (
+              <PostsOfDev />
+            )}
+          </ProfileWrapper>
+
+          {/* <ProfileMainWrapper>
             <div className="main-left">
               <div className="user-data">
                 <div className="name-section">
                   <div className="name">{data?.data?.name}</div>
                   <div className="username">{data?.data?.username}</div>
                   <div className="bio">{data?.data?.bio}</div>
-                  {/* <a className="website" href={linkProcessor("google.com")}>
-                    Website
-                  </a> */}
+
                 </div>
                 <div className="sepration" />
                 <div className="numbers-section">
@@ -236,41 +379,7 @@ const Profile = () => {
                 <div className="profile-image"></div>
               </ProfileImageWrapper>
             </div>
-          </ProfileMainWrapper>
-          <MoreDataWrapper>
-            <div className="sepration"></div>
-            <div className="about-head">About</div>
-            <div className="about">{data?.data?.about}</div>
-            <div className="profiles-section">
-              {data?.data?.profiles &&
-                data?.data?.profiles?.length > 0 &&
-                data?.data?.profiles?.map((item, index) => (
-                  <ProfileIndv
-                    className="profile"
-                    key={index}
-                    onClick={() => window.open(linkProcessor(item?.link))}
-                  >
-                    <ProfileIcon platform={item?.platform} />
-                  </ProfileIndv>
-                ))}
-            </div>
-            {data?.isMe && (
-              <div className="extra-options">
-                <button
-                  className="extra-button"
-                  onClick={() => setChangep(true)}
-                >
-                  Change Password
-                </button>
-                <button
-                  className="extra-button red"
-                  onClick={() => setDel(true)}
-                >
-                  Delete Account
-                </button>
-              </div>
-            )}
-          </MoreDataWrapper>
+          </ProfileMainWrapper> */}
 
           <FModal show={fmodal} setShow={setFmodal} category={fmodalcat} />
           {editProfile && (

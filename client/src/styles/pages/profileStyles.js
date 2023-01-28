@@ -1,93 +1,140 @@
 import styled from "styled-components";
 import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
-export const ProfileMainWrapper = styled.div`
-  height: calc(100vh - 70px);
-  width: 100%;
+export const ProfileWrapper = styled.div`
+  padding: 0 6%;
+`;
+
+export const TopWrapper = styled.div`
+  margin-top: 10vh;
   display: flex;
-  padding: 0% 6%;
-  position: relative;
-  .main-left {
-    width: 50%;
-    height: 100%;
+  justify-content: center;
+  gap: 40px;
+  height: 35vh;
+  .image-section {
+    background: url(${(props) => props.url});
+    ${backgroundGeneral}
+    border-radius:50%;
+    height: 170px;
+    width: 170px;
   }
-  .user-data {
-    width: 100%;
-    height: 75%;
-    margin-top: 14%;
-    ${flexcv}
-    align-items:flex-start;
-    justify-content: space-between;
+  .text-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 5px;
   }
-  .name {
-    font-size: 2.5rem;
-    font-weight: 700;
-    text-transform: capitalize;
+  .username-section {
+    display: flex;
+    gap: 30px;
+    align-items: center;
   }
   .username {
-    margin-top: 10px;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-  .bio {
-    margin-top: 10px;
-    font-size: 1.1rem;
-    color: var(--text-2);
-  }
-  .website {
-    font-size: 1rem;
-    font-weight: 500;
-  }
-  span {
+    font-size: 1.8rem;
     font-weight: 700;
   }
-  .posts {
+  .followers-section {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  .numbers-section {
-    width: 100%;
-  }
-  .add-project {
-    font-size: 0.88rem;
-    height: 30px;
-    width: 100px;
-    background: var(--primary-color-glass);
-    border-radius: 5px;
-    color: white;
-    ${flexch}
-    gap:5px;
-    font-weight: 500;
-  }
-  .follower-section {
-    font-size: 1.2rem;
-    margin-top: 15px;
-    display: flex;
-    gap: 20px;
+    gap: 50px;
+    font-size: 1.1rem;
   }
   .follower-section-sub {
     cursor: pointer;
   }
-  .button-inner {
-    display: flex;
-    gap: 20px;
+  span {
+    font-weight: 700;
   }
-
-  .main-right {
-    width: 50%;
-    height: 100%;
-    ${flexch}
-    align-items:flex-start;
+  .name-section {
+    font-size: 1rem;
+  }
+  .name {
+    font-weight: 600;
+  }
+  .bio {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    line-height: 1.2;
   }
   .complete-profile {
-    margin-top: 20px;
-    font-size: 1.1rem;
+    margin-top: 0px;
+    font-size: 1rem;
     font-weight: 500;
     color: green;
   }
+`;
+
+export const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 40px;
+  height: 10vh;
+  margin-top: 5vh;
+  border-bottom: 1px solid var(--sepration);
+
+  .wrapper-button {
+    background: inherit;
+    color: var(--text-3);
+    font-weight: 700;
+    gap: 7px;
+    font-size: 0.9rem;
+    border-radius: 0px;
+    border-bottom: 3px solid white;
+  }
+
+  svg {
+    font-size: 1rem;
+  }
+  .active {
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+  }
+`;
+
+export const MoreDataWrapper = styled.div`
+  width: 100%;
+  padding-bottom: 30px;
+  .about-head {
+    margin-top: 50px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .about {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 1rem;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+  .profiles-section {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+  }
+
+  .extra-options {
+    display: flex;
+    margin-top: 50px;
+    padding: 20px 0px;
+    gap: 20px;
+  }
+  .extra-button {
+    height: 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    width: 200px;
+  }
+`;
+
+export const ExtraButton = styled.button`
+  height: 35px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  gap: 5px;
+  background: ${(props) => props.primary && "var(--primary-color)"};
+  color: ${(props) => (props.primary ? "white" : "var(--text-1)")};
+  border-radius: 5px;
+  width: 170px;
 `;
 
 export const SoloButton = styled.button`
@@ -100,67 +147,7 @@ export const SoloButton = styled.button`
   background: ${(props) =>
     props?.notActive ? "var(--primary-color-glass)" : "var(--primary-color)"};
 `;
-export const ProfileImageWrapper = styled.div`
-  width: 60%;
-  height: 70%;
-  position: relative;
-  margin-top: 18%;
-  .profile-image {
-    border-radius: 5px;
-    width: 100%;
-    height: 100%;
-    background: url(${(props) => props.url});
-    ${backgroundGeneral}
-  }
-  .profile-back {
-    border-radius: 5px;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: var(--primary-color-glass);
-    z-index: -1;
-    top: -8%;
-    left: 15%;
-  }
-`;
 
-export const MoreDataWrapper = styled.div`
-  width: 100%;
-  min-height: 30px;
-  margin-bottom: 30px;
-  padding: 0% 6%;
-  .about-head {
-    margin-top: 40px;
-    font-size: 2.4rem;
-    font-weight: 600;
-  }
-  .about {
-    width: 85%;
-    margin-top: 20px;
-    font-size: 1.1rem;
-    color: var(--text-2);
-    line-height: 1.4;
-  }
-  .profiles-section {
-    display: flex;
-    gap: 25px;
-    margin-top: 40px;
-  }
-
-  .extra-options {
-    display: flex;
-    margin-top: 40px;
-    gap: 20px;
-    justify-content: flex-end;
-  }
-  .extra-button {
-    height: 40px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    width: 200px;
-  }
-`;
 export const LoadingWrapper = styled.div`
   ${flexch}
   height: ${(props) =>

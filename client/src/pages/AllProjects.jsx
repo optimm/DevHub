@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useGetAllProjectsQuery } from "../app/services/projectApi";
 import ProjectCard from "../components/ProjectCard";
-import { AllProjectCardWrapper } from "../styles/pages/allProjectsStyles";
+import {
+  AllProjectCardWrapper,
+  AllProjectsWrapper,
+} from "../styles/pages/allProjectsStyles";
 import { SearchBarWrapper } from "../styles/pages/allUsersStyles";
 
 const AllProjects = () => {
@@ -11,7 +14,7 @@ const AllProjects = () => {
   const projectData = data?.data?.data;
   const [value, setValue] = useState("");
   return (
-    <>
+    <AllProjectsWrapper>
       <SearchBarWrapper>
         <Paper
           elevation={1}
@@ -41,7 +44,7 @@ const AllProjects = () => {
           <>No Data</>
         )}
       </AllProjectCardWrapper>
-    </>
+    </AllProjectsWrapper>
   );
 };
 

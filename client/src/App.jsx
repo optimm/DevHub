@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
 import AllProjects from "./pages/AllProjects";
@@ -65,6 +66,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllUsers />
+                    <Footer />
                   </>
                 }
               />
@@ -74,6 +76,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <Profile />
+                    <Footer />
                   </>
                 }
               />
@@ -84,6 +87,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllProjects />
+                    <Footer />
                   </>
                 }
               />
@@ -93,6 +97,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <Project />
+                    <Footer />
                   </>
                 }
               />

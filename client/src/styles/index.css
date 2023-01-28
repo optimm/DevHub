@@ -45,7 +45,8 @@ button {
   justify-content: space-between;
 }
 .red {
-  color: red;
+  color: red !important;
+
 }
 
 @keyframes fadeIn {

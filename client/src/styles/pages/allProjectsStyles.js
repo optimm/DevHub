@@ -1,10 +1,15 @@
 import styled from "styled-components";
 import * as mq from "../mediaQueries";
 
-export const AllProjectCardWrapper = styled.div`
-  margin: 3% 0%;
-  width: 100%;
+export const AllProjectsWrapper = styled.div`
   padding: 0% 6%;
+  min-height: calc(90vh - 220px);
+`;
+
+export const AllProjectCardWrapper = styled.div`
+  margin: 5vh 0px;
+  width: 100%;
+
   display: grid;
   row-gap: 40px;
   column-gap: 80px;
