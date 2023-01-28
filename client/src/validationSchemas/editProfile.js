@@ -33,13 +33,7 @@ let editProfileSchema = yup.object().shape({
   profiles: yup.array(
     yup.object({
       platform: yup.string().required("Platform is required"),
-      link: yup
-        .string()
-        .required("Link is required")
-        .test("link", "Link is required", (val) => {
-          if (!val || (val && !val.trim().length)) return false;
-          return true;
-        }),
+      link: yup.string().required("Link is required"),
     })
   ),
 });

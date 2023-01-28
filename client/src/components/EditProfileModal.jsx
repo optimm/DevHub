@@ -215,10 +215,14 @@ const EditProfileModal = ({ show, setShow }) => {
                           className="form-input"
                           fullWidth
                           value={linkToProfile(item)}
+                          onBlur={handleBlur}
                           onChange={(e) => {
                             let temp = [...values?.profiles];
                             let flag = false;
-                            if (!e.target.value || e.target.value === "") {
+                            if (
+                              !e.target.value ||
+                              e.target.value.trim() === ""
+                            ) {
                               let ind = -1;
                               temp.map((x, i) => {
                                 if (x?.platform === item) {
@@ -235,7 +239,7 @@ const EditProfileModal = ({ show, setShow }) => {
                               if (x?.platform === item) {
                                 flag = true;
                                 let newObj = { ...temp[i] };
-                                newObj.link = e.target.value;
+                                newObj.link = e.target.value.trim();
                                 temp[i] = newObj;
                               }
                             });
@@ -243,7 +247,7 @@ const EditProfileModal = ({ show, setShow }) => {
                             if (!flag) {
                               temp = [
                                 ...temp,
-                                { platform: item, link: e.target.value },
+                                { platform: item, link: e.target.value.trim() },
                               ];
                             }
                             setFieldValue("profiles", temp);
