@@ -15,6 +15,7 @@ import createProjectSchema from "../validationSchemas/createProject";
 import { createNotification } from "../components/Notification";
 import { useSelector } from "react-redux";
 import { BsCardImage } from "react-icons/bs";
+import { trimAll } from "../util/utilFunctions";
 
 export const CreateProject = () => {
   const [create, { data, isLoading, isError, isSuccess, error }] =
@@ -39,6 +40,7 @@ export const CreateProject = () => {
     },
     validationSchema: createProjectSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       let temp = { ...values };
       if (temp.live_link === "") delete temp["live_link"];
       if (temp.github_link === "") delete temp["github_link"];

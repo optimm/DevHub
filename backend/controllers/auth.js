@@ -10,7 +10,16 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   const { name, email, password, username } = req.body;
-  if (!email || !name || !password || !username) {
+  if (
+    !email ||
+    email === "" ||
+    !name ||
+    name === "" ||
+    !password ||
+    password === "" ||
+    !username ||
+    username === ""
+  ) {
     throw new BadRequestError(
       "Please provide name,username,email and password"
     );
@@ -33,7 +42,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
+  if (!email || email === "" || !password || password === "") {
     throw new BadRequestError("Please provide email and password");
   }
   const user = await User.findOne({ email }).select("+password");
@@ -83,7 +92,12 @@ const changePassword = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId).select("+password");
   const { currentPassword, newPassword } = req.body;
-  if (!currentPassword || !newPassword) {
+  if (
+    !currentPassword ||
+    !newPassword ||
+    currentPassword === "" ||
+    newPassword === ""
+  ) {
     throw new BadRequestError("Please provide current and new password");
   }
   const isValid = await me.CheckPassword(currentPassword);

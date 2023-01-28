@@ -22,6 +22,7 @@ import commentSchema from "../validationSchemas/comment";
 import { createNotification } from "./Notification";
 import { AiOutlineDelete } from "react-icons/ai";
 import { RiEditFill } from "react-icons/ri";
+import { trimAll } from "../util/utilFunctions";
 
 const CommentsModal = ({ show, setShow, isMine }) => {
   const { id } = useParams();
@@ -42,6 +43,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     },
     validationSchema: commentSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       if (!isAuthenticated) {
         createNotification(`Please Login First`, "error", 2000);
         navigate("/login");

@@ -8,6 +8,7 @@ import { Notification } from "./components/Notification";
 import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
 import { CreateProject } from "./pages/CreateProject";
+import EditProject from "./pages/EditProject";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -97,6 +98,16 @@ const App = () => {
                   <>
                     <Navbar />
                     <Project />
+                    <Footer />
+                  </>
+                }
+              />
+              <Route
+                path="/projects/:id/edit"
+                element={
+                  <>
+                    <Navbar />
+                    <EditProject />
                     <Footer />
                   </>
                 }

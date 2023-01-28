@@ -23,8 +23,13 @@ export const linkProcessor = (link) => {
   return link;
 };
 
-export const arraysEqual = (a1, a2) =>
-  a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx]));
+export const arraysEqual = (a1, a2) => {
+  if (!a1 && (!a2 || a2?.length === 0)) return true;
+  if (!a1 || !a2) return false;
+  return (
+    a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx]))
+  );
+};
 
 export const objectsEqual = (o1, o2) =>
   typeof o1 === "object" && Object.keys(o1).length > 0
@@ -38,4 +43,15 @@ export const timeProcessor = (str) => {
   const dt = d.toDateString();
   const st = d.toLocaleTimeString();
   return dt + ", at " + st;
+};
+
+export const trimAll = (obj) => {
+  const keys = Object.keys(obj);
+  keys.forEach((key, index) => {
+    let myVar = obj[key];
+    if (typeof myVar === "string") {
+      obj[key] = myVar.trim();
+    }
+  });
+  return obj;
 };

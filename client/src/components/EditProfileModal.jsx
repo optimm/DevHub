@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";
 import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
-import { arraysEqual, capitalizeString } from "../util/utilFunctions";
+import { arraysEqual, capitalizeString, trimAll } from "../util/utilFunctions";
 
 import { platformOptions } from "../util/options";
 
@@ -55,6 +55,7 @@ const EditProfileModal = ({ show, setShow }) => {
     initialValues: {},
     validationSchema: editProfileSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       if (
         me?.name === values?.name &&
         me?.username === values?.username &&

@@ -64,8 +64,14 @@ const createProject = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
   const { title, live_link, github_link } = req.body;
-  if (!title || (title && !live_link && !github_link)) {
-    throw new BadRequestError("Title and one link for project is required");
+  if (
+    !title ||
+    title === "" ||
+    (title &&
+      (!live_link || live_link === "") &&
+      (!github_link || github_link === ""))
+  ) {
+    throw new BadRequestError("Please Provide title and one link for project");
   }
   const project = await Project.create({ ...req.body, owner: userId });
   me.projects.unshift(project._id);
@@ -75,9 +81,9 @@ const createProject = async (req, res) => {
 };
 
 const updateProject = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   const { userId } = req.user;
-  const project = await Project.findById(id);
+  let project = await Project.findById(id);
   if (!project) {
     throw new NotFoundError("Project not found");
   }
@@ -85,14 +91,33 @@ const updateProject = async (req, res) => {
     throw new UnauthenticatedError("Project is not owned by current user");
   }
   const { title, live_link, github_link, tags, desc } = req.body;
+  if (
+    !title ||
+    title === "" ||
+    (title &&
+      (!live_link || live_link === "") &&
+      (!github_link || github_link === ""))
+  ) {
+    throw new BadRequestError("Please Provide title and one link for project");
+  }
+  project = project.toObject();
   if (title) {
     project.title = title;
+  }
+  if (project?.desc && (!desc || desc === "")) {
+    delete project.desc;
   }
   if (desc) {
     project.desc = desc;
   }
+  if (project?.live_link && (live_link || live_link === "")) {
+    delete project.live_link;
+  }
   if (live_link) {
     project.live_link = live_link;
+  }
+  if (project?.github_link && (github_link || github_link === "")) {
+    delete project.github_link;
   }
   if (github_link) {
     project.github_link = github_link;
@@ -100,7 +125,10 @@ const updateProject = async (req, res) => {
   if (tags) {
     project.tags = [...tags];
   }
-  await project.save();
+
+  await Project.deleteOne({ _id: id });
+  let newProject = new Project(project);
+  await newProject.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Project Updated" });
 };
 
@@ -187,7 +215,7 @@ const commentOnProject = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.user;
   const { comment } = req.body;
-  if (!comment) {
+  if (!comment || comment === "") {
     throw new BadRequestError("Please provide a comment");
   }
   const project = await Project.findById(id);
@@ -255,6 +283,9 @@ const editComment = async (req, res) => {
   const { userId } = req.user;
   const { id: pId } = req.params;
   let { commentId, commentText } = req.body;
+  if (!commentText || commentText === "") {
+    throw new BadRequestError("Please provide a comment");
+  }
   const project = await Project.findById(pId);
   commentId = mongoose.Types.ObjectId(commentId);
 

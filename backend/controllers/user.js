@@ -112,6 +112,16 @@ const updateProfile = async (req, res) => {
     }
     me.username = username;
   }
+  if (
+    !email ||
+    email === "" ||
+    !name ||
+    name === "" ||
+    !username ||
+    username === ""
+  ) {
+    throw new BadRequestError("Please provide name,username,email");
+  }
   if (name) me.name = name;
   if (about) me.about = about;
   if (bio) me.bio = bio;

@@ -193,7 +193,10 @@ const Project = () => {
                 </div>
                 {isAuthenticated && data?.isMine && (
                   <div className="likes-section">
-                    <button className="edit-button">
+                    <button
+                      className="edit-button"
+                      onClick={() => navigate("edit")}
+                    >
                       Edit <RiEditFill />
                     </button>
                     <button
