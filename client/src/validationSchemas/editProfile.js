@@ -4,12 +4,12 @@ let editProfileSchema = yup.object().shape({
   name: yup
     .string()
     .required("Name is required")
-    .min(2, "Name must be atleast 2 characters")
-    .max(50, "Name cannot be more than 50 characters")
     .test("name", "Name is required", (val) => {
       if (!val || (val && !val.trim().length)) return false;
       return true;
     })
+    .min(2, "Name must be atleast 2 characters")
+    .max(50, "Name cannot be more than 50 characters")
     .test("name", "Name must be atleast 2 characters", (val) => {
       if (val && val.trim().length < 2) return false;
       return true;
@@ -17,12 +17,12 @@ let editProfileSchema = yup.object().shape({
   username: yup
     .string()
     .required("Username is required")
-    .min(2, "Username must be atleast 2 characters")
-    .max(10, "Username cannot be more than 10 characters")
     .test("username", "Username is required", (val) => {
       if (!val || (val && !val.trim().length)) return false;
       return true;
     })
+    .min(2, "Username must be atleast 2 characters")
+    .max(10, "Username cannot be more than 10 characters")
     .test("username", "Username must be atleast 2 characters", (val) => {
       if (val && val.trim().length < 2) return false;
       return true;
