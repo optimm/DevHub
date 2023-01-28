@@ -3,17 +3,15 @@ import AllTagsModal from "../../components/AllTagsModal";
 import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProjectMainWrapper = styled.div`
-  height: calc(100vh - 70px);
   width: 100%;
   display: flex;
   padding: 0% 6%;
 
   .main-left {
     width: 50%;
-    height: 100%;
   }
   .data-wrapper {
-    margin-top: 8%;
+    margin-top: 8vh;
   }
   .profile-section {
     display: flex;
@@ -80,7 +78,6 @@ export const ProjectMainWrapper = styled.div`
 
   .main-right {
     width: 50%;
-    height: 100%;
     ${flexcv}
     align-items:flex-start;
     margin-left: 5%;
@@ -108,9 +105,9 @@ export const LikesIndv = styled.div`
 `;
 export const ProjectImageWrapper = styled.div`
   width: 92%;
-  height: 55%;
+  height: 50vh;
   position: relative;
-  margin-top: 10%;
+  margin-top: 17vh;
 
   .project-image {
     border-radius: 5px;

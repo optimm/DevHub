@@ -3,26 +3,27 @@ import { ProjectCardWrapper } from "../styles/components/projectCardStyles";
 import { BiComment } from "react-icons/bi";
 import { AiFillLike } from "react-icons/ai";
 import { Avatar } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-const ProjectCard = ({
-  project = { title: "Devhub is nice", total_likes: 0, total_comments: 0 },
-}) => {
+import { Link, useNavigate, useParams } from "react-router-dom";
+const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
+
   return (
-    <ProjectCardWrapper
-      image="/images/login.jpg"
-      onClick={() => navigate(`${project?._id}`)}
-    >
-      <div className="image-section">
+    <ProjectCardWrapper image="/images/login.jpg">
+      <div
+        className="image-section"
+        onClick={() => navigate(`/projects/${project?._id}`)}
+      >
         <div className="image-overlay">
-          <div className="title">{project?.title} is a kind of chill</div>
+          <div className="title">{project?.title}</div>
         </div>
       </div>
       <div className="data-section">
         <div className="likes-comments">
           <div className="likes-left">
-            <Avatar sx={{ width: 25, height: 25 }} />
-            <div>Optimm</div>
+            <Link to={`/users/${project?.owner?._id}`}>
+              <Avatar sx={{ width: 25, height: 25 }} />
+            </Link>
+            <div>{project?.owner?.name}</div>
           </div>
           <div className="likes-right">
             <div className="like-indv">

@@ -11,7 +11,7 @@ export const authApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllUsers", "SingleUser", "FollowUser", "AllProjects"],
+      invalidatesTags: ["AllUsers", "SingleUser"],
     }),
     login: builder.mutation({
       query: ({ body }) => {
@@ -26,10 +26,10 @@ export const authApi = baseApi.injectEndpoints({
         const { data: user } = data;
         dispatch(authenticateMe({ isAuthenticated: true, data: user }));
       },
-      invalidatesTags: ["SingleUser", "AllUsers", "FollowUser", "AllProjects"],
+      invalidatesTags: ["SingleUser", "AllUsers", "SingleProject"],
     }),
-    logout: builder.query({
-      query: ({ id }) => {
+    logout: builder.mutation({
+      query: () => {
         return {
           url: `auth/logout`,
           method: "GET",
@@ -37,17 +37,9 @@ export const authApi = baseApi.injectEndpoints({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        dispatch(
-          baseApi.util.invalidateTags([
-            "AllUsers",
-            "SingleUser",
-            "FollowUser",
-            "Followers",
-            "AllProjects",
-          ])
-        );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       },
+      invalidatesTags: ["AllUsers", "SingleUser", "CheckAuth", "SingleProject"],
     }),
     changePassword: builder.mutation({
       query: ({ body }) => {
@@ -64,6 +56,6 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useRegisterMutation,
   useLoginMutation,
-  useLogoutQuery,
+  useLogoutMutation,
   useChangePasswordMutation,
 } = authApi;

@@ -10,11 +10,7 @@ import { BiComment, BiShareAlt } from "react-icons/bi";
 import { AiFillLike, AiOutlineDelete } from "react-icons/ai";
 import { RiBookmarkFill, RiEditFill } from "react-icons/ri";
 
-import {
-  LoadingWrapper,
-  ProfileIndv,
-  SoloButton,
-} from "../styles/pages/profileStyles";
+import { LoadingWrapper, ProfileIndv } from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
@@ -23,8 +19,11 @@ import {
 } from "../app/services/projectApi";
 import { linkProcessor, timeProcessor } from "../util/utilFunctions";
 import { useSelector } from "react-redux";
-import AllTagsModal from "../components/AllTagsModal";
 import { createNotification } from "../components/Notification";
+import AllTagsModal from "../components/AllTagsModal";
+import LikesSavesModal from "../components/LikesSavesModal";
+import CommentsModal from "../components/CommentsModal";
+import DeleteAccountProject from "../components/DeleteAccountProject";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -41,14 +40,13 @@ const Project = () => {
   const [tagMore, setTagMore] = useState(false);
   const [viewAllTags, setViewAllTags] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
+  const [likesShow, setLikesShow] = useState(false);
+  const [savesShow, setSavesShow] = useState(false);
+  const [comment, setComment] = useState(false);
+  const [deleteProject, setDeleteProject] = useState(false);
 
   useEffect(() => {
-    if (isFetching) {
-      setBlankLoader(true);
-    } else if (!isFetching && data?.success) {
-      setTimeout(() => {
-        setBlankLoader(false);
-      }, 500);
+    if (!isFetching && data?.success) {
       let temp = "";
       if (data?.data?.tags?.length > 0) {
         let arr = data?.data?.tags;
@@ -71,6 +69,16 @@ const Project = () => {
     }
   }, [isFetching]);
 
+  useEffect(() => {
+    if (isLoading) {
+      setBlankLoader(true);
+    } else if (!isLoading && data?.success) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 500);
+    }
+  }, [isLoading]);
+
   const handleLikeUnlike = async () => {
     if (!isAuthenticated) {
       createNotification(`Please Login First`, "error", 2000);
@@ -79,8 +87,8 @@ const Project = () => {
       const { data: likeData, error: likeError } = await likeUnlike({ id });
       if (likeData?.success) {
         createNotification(likeData?.msg, "success", 2000);
-      } else if (!likeError?.success) {
-        createNotification(likeError?.msg, "error", 2000);
+      } else if (!likeError?.data?.success) {
+        createNotification(likeError?.data?.LikesIndvmsg, "error", 2000);
       }
     }
   };
@@ -98,9 +106,14 @@ const Project = () => {
     }
   };
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    createNotification("Url copied to clipboard", "success", 2000);
+  };
+
   return (
     <>
-      {isLoading || isFetching || blankLoader ? (
+      {isLoading || blankLoader ? (
         <LoadingWrapper project>Loading...</LoadingWrapper>
       ) : (
         <>
@@ -168,10 +181,10 @@ const Project = () => {
                   <LikesIndv onClick={handleLikeUnlike} checked={data?.isLiked}>
                     <AiFillLike />
                   </LikesIndv>
-                  <LikesIndv>
+                  <LikesIndv onClick={() => setComment(true)}>
                     <BiComment />
                   </LikesIndv>
-                  <LikesIndv>
+                  <LikesIndv onClick={handleShare}>
                     <BiShareAlt />
                   </LikesIndv>
                   <LikesIndv onClick={handleSaveUnsave} checked={data?.isSaved}>
@@ -183,7 +196,10 @@ const Project = () => {
                     <button className="edit-button">
                       Edit <RiEditFill />
                     </button>
-                    <button className="edit-button red">
+                    <button
+                      className="edit-button red"
+                      onClick={() => setDeleteProject(true)}
+                    >
                       Delete <AiOutlineDelete />
                     </button>
                   </div>
@@ -191,12 +207,15 @@ const Project = () => {
               </div>
 
               <div className="likes-section">
-                <div className="likes-data">
+                <div className="likes-data" onClick={() => setLikesShow(true)}>
                   Liked by {projectData?.total_likes}{" "}
                   {projectData?.total_likes === 1 ? "User" : "Users"}
                 </div>
                 {isAuthenticated && data?.isMine && (
-                  <div className="likes-data">
+                  <div
+                    className="likes-data"
+                    onClick={() => setSavesShow(true)}
+                  >
                     Saved by {projectData?.total_saves}{" "}
                     {projectData?.total_saves === 1 ? "User" : "Users"}
                   </div>
@@ -209,6 +228,36 @@ const Project = () => {
               show={viewAllTags}
               setShow={setViewAllTags}
               tags={data?.data?.tags}
+            />
+          )}
+          {likesShow && (
+            <LikesSavesModal
+              show={likesShow}
+              setShow={setLikesShow}
+              array={projectData?.likes}
+              heading="Likes"
+            />
+          )}
+          {savesShow && (
+            <LikesSavesModal
+              show={savesShow}
+              setShow={setSavesShow}
+              array={projectData?.saved}
+              heading="Saved By"
+            />
+          )}
+          {comment && (
+            <CommentsModal
+              show={comment}
+              setShow={setComment}
+              isMine={data?.isMine}
+            />
+          )}
+          {deleteProject && (
+            <DeleteAccountProject
+              show={deleteProject}
+              setShow={setDeleteProject}
+              project={true}
             />
           )}
         </>

@@ -11,6 +11,7 @@ export const userApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["CheckAuth"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -36,16 +37,18 @@ export const userApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
+      invalidatesTags: [
+        "AllUsers",
+        "SingleUser",
+        "SingleProject",
+        "AllProjects",
+        "AllComments",
+        "CheckAuth",
+        "SavedProjects",
+        "ProjectOfUser",
+      ],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        dispatch(
-          baseApi.util.invalidateTags([
-            "AllUsers",
-            "SingleUser",
-            "FollowUser",
-            "Followers",
-          ])
-        );
         dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
       },
     }),
@@ -86,6 +89,25 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["Followers"],
     }),
+    getProjectOfUser: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `user/${id}/projects`,
+          method: "GET",
+        };
+      },
+      providesTags: ["ProjectOfUser"],
+    }),
+
+    getSavedProjects: builder.query({
+      query: () => {
+        return {
+          url: `user/me/saved`,
+          method: "GET",
+        };
+      },
+      providesTags: ["SavedProjects"],
+    }),
   }),
 });
 
@@ -97,4 +119,6 @@ export const {
   useFollowUserMutation,
   useGetFollowersFollowingQuery,
   useDeleteProfileMutation,
+  useGetProjectOfUserQuery,
+  useGetSavedProjectsQuery,
 } = userApi;

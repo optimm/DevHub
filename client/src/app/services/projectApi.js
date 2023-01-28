@@ -29,7 +29,21 @@ export const projectApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["AllProjects", "SingleUser"],
+      invalidatesTags: ["AllProjects", "SingleUser", "ProjectOfUser"],
+    }),
+    deleteProject: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: [
+        "AllProjects",
+        "SingleUser",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
     }),
     likeUnlikeProject: builder.mutation({
       query: ({ id }) => {
@@ -38,7 +52,12 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
     }),
     saveUnsaveProject: builder.mutation({
       query: ({ id }) => {
@@ -47,15 +66,76 @@ export const projectApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      invalidatesTags: ["AllProjects", "SingleProject"],
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
+    }),
+    getComments: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "GET",
+        };
+      },
+      providesTags: ["AllComments"],
+    }),
+    addComment: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "POST",
+          body,
+        };
+      },
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "AllComments",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
+    }),
+    deleteComment: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "DELETE",
+          body,
+        };
+      },
+      invalidatesTags: [
+        "AllProjects",
+        "SingleProject",
+        "AllComments",
+        "ProjectOfUser",
+        "SavedProjects",
+      ],
+    }),
+    editComment: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `project/${id}/comment`,
+          method: "PATCH",
+          body,
+        };
+      },
+      invalidatesTags: ["AllComments"],
     }),
   }),
 });
 
 export const {
   useCreateProjectMutation,
+  useDeleteProjectMutation,
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
   useLikeUnlikeProjectMutation,
   useSaveUnsaveProjectMutation,
+  useGetCommentsQuery,
+  useAddCommentMutation,
+  useDeleteCommentMutation,
+  useEditCommentMutation,
 } = projectApi;

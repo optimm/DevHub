@@ -5,10 +5,10 @@ export const SearchBarWrapper = styled.div`
   width: 40%;
   margin: auto;
   height: 50px;
-  margin-top: 2%;
+  margin-top: 5vh;
 `;
 export const AllUsersCardWrapper = styled.div`
-  margin: 3% 0%;
+  margin: 5vh 0px;
   width: 100%;
   padding: 0% 6%;
   display: grid;

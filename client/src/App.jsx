@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
 import AllProjects from "./pages/AllProjects";
@@ -12,15 +13,29 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Project from "./pages/Project";
 import Register from "./pages/Register";
+import { LoadingWrapper } from "./styles/pages/profileStyles";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { data, isLoading, isFetching } = useCheckMyAuthQuery();
+  const { data, isLoading, error, isFetching } = useCheckMyAuthQuery();
+  const [blankLoader, setBlankLoader] = useState(true);
+  useEffect(() => {
+    if (isFetching) {
+      setBlankLoader(true);
+    } else if (
+      !isFetching &&
+      (data?.success === true || error?.data?.success === false)
+    ) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 1000);
+    }
+  }, [isFetching]);
 
   return (
     <>
-      {isLoading || isFetching ? (
-        <>Loading...</>
+      {isLoading || isFetching || blankLoader ? (
+        <LoadingWrapper allWeb>Loading...</LoadingWrapper>
       ) : (
         <>
           <BrowserRouter>
@@ -51,6 +66,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllUsers />
+                    <Footer />
                   </>
                 }
               />
@@ -60,6 +76,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <Profile />
+                    <Footer />
                   </>
                 }
               />
@@ -70,6 +87,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <AllProjects />
+                    <Footer />
                   </>
                 }
               />
@@ -79,6 +97,7 @@ const App = () => {
                   <>
                     <Navbar />
                     <Project />
+                    <Footer />
                   </>
                 }
               />
@@ -90,6 +109,7 @@ const App = () => {
                     <>
                       <Navbar />
                       <CreateProject />
+                      <Footer />
                     </>
                   ) : (
                     <Navigate replace to="/login" />

@@ -7,13 +7,14 @@ const {
 } = require("../errors");
 const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
+const { default: mongoose } = require("mongoose");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
-  if (req.user) {
-    const authUserQuery = { owner: { $ne: req.user.userId } };
-    searchQuery = { ...authUserQuery };
-  }
+  // if (req.user) {
+  //   const authUserQuery = { owner: { $ne: req.user.userId } };
+  //   searchQuery = { ...authUserQuery };
+  // }
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
@@ -23,10 +24,11 @@ const getSingleProject = async (req, res) => {
   let isLiked = false;
   let isMine = false;
   let isSaved = false;
-  const project = await Project.findById(id).populate(
-    "owner",
-    "name username email avatar"
-  );
+  const project = await Project.findById(id)
+    .select("-comments")
+    .populate("owner", "name username email avatar")
+    .populate("likes", "name username email avatar")
+    .populate("saved", "name username email avatar");
   if (!project) {
     throw new NotFoundError("Project not found");
   }
@@ -34,9 +36,11 @@ const getSingleProject = async (req, res) => {
     const userId = req?.user?.userId.toString();
     if (userId === project?.owner?._id.toString()) isMine = true;
 
-    if (project?.likes?.some((e) => e.toString() === userId)) isLiked = true;
+    if (project?.likes?.some((e) => e._id.toString() === userId))
+      isLiked = true;
 
-    if (project?.saved?.some((e) => e.toString() === userId)) isSaved = true;
+    if (project?.saved?.some((e) => e._id.toString() === userId))
+      isSaved = true;
   }
 
   res
@@ -190,9 +194,10 @@ const commentOnProject = async (req, res) => {
   if (!project) {
     throw new NotFoundError("Project not found");
   }
-  project.comments.push({ user: userId, comment });
+  project.comments.unshift({ user: userId, comment });
+  project.total_comments += 1;
   await project.save();
-  res.status(StatusCodes.OK).json({ success: true, message: "Comment added" });
+  res.status(StatusCodes.OK).json({ success: true, msg: "Comment added" });
 };
 
 const deleteComment = async (req, res) => {
@@ -224,8 +229,64 @@ const deleteComment = async (req, res) => {
   project.comments = project.comments.filter(
     (item) => item._id.toString() !== commentId.toString()
   );
+  project.total_comments -= 1;
+
   await project.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Comment Deleted" });
+};
+
+const getComments = async (req, res) => {
+  const { id: pId } = req.params;
+  const project = await Project.findById(pId).populate({
+    path: "comments",
+    populate: { path: "user", select: "name username email avatar" },
+  });
+
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  let comments = project.comments;
+  res
+    .status(StatusCodes.OK)
+    .json({ success: true, data: { _id: project?._id, comments } });
+};
+
+const editComment = async (req, res) => {
+  const { userId } = req.user;
+  const { id: pId } = req.params;
+  let { commentId, commentText } = req.body;
+  const project = await Project.findById(pId);
+  commentId = mongoose.Types.ObjectId(commentId);
+
+  if (!project) {
+    throw new NotFoundError("Project not found");
+  }
+  let comments = project.comments;
+  comments = comments.filter(
+    (item) => item._id.toString() === commentId.toString()
+  );
+
+  if (comments.length < 1) {
+    throw new NotFoundError("Comment not found");
+  }
+  const comment = comments[0];
+  if (
+    !(
+      comment.user.toString() === userId.toString() ||
+      project.owner.toString() === userId.toString()
+    )
+  ) {
+    throw new UnauthenticatedError("Not authorized to delete comment");
+  }
+  await Project.updateOne(
+    { "comments._id": commentId },
+    {
+      $set: {
+        "comments.$.comment": commentText,
+      },
+    }
+  );
+  res.status(StatusCodes.OK).json({ success: true, msg: "Comment Updated" });
 };
 
 module.exports = {
@@ -239,5 +300,7 @@ module.exports = {
   saveProject,
   commentOnProject,
   deleteComment,
+  getComments,
+  editComment,
   getProjectsOfUser,
 };

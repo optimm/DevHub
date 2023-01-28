@@ -12,6 +12,10 @@ export const baseApi = createApi({
     "Followers",
     "AllProjects",
     "SingleProject",
+    "AllComments",
+    "CheckAuth",
+    "ProjectOfUser",
+    "SavedProjects",
   ],
   endpoints: () => ({}),
 });

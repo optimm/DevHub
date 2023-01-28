@@ -13,6 +13,8 @@ const {
   saveProject,
   commentOnProject,
   deleteComment,
+  getComments,
+  editComment,
 } = require("../controllers/project");
 
 router.route("/").get(ifAuthenticated, getAllProjects);
@@ -28,6 +30,8 @@ router.route("/:id/save").get(authMiddleware, saveProject);
 
 router
   .route("/:id/comment")
+  .get(getComments)
   .post(authMiddleware, commentOnProject)
-  .delete(authMiddleware, deleteComment);
+  .delete(authMiddleware, deleteComment)
+  .patch(authMiddleware, editComment);
 module.exports = router;
