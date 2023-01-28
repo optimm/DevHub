@@ -42,7 +42,8 @@ const Login = () => {
     if (isSuccess) {
       resetForm();
       createNotification(`Welcome ${data?.data?.name}`, "success", 2000);
-      navigate("/");
+      const { _id: id } = data?.data;
+      navigate(`/user/${id}`);
     }
   }, [isSuccess]);
 

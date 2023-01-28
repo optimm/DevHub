@@ -20,6 +20,7 @@ const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
   const { data, isLoading, error, isFetching } = useCheckMyAuthQuery();
   const [blankLoader, setBlankLoader] = useState(true);
+  const [errState, setErrState] = useState(false);
   useEffect(() => {
     if (isFetching) {
       setBlankLoader(true);
@@ -27,12 +28,14 @@ const App = () => {
       !isFetching &&
       (data?.success === true || error?.data?.success === false)
     ) {
+      if (error?.data?.success === false) setErrState(false);
+      else setErrState(true);
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);
     }
   }, [isFetching]);
-
+  console.log(data, error);
   return (
     <>
       {isLoading || isFetching || blankLoader ? (
@@ -53,7 +56,7 @@ const App = () => {
               <Route
                 path={"/login"}
                 element={
-                  data?.success || isAuthenticated ? (
+                  errState || isAuthenticated ? (
                     <Navigate replace to="/" />
                   ) : (
                     <Login />
@@ -116,7 +119,7 @@ const App = () => {
               <Route
                 path="/projects/add"
                 element={
-                  data?.success || isAuthenticated ? (
+                  errState || isAuthenticated ? (
                     <>
                       <Navbar />
                       <CreateProject />
