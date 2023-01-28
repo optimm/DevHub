@@ -23,7 +23,7 @@ const ProjectCard = ({ project }) => {
             <Link to={`/users/${project?.owner?._id}`}>
               <Avatar sx={{ width: 25, height: 25 }} />
             </Link>
-            <div>{project?.owner?.name}</div>
+            <div className="username">{project?.owner?.username}</div>
           </div>
           <div className="likes-right">
             <div className="like-indv">

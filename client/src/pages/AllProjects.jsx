@@ -1,6 +1,7 @@
 import { IconButton, InputBase, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useSearchParams } from "react-router-dom";
 import { useGetAllProjectsQuery } from "../app/services/projectApi";
 import ProjectCard from "../components/ProjectCard";
 import {
@@ -10,9 +11,18 @@ import {
 import { SearchBarWrapper } from "../styles/pages/allUsersStyles";
 
 const AllProjects = () => {
-  const { data, isLoading } = useGetAllProjectsQuery();
-  const projectData = data?.data?.data;
+  let [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState("");
+  const { data, isLoading } = useGetAllProjectsQuery({
+    q: searchParams.get("q") || "",
+  });
+  const projectData = data?.data?.data;
+
+  const handleSearch = () => {
+    if (value?.length > 0) {
+      setSearchParams({ q: value });
+    }
+  };
   return (
     <AllProjectsWrapper>
       <SearchBarWrapper>
@@ -28,7 +38,11 @@ const AllProjects = () => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
-          <IconButton sx={{ p: "10px" }} aria-label="search" disabled>
+          <IconButton
+            sx={{ p: "10px" }}
+            aria-label="search"
+            onClick={handleSearch}
+          >
             <AiOutlineSearch />
           </IconButton>
         </Paper>

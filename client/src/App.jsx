@@ -35,7 +35,6 @@ const App = () => {
       }, 1000);
     }
   }, [isFetching]);
-  console.log(data, error);
   return (
     <>
       {isLoading || isFetching || blankLoader ? (

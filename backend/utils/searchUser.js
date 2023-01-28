@@ -6,7 +6,7 @@ const searchUser = async (req, res, searchQuery) => {
   let queryObject = { ...searchQuery };
 
   if (q) {
-    q = q.toLowercase();
+    q = q.toLowerCase();
     const userQuery = {
       $or: [
         { name: { $regex: q, $options: "i" } },

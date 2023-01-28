@@ -4,9 +4,9 @@ import { authenticateMe } from "../../features/meSlice";
 export const projectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProjects: builder.query({
-      query: () => {
+      query: ({ q }) => {
         return {
-          url: "project",
+          url: q?.length > 0 ? `project?q=${q}` : "project",
           method: "GET",
         };
       },

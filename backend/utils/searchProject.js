@@ -25,9 +25,9 @@ const searchProject = async (req, res, searchQuery) => {
     q = q.toLowerCase();
     data = data.filter(
       (item) =>
-        item.title.includes(q) ||
-        item.owner.name.includes(q) ||
-        item.owner.username.includes(q)
+        item.title.toLowerCase().includes(q) ||
+        item.owner.name.toLowerCase().includes(q) ||
+        item.owner.username.toLowerCase().includes(q)
     );
   }
   const total = data.length;
