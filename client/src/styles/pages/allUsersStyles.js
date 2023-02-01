@@ -9,6 +9,7 @@ export const SearchBarWrapper = styled.div`
 `;
 export const AllUsersCardWrapper = styled.div`
   margin: 5vh 0px;
+  margin-top: 6vh;
   width: 100%;
   padding: 0% 6%;
   display: grid;
