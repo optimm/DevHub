@@ -34,7 +34,7 @@ const AllProjects = () => {
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Developers"
+            placeholder="Search by project title, tags or owner username"
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />

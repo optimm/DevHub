@@ -1,5 +1,6 @@
 const paginate = async (req, res, mongoQuery) => {
   const { page, limit } = req.query;
+  console.log({ page, limit });
   let data;
   if (page && limit) {
     data = await mongoQuery.skip((page - 1) * limit).limit(limit);

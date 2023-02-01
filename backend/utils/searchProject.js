@@ -1,36 +1,74 @@
 const Project = require("../models/Project");
+const User = require("../models/User");
 const paginate = require("./paginate");
 
 const searchProject = async (req, res, searchQuery) => {
-  let { q, tags, sortByLikes, sortByComments } = req.query;
-  let queryObject = { ...searchQuery };
-  const tagQuery = { tags: { $in: tags } };
-
-  // const titleQuery = { title: { $regex: q, $options: "i" } };
-  // if (q) {
-  //   queryObject = { ...queryObject, ...titleQuery };
-  // }
-
-  if (tags && tags.length > 0) {
-    queryObject = { ...queryObject, ...tagQuery };
-  }
-
-  let mongoQuery = Project.find(queryObject)
-    .populate("owner", "name username email avatar")
-    .select("-likes -comments -saved");
-
-  let data = await paginate(req, res, mongoQuery);
-
+  let { q, sortByLikes, sortByComments } = req.query;
+  let mongoQuery;
+  let total;
   if (q) {
-    q = q.toLowerCase();
-    data = data.filter(
-      (item) =>
-        item.title.toLowerCase().includes(q) ||
-        item.owner.name.toLowerCase().includes(q) ||
-        item.owner.username.toLowerCase().includes(q)
-    );
+    mongoQuery = Project.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner",
+          foreignField: "_id",
+          as: "owner",
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { title: { $regex: q, $options: "i" } },
+            { tags: { $regex: new RegExp(q, "i") } },
+            { "owner.name": { $regex: q, $options: "i" } },
+            { "owner.username": { $regex: q, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          desc: 1,
+          image: 1,
+          tags: 1,
+          github_link: 1,
+          live_link: 1,
+          likes: 1,
+          comments: 1,
+          saved: 1,
+          total_likes: 1,
+          total_saves: 1,
+          total_comments: 1,
+          created_at: 1,
+          owner: {
+            $arrayElemAt: [
+              {
+                $map: {
+                  input: "$owner",
+                  as: "o",
+                  in: {
+                    _id: "$$o._id",
+                    username: "$$o.username",
+                    email: "$$o.email",
+                    avatar: "$$o.avatar",
+                  },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      },
+    ]);
+    total = await mongoQuery.countDocuments();
+  } else {
+    mongoQuery = Project.find(searchQuery)
+      .select("-likes -comments -saved")
+      .populate("owner", "name email avatar username");
+    total = await Project.countDocuments(searchQuery);
   }
-  const total = data.length;
+  const data = await paginate(req, res, mongoQuery);
   return { data, total };
 };
 

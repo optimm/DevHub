@@ -8,13 +8,10 @@ const {
 const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
 const { default: mongoose } = require("mongoose");
+const paginate = require("../utils/paginate");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
-  // if (req.user) {
-  //   const authUserQuery = { owner: { $ne: req.user.userId } };
-  //   searchQuery = { ...authUserQuery };
-  // }
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
@@ -158,6 +155,7 @@ const deleteProject = async (req, res) => {
 const getSavedProjects = async (req, res) => {
   const { userId } = req.user;
   const searchQuery = { saved: userId };
+
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
