@@ -3,6 +3,7 @@ const getReadmeUrl = async ({ github_link }) => {
   const regex = /(?:https:\/\/)?github.com\/([\w-]+)\/([\w-]+)/;
   const match = github_link.match(regex);
   let link = null;
+  let readmeData = null;
 
   if (match) {
     const url = `${match[1]}/${match[2]}`;
@@ -11,9 +12,14 @@ const getReadmeUrl = async ({ github_link }) => {
         `https://api.github.com/repos/${url}/readme`
       );
       link = data?.download_url;
+      console.log(data);
     } catch (error) {}
   }
-  return link;
+  if (link) {
+    const { data } = await axios.get(link);
+    readmeData = data;
+  }
+  return { readmeData, link };
 };
 
 module.exports = getReadmeUrl;

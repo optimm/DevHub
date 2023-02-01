@@ -48,7 +48,7 @@ export const ProjectMainWrapper = styled.div`
   }
 
   .tags-section {
-    margin-top: 15px;
+    margin-top: 25px;
   }
   .tags-head {
     font-weight: 600;
@@ -66,7 +66,7 @@ export const ProjectMainWrapper = styled.div`
     cursor: pointer;
   }
   .links-section {
-    margin-top: 20px;
+    margin-top: 25px;
     display: flex;
     gap: 20px;
   }

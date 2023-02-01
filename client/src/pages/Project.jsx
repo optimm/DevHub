@@ -10,7 +10,11 @@ import { BiComment, BiShareAlt } from "react-icons/bi";
 import { AiFillLike, AiOutlineDelete } from "react-icons/ai";
 import { RiBookmarkFill, RiEditFill } from "react-icons/ri";
 
-import { LoadingWrapper, ProfileIndv } from "../styles/pages/profileStyles";
+import {
+  ExtraButton,
+  LoadingWrapper,
+  ProfileIndv,
+} from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
@@ -24,6 +28,7 @@ import AllTagsModal from "../components/AllTagsModal";
 import LikesSavesModal from "../components/LikesSavesModal";
 import CommentsModal from "../components/CommentsModal";
 import DeleteAccountProject from "../components/DeleteAccountProject";
+import ReadmeFile from "../components/ReadmeFile";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -44,6 +49,7 @@ const Project = () => {
   const [savesShow, setSavesShow] = useState(false);
   const [comment, setComment] = useState(false);
   const [deleteProject, setDeleteProject] = useState(false);
+  const [readmeShow, setReadmeShow] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -168,6 +174,14 @@ const Project = () => {
                     </ProfileIndv>
                   )}
                 </div>
+                {data?.readme?.readmeData && (
+                  <div
+                    className="links-section"
+                    onClick={() => setReadmeShow(true)}
+                  >
+                    <ExtraButton>View Readme</ExtraButton>
+                  </div>
+                )}
               </div>
             </div>
             <div className="main-right">
@@ -261,6 +275,13 @@ const Project = () => {
               show={deleteProject}
               setShow={setDeleteProject}
               project={true}
+            />
+          )}
+          {readmeShow && (
+            <ReadmeFile
+              show={readmeShow}
+              setShow={setReadmeShow}
+              readmeData={data?.readme}
             />
           )}
         </>

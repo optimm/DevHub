@@ -135,6 +135,15 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllComments"],
     }),
+    ///
+    getReadme: builder.query({
+      query: ({ url }) => {
+        return {
+          url: url,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
@@ -150,4 +159,5 @@ export const {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useEditCommentMutation,
+  useGetReadmeQuery,
 } = projectApi;
