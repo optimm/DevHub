@@ -144,7 +144,7 @@ const Project = () => {
                       className="view-more"
                       onClick={() => setViewAllTags(true)}
                     >
-                      View All
+                      View Tags
                     </div>
                   </div>
                 </div>

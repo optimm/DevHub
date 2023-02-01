@@ -9,6 +9,7 @@ const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
 const { default: mongoose } = require("mongoose");
 const paginate = require("../utils/paginate");
+const getReadmeUrl = require("../utils/getReadmeUrl");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
@@ -21,6 +22,7 @@ const getSingleProject = async (req, res) => {
   let isLiked = false;
   let isMine = false;
   let isSaved = false;
+  let readme = null;
   const project = await Project.findById(id)
     .select("-comments")
     .populate("owner", "name username email avatar")
@@ -28,6 +30,9 @@ const getSingleProject = async (req, res) => {
     .populate("saved", "name username email avatar");
   if (!project) {
     throw new NotFoundError("Project not found");
+  }
+  if (project?.github_link) {
+    readme = await getReadmeUrl({ github_link: project?.github_link });
   }
   if (req?.user?.userId) {
     const userId = req?.user?.userId.toString();
@@ -42,7 +47,7 @@ const getSingleProject = async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json({ success: true, data: project, isMine, isLiked, isSaved });
+    .json({ success: true, data: project, isMine, isLiked, isSaved, readme });
 };
 
 const getProjectsOfUser = async (req, res) => {
