@@ -60,10 +60,11 @@ const searchProject = async (req, res, searchQuery) => {
           },
         },
       },
-    ]);
+    ]).sort("-total_likes");
     total = await mongoQuery.countDocuments();
   } else {
     mongoQuery = Project.find(searchQuery)
+      .sort("-total_likes")
       .select("-likes -comments -saved")
       .populate("owner", "name email avatar username");
     total = await Project.countDocuments(searchQuery);

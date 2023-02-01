@@ -49,9 +49,9 @@ export const userApi = baseApi.injectEndpoints({
       ],
     }),
     getAllUser: builder.query({
-      query: () => {
+      query: ({ q }) => {
         return {
-          url: `user`,
+          url: q?.length > 0 ? `user?q=${q}` : "user",
           method: "GET",
         };
       },

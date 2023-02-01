@@ -7,11 +7,21 @@ import {
 } from "../styles/pages/allUsersStyles";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useSearchParams } from "react-router-dom";
 
 const AllUsers = () => {
-  const { data, isLoading } = useGetAllUserQuery();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const { data, isLoading } = useGetAllUserQuery({
+    q: searchParams.get("q") || "",
+  });
   const userData = data?.data?.data;
   const [value, setValue] = useState("");
+
+  const handleSearch = () => {
+    if (value?.length > 0) {
+      setSearchParams({ q: value });
+    }
+  };
   return (
     <>
       <SearchBarWrapper>
@@ -23,11 +33,15 @@ const AllUsers = () => {
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Developers"
+            placeholder="Search by name or username"
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
-          <IconButton sx={{ p: "10px" }} aria-label="search" disabled>
+          <IconButton
+            sx={{ p: "10px" }}
+            aria-label="search"
+            onClick={handleSearch}
+          >
             <AiOutlineSearch />
           </IconButton>
         </Paper>
