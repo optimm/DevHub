@@ -21,7 +21,7 @@ const PostsOfDev = ({ isMe }) => {
           Add Project
         </ExtraButton>
       )}
-      <AllProjectCardWrapper>
+      <AllProjectCardWrapper noPad>
         {isLoading ? (
           <>Loading...</>
         ) : data?.data?.total > 0 ? (

@@ -13,7 +13,7 @@ const SavedProjects = () => {
   const projectData = data?.data?.data;
   return (
     <PostWrapper>
-      <AllProjectCardWrapper>
+      <AllProjectCardWrapper noPad>
         {isLoading ? (
           <>Loading...</>
         ) : data?.data?.total > 0 ? (

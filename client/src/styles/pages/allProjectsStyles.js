@@ -6,7 +6,7 @@ export const AllProjectsWrapper = styled.div`
 `;
 
 export const AllProjectCardWrapper = styled.div`
-  padding: 0% 6%;
+  padding: ${(props) => (props.noPad ? "0px" : "0% 6%")};
   margin: 5vh 0px;
   margin-top: 6vh;
   width: 100%;
