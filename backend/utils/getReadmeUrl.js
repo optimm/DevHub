@@ -11,8 +11,7 @@ const getReadmeUrl = async ({ github_link }) => {
       const { data } = await axios.get(
         `https://api.github.com/repos/${url}/readme`
       );
-      link = data?.download_url;
-      console.log(data);
+      link = data?.download_url;  
     } catch (error) {}
   }
   if (link) {

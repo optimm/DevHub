@@ -132,10 +132,15 @@ export const AllTagsWrapper = styled.div`
   max-height: 40vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   padding: 0px 10px;
 `;
 
 export const TagSingle = styled.div`
-  font-size: 0.88rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    color: var(--blue);
+  }
 `;

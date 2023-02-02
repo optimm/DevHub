@@ -61,7 +61,34 @@ const searchProject = async (req, res, searchQuery) => {
         },
       },
     ]).sort("-total_likes");
-    total = await mongoQuery.countDocuments();
+
+    const z = await Project.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner",
+          foreignField: "_id",
+          as: "owner",
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { title: { $regex: q, $options: "i" } },
+            { tags: { $regex: new RegExp(q, "i") } },
+            { "owner.name": { $regex: q, $options: "i" } },
+            { "owner.username": { $regex: q, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    total = z[0]?.count || 0;
   } else {
     mongoQuery = Project.find(searchQuery)
       .sort("-total_likes")
