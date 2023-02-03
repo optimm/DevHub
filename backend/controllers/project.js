@@ -108,7 +108,7 @@ const updateProject = async (req, res) => {
   if (userId.toString() !== project.owner.toString()) {
     throw new UnauthenticatedError("Project is not owned by current user");
   }
-  const { title, live_link, github_link, tags, desc } = req.body;
+  const { title, live_link, github_link, tags, desc, image } = req.body;
   if (
     !title ||
     title === "" ||
@@ -142,6 +142,12 @@ const updateProject = async (req, res) => {
   }
   if (tags) {
     project.tags = [...tags];
+  }
+  if (image) {
+    const myCloud = await cloudinary.uploader.upload(image, {
+      folder: "projects",
+    });
+    project.image = { public_id: myCloud?.public_id, url: myCloud?.secure_url };
   }
 
   await Project.deleteOne({ _id: id });

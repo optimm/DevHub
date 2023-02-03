@@ -12,6 +12,7 @@ import {
   MainLeft,
   MainRight,
   MainWrapper,
+  UploadedImage,
 } from "../styles/pages/createProjectStyles";
 import { tags } from "../util/options";
 import createProjectSchema from "../validationSchemas/createProject";
@@ -31,6 +32,8 @@ const EditProject = () => {
     useGetSingleProjectQuery({ id }, { skip: err });
 
   const { myData } = useSelector((state) => state.me);
+  const [image, setImage] = useState(null);
+
   const {
     touched,
     errors,
@@ -64,10 +67,14 @@ const EditProject = () => {
         pData?.desc === temp?.desc &&
         pData?.live_link === temp?.live_link &&
         pData?.github_link === temp?.github_link &&
-        arraysEqual(pData?.tags, temp?.tags)
+        arraysEqual(pData?.tags, temp?.tags) &&
+        pData?.image?.url === image
       ) {
         createNotification("Nothing to update", "error", 2000);
         return;
+      }
+      if (pData?.image?.url !== image) {
+        temp.image = image;
       }
 
       try {
@@ -89,8 +96,39 @@ const EditProject = () => {
       pData?.live_link && setFieldValue("live_link", pData?.live_link);
       pData?.github_link && setFieldValue("github_link", pData?.github_link);
       pData?.tags && setFieldValue("tags", pData?.tags);
+      setImage(pData?.image?.url);
     }
   }, [data]);
+
+  const handleImageChange = (e) => {
+    let pData = data?.data;
+    const selectedFile = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.readAsDataURL(selectedFile);
+    Reader.onload = () => {
+      if (Reader.readyState == 2) {
+        if (
+          selectedFile &&
+          (selectedFile.type === "image/jpeg" ||
+            selectedFile.type === "image/png" ||
+            selectedFile.type === "image/jpg")
+        ) {
+          if (selectedFile.size <= 3000000) {
+            setImage(Reader.result);
+          } else {
+            createNotification("File size greater than 3MB", "warning", 2000);
+            e.target.value = "";
+            setImage(pData?.image?.url);
+          }
+        } else {
+          createNotification("File type not supported", "warning", 2000);
+          setFieldValue("image", null);
+          e.target.value = "";
+          setImage(pData?.image?.url);
+        }
+      }
+    };
+  };
 
   return (
     <>
@@ -207,13 +245,15 @@ const EditProject = () => {
             </MainLeft>
             <MainRight>
               <div className="paper-for-image">
-                <div className="image-wrapper">
-                  <BsCardImage />
-                  <div className="text">
-                    Upload cover Image for your project.
-                  </div>
-                </div>
+                <UploadedImage src={image}></UploadedImage>
               </div>
+              <input
+                type="file"
+                id="myfile"
+                name="myfile"
+                className="file-chooser"
+                onChange={(e) => handleImageChange(e)}
+              />
             </MainRight>
           </MainWrapper>
         </>

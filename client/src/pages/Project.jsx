@@ -186,7 +186,9 @@ const Project = () => {
               </div>
             </div>
             <div className="main-right">
-              <ProjectImageWrapper url="/images/login.jpg">
+              <ProjectImageWrapper
+                url={projectData?.image?.url || "/images/login.jpg"}
+              >
                 <div className="project-back"></div>
                 <div className="project-image"></div>
               </ProjectImageWrapper>

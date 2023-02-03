@@ -8,7 +8,7 @@ const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
 
   return (
-    <ProjectCardWrapper image="/images/login.jpg">
+    <ProjectCardWrapper image={project?.image?.url || "/images/login.jpg"}>
       <div
         className="image-section"
         onClick={() => navigate(`/projects/${project?._id}`)}
