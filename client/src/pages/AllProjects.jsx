@@ -1,8 +1,10 @@
 import { IconButton, InputBase, Paper } from "@mui/material";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
 import { useGetAllProjectsQuery } from "../app/services/projectApi";
+import { AllUsersProjectsLoader } from "../components/Loaders";
 import ProjectCard from "../components/ProjectCard";
 import {
   AllProjectCardWrapper,
@@ -13,7 +15,7 @@ import { SearchBarWrapper } from "../styles/pages/allUsersStyles";
 const AllProjects = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState("");
-  const { data, isLoading } = useGetAllProjectsQuery({
+  const { data, isLoading, error, isFetching } = useGetAllProjectsQuery({
     q: searchParams.get("q") || "",
   });
   const projectData = data?.data?.data;
@@ -21,8 +23,21 @@ const AllProjects = () => {
   const handleSearch = () => {
     if (value?.length > 0) {
       setSearchParams({ q: value });
+      setBlankLoader(true);
     }
   };
+  const [blankLoader, setBlankLoader] = useState(false);
+  useEffect(() => {
+    if (isLoading) {
+      setBlankLoader(true);
+    }
+    if (!isLoading && (data?.success || error?.data?.success === false)) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 1000);
+    }
+  }, [isLoading, isFetching]);
+
   return (
     <AllProjectsWrapper>
       <SearchBarWrapper>
@@ -47,17 +62,19 @@ const AllProjects = () => {
           </IconButton>
         </Paper>
       </SearchBarWrapper>
-      <AllProjectCardWrapper>
-        {isLoading ? (
-          <>Loading...</>
-        ) : data?.data?.total > 0 ? (
-          projectData.map((item, index) => (
-            <ProjectCard project={item} key={index} />
-          ))
-        ) : (
-          <>No Data</>
-        )}
-      </AllProjectCardWrapper>
+      {isLoading || blankLoader ? (
+        <AllUsersProjectsLoader />
+      ) : (
+        <AllProjectCardWrapper>
+          {data?.data?.total > 0 ? (
+            projectData.map((item, index) => (
+              <ProjectCard project={item} key={index} />
+            ))
+          ) : (
+            <>No Data</>
+          )}
+        </AllProjectCardWrapper>
+      )}
     </AllProjectsWrapper>
   );
 };

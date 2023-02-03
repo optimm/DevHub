@@ -230,13 +230,15 @@ const Profile = () => {
                 Projects
                 <BsGridFill />
               </button>
-              <button
-                className={`wrapper-button ${active == 3 && "active"}`}
-                onClick={() => setActive(3)}
-              >
-                Saved
-                <RiBookmarkFill />
-              </button>
+              {data?.isMe && (
+                <button
+                  className={`wrapper-button ${active == 3 && "active"}`}
+                  onClick={() => setActive(3)}
+                >
+                  Saved
+                  <RiBookmarkFill />
+                </button>
+              )}
             </ButtonWrapper>
 
             {active == 1 ? (
@@ -286,8 +288,10 @@ const Profile = () => {
               </MoreDataWrapper>
             ) : active === 2 ? (
               <PostsOfDev isMe={data?.isMe} />
-            ) : (
+            ) : active == 3 && data?.isMe ? (
               <SavedProjects />
+            ) : (
+              <></>
             )}
           </ProfileWrapper>
 
