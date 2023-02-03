@@ -2,10 +2,16 @@ import React from "react";
 import {
   AllUsersProjectsLoaders,
   FullScreenLoaders,
+  LoadingCommentWrapper,
   PostDevLoadingWrapper,
   ProfileLoadingWrapper,
 } from "../styles/components/loadingStyles";
-import { MagnifyingGlass, ThreeDots, Triangle } from "react-loader-spinner";
+import {
+  Discuss,
+  MagnifyingGlass,
+  ThreeDots,
+  Triangle,
+} from "react-loader-spinner";
 
 export const FullScreenLoader = () => {
   return (
@@ -65,5 +71,22 @@ export const PostOfDevLoader = () => {
         visible={true}
       />
     </PostDevLoadingWrapper>
+  );
+};
+
+export const CommentLoader = () => {
+  return (
+    <LoadingCommentWrapper>
+      <Discuss
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="comment-loading"
+        wrapperStyle={{}}
+        wrapperClass="comment-wrapper"
+        color="#fff"
+        backgroundColor="var(--primary-color)"
+      />
+    </LoadingCommentWrapper>
   );
 };

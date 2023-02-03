@@ -39,3 +39,9 @@ export const PostDevLoadingWrapper = styled.div`
   width: 100%;
   ${flexcv}
 `;
+
+export const LoadingCommentWrapper = styled.div`
+  width: 100%;
+  height: 45vh;
+  ${flexcv}
+`;

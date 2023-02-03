@@ -19,8 +19,8 @@ import { createNotification } from "../components/Notification";
 import { useSelector } from "react-redux";
 import { BsCardImage } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
-import { LoadingWrapper } from "../styles/pages/profileStyles";
 import { arraysEqual, trimAll } from "../util/utilFunctions";
+import { ProfileLoader } from "../components/Loaders";
 
 const EditProject = () => {
   const { id } = useParams();
@@ -95,7 +95,7 @@ const EditProject = () => {
   return (
     <>
       {isLoading || isFetching ? (
-        <LoadingWrapper>Loading..</LoadingWrapper>
+        <ProfileLoader />
       ) : (
         <>
           <Head>

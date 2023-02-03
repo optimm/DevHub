@@ -148,16 +148,6 @@ export const SoloButton = styled.button`
     props?.notActive ? "var(--primary-color-glass)" : "var(--primary-color)"};
 `;
 
-export const LoadingWrapper = styled.div`
-  ${flexch}
-  height: ${(props) =>
-    props.project
-      ? "calc(100vh - 70px);"
-      : props.allWeb
-      ? "100vh;"
-      : "calc(100vh - 69px);"}
-  font-size: 30px;
-`;
 
 export const ProfileIndv = styled.div`
   ${flexch}

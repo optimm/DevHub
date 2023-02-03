@@ -29,6 +29,7 @@ import LikesSavesModal from "../components/LikesSavesModal";
 import CommentsModal from "../components/CommentsModal";
 import DeleteAccountProject from "../components/DeleteAccountProject";
 import ReadmeFile from "../components/ReadmeFile";
+import { ProfileLoader } from "../components/Loaders";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ const Project = () => {
     } else if (!isLoading && data?.success) {
       setTimeout(() => {
         setBlankLoader(false);
-      }, 500);
+      }, 1000);
     }
   }, [isLoading]);
 
@@ -120,7 +121,7 @@ const Project = () => {
   return (
     <>
       {isLoading || blankLoader ? (
-        <LoadingWrapper project>Loading...</LoadingWrapper>
+        <ProfileLoader />
       ) : (
         <>
           <ProjectMainWrapper>
