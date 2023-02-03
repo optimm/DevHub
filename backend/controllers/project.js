@@ -1,5 +1,6 @@
 const Project = require("../models/Project");
 const { StatusCodes } = require("http-status-codes");
+const cloudinary = require("cloudinary").v2;
 const {
   BadRequestError,
   UnauthenticatedError,
@@ -65,17 +66,32 @@ const getProjectsOfUser = async (req, res) => {
 const createProject = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
-  const { title, live_link, github_link } = req.body;
+  const { title, desc, live_link, github_link, image, tags } = req.body;
   if (
     !title ||
+    !image ||
     title === "" ||
     (title &&
       (!live_link || live_link === "") &&
       (!github_link || github_link === ""))
   ) {
-    throw new BadRequestError("Please Provide title and one link for project");
+    throw new BadRequestError(
+      "Please Provide title, cover image and one link for project"
+    );
   }
-  const project = await Project.create({ ...req.body, owner: userId });
+  const myCloud = await cloudinary.uploader.upload(image, {
+    folder: "projects",
+  });
+  let projectData = {
+    title,
+    image: { public_id: myCloud?.public_id, url: myCloud?.secure_url },
+  };
+  if (desc) projectData.desc = desc;
+  if (live_link) projectData.live_link = live_link;
+  if (github_link) projectData.github_link = github_link;
+  if (tags) projectData.tags = tags;
+
+  const project = await Project.create({ ...projectData, owner: userId });
   me.projects.unshift(project._id);
   me.total_projects += 1;
   await me.save();

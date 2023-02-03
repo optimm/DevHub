@@ -1,6 +1,6 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { useCreateProjectMutation } from "../app/services/projectApi";
 import {
@@ -9,6 +9,7 @@ import {
   MainLeft,
   MainRight,
   MainWrapper,
+  UploadedImage,
 } from "../styles/pages/createProjectStyles";
 import { tags } from "../util/options";
 import createProjectSchema from "../validationSchemas/createProject";
@@ -21,6 +22,8 @@ export const CreateProject = () => {
   const [create, { data, isLoading, isError, isSuccess, error }] =
     useCreateProjectMutation();
   const { myData } = useSelector((state) => state.me);
+
+  const [image, setImage] = useState(null);
   const {
     touched,
     errors,
@@ -40,12 +43,18 @@ export const CreateProject = () => {
     },
     validationSchema: createProjectSchema,
     onSubmit: async (values) => {
+      if (!image) {
+        createNotification("Please select a cover image", "error", 2000);
+        return;
+      }
       values = trimAll(values);
       let temp = { ...values };
       if (temp.live_link === "") delete temp["live_link"];
       if (temp.github_link === "") delete temp["github_link"];
       if (temp?.tags?.length === 0) delete temp["tags"];
       if (temp?.desc?.length === 0) delete temp["desc"];
+      temp.image = image;
+
       await create({ body: temp });
     },
   });
@@ -54,11 +63,41 @@ export const CreateProject = () => {
     if (isSuccess) {
       createNotification(data?.msg, "success", 2000);
       resetForm();
+      setImage(null);
     }
     if (isError) {
       createNotification(error?.data?.msg, "error", 2000);
     }
   }, [isSuccess, isError]);
+
+  const handleImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.readAsDataURL(selectedFile);
+    Reader.onload = () => {
+      if (Reader.readyState == 2) {
+        if (
+          selectedFile &&
+          (selectedFile.type === "image/jpeg" ||
+            selectedFile.type === "image/png" ||
+            selectedFile.type === "image/jpg")
+        ) {
+          if (selectedFile.size <= 3000000) {
+            setImage(Reader.result);
+          } else {
+            createNotification("File size greater than 3MB", "warning", 2000);
+            e.target.value = "";
+            setImage(null);
+          }
+        } else {
+          createNotification("File type not supported", "warning", 2000);
+          setFieldValue("image", null);
+          e.target.value = "";
+          setImage(null);
+        }
+      }
+    };
+  };
 
   return (
     <>
@@ -165,11 +204,24 @@ export const CreateProject = () => {
         </MainLeft>
         <MainRight>
           <div className="paper-for-image">
-            <div className="image-wrapper">
-              <BsCardImage />
-              <div className="text">Upload cover Image for your project.</div>
-            </div>
+            {image ? (
+              <UploadedImage src={image}></UploadedImage>
+            ) : (
+              <div className="image-wrapper">
+                <BsCardImage />
+                <div className="text">
+                  Cover Image for your project {"(Max 3MB)"}
+                </div>
+              </div>
+            )}
           </div>
+          <input
+            type="file"
+            id="myfile"
+            name="myfile"
+            className="file-chooser"
+            onChange={(e) => handleImageChange(e)}
+          />
         </MainRight>
       </MainWrapper>
     </>
