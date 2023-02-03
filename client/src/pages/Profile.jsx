@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   ButtonWrapper,
   ExtraButton,
-  LoadingWrapper,
   MoreDataWrapper,
   ProfileIndv,
   ProfileWrapper,
@@ -38,6 +37,7 @@ import {
   RiBookmarkFill,
 } from "react-icons/ri";
 import SavedProjects from "../components/SavedProjects";
+import { ProfileLoader } from "../components/Loaders";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Profile = () => {
   const { id } = useParams();
 
   const { isAuthenticated } = useSelector((state) => state.me);
-  const [blankLoader, setBlankLoader] = useState(true);
+  const [blankLoader, setBlankLoader] = useState(false);
   //modals
   const [fmodal, setFmodal] = useState(false);
   const [fmodalcat, setFmodalCat] = useState("");
@@ -99,7 +99,7 @@ const Profile = () => {
     } else if (!isLoading && data?.success) {
       setTimeout(() => {
         setBlankLoader(false);
-      }, 500);
+      }, 1000);
     }
   }, [isLoading]);
 
@@ -137,7 +137,7 @@ const Profile = () => {
   return (
     <>
       {isLoading || blankLoader ? (
-        <LoadingWrapper>Loading...</LoadingWrapper>
+        <ProfileLoader />
       ) : (
         <>
           <ProfileWrapper>

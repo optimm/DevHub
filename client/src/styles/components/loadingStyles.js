@@ -27,3 +27,9 @@ export const AllUsersProjectsLoaders = styled.div`
   width: 100%;
   ${flexcv}
 `;
+
+export const ProfileLoadingWrapper = styled.div`
+  height: calc(100vh - 69px);
+  width: 100%;
+  ${flexcv}
+`;

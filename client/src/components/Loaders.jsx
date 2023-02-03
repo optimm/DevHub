@@ -2,8 +2,9 @@ import React from "react";
 import {
   AllUsersProjectsLoaders,
   FullScreenLoaders,
+  ProfileLoadingWrapper,
 } from "../styles/components/loadingStyles";
-import { MagnifyingGlass } from "react-loader-spinner";
+import { MagnifyingGlass, Triangle } from "react-loader-spinner";
 
 export const FullScreenLoader = () => {
   return (
@@ -21,8 +22,8 @@ export const AllUsersProjectsLoader = () => {
     <AllUsersProjectsLoaders>
       <MagnifyingGlass
         visible={true}
-        height="100"
-        width="100"
+        height="120"
+        width="120"
         ariaLabel="MagnifyingGlass-loading"
         wrapperStyle={{}}
         wrapperClass="MagnifyingGlass-wrapper"
@@ -30,5 +31,21 @@ export const AllUsersProjectsLoader = () => {
         color="var(--primary-color)"
       />
     </AllUsersProjectsLoaders>
+  );
+};
+
+export const ProfileLoader = () => {
+  return (
+    <ProfileLoadingWrapper>
+      <Triangle
+        height="120"
+        width="120"
+        color="var(--primary-color)"
+        ariaLabel="triangle-loading"
+        wrapperStyle={{}}
+        wrapperClassName=""
+        visible={true}
+      />
+    </ProfileLoadingWrapper>
   );
 };
