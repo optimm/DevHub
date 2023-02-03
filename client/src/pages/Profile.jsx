@@ -57,13 +57,12 @@ const Profile = () => {
   const [complete, setComplete] = useState(false);
   //queries
   const [logoutFn, {}] = useLogoutMutation();
-  const { data, isLoading, isFetching, isSuccess, isError } =
-    useGetSingleUserQuery(
-      {
-        id,
-      },
-      { skip: del }
-    );
+  const { data, isLoading, isFetching, error } = useGetSingleUserQuery(
+    {
+      id,
+    },
+    { skip: del }
+  );
 
   const [
     followFunction,
@@ -96,7 +95,10 @@ const Profile = () => {
   useEffect(() => {
     if (isLoading) {
       setBlankLoader(true);
-    } else if (!isLoading && data?.success) {
+    } else if (
+      !isLoading &&
+      (data?.success || error?.data?.success === false)
+    ) {
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);

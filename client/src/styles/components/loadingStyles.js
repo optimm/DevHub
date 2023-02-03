@@ -33,3 +33,9 @@ export const ProfileLoadingWrapper = styled.div`
   width: 100%;
   ${flexcv}
 `;
+
+export const PostDevLoadingWrapper = styled.div`
+  height: 100px;
+  width: 100%;
+  ${flexcv}
+`;
