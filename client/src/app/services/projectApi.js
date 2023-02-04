@@ -1,5 +1,4 @@
 import { baseApi } from "./baseApi";
-import { authenticateMe } from "../../features/meSlice";
 
 export const projectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

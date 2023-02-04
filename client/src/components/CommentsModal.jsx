@@ -29,7 +29,6 @@ const CommentsModal = ({ show, setShow, isMine }) => {
   const navigate = useNavigate();
 
   const {
-    touched,
     errors,
     values,
     handleSubmit,
@@ -79,12 +78,11 @@ const CommentsModal = ({ show, setShow, isMine }) => {
   });
 
   const { isAuthenticated, myData } = useSelector((state) => state.me);
-  const { data, isLoading, isFetching, isSuccess, isError, error } =
-    useGetCommentsQuery({ id });
+  const { data, isLoading } = useGetCommentsQuery({ id });
 
-  const [addComment, {}] = useAddCommentMutation();
-  const [deleteComment, {}] = useDeleteCommentMutation();
-  const [editCommentFn, {}] = useEditCommentMutation();
+  const [addComment] = useAddCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [editCommentFn] = useEditCommentMutation();
   const comments = data?.data?.comments;
 
   const [blankLoader, setBlankLoader] = useState(false);
@@ -103,10 +101,6 @@ const CommentsModal = ({ show, setShow, isMine }) => {
       }, 1000);
     }
   }, [isLoading]);
-
-  useEffect(() => {
-    console.log(values, values.comment, values.comment.length);
-  }, []);
 
   const handleDeleteComment = async ({ commentId }) => {
     const { data: deleteCommentData, error: deleteCommentError } =

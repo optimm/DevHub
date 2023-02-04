@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "styled-components/macro";
 import { useDeleteProjectMutation } from "../app/services/projectApi";
@@ -10,10 +9,9 @@ import { flexcv } from "../styles/globalStyle";
 
 const DeleteAccountProject = ({ show, setShow, project }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handleClose = () => setShow(false);
-  const [deleteAcc, {}] = useDeleteProfileMutation();
-  const [deleteProject, {}] = useDeleteProjectMutation();
+  const [deleteAcc] = useDeleteProfileMutation();
+  const [deleteProject] = useDeleteProjectMutation();
   const { id } = useParams();
 
   const handleDelete = async () => {

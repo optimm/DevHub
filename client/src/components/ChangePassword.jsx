@@ -1,9 +1,7 @@
+import React from "react";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { useChangePasswordMutation } from "../app/services/authApi";
 import { InnerWrapper } from "../styles/components/changePasswordStyles";
 import { EditForm, Footer } from "../styles/components/editProfileStyles";
@@ -13,40 +11,25 @@ import changePasswordSchema from "../validationSchemas/changePassword";
 import { createNotification } from "./Notification";
 
 const ChangePassword = ({ show, setShow }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { id } = useParams();
-
-  const {
-    touched,
-    errors,
-    values,
-    handleSubmit,
-    handleBlur,
-    handleChange,
-    setFieldValue,
-  } = useFormik({
-    initialValues: {
-      currentPassword: "",
-      newPassword: "",
-    },
-    validationSchema: changePasswordSchema,
-    onSubmit: async (values) => {
-      values = trimAll(values);
-      await change({ body: values });
-    },
-  });
+  const { touched, errors, values, handleSubmit, handleBlur, handleChange } =
+    useFormik({
+      initialValues: {
+        currentPassword: "",
+        newPassword: "",
+      },
+      validationSchema: changePasswordSchema,
+      onSubmit: async (values) => {
+        values = trimAll(values);
+        try {
+          const data = await change({ body: values }).unwrap();
+          createNotification(data?.msg, "success", 2000);
+          setShow(false);
+        } catch (error) {}
+      },
+    });
 
   const handleClose = () => setShow(false);
-  const [change, { data, error, isLoading, isError, isSuccess }] =
-    useChangePasswordMutation();
-
-  useEffect(() => {
-    if (isSuccess) {
-      createNotification(data?.msg, "success", 2000);
-      setShow(false);
-    }
-  }, [isSuccess]);
+  const [change, { isLoading, error, isError }] = useChangePasswordMutation();
 
   return (
     <Modal show={show} onHide={handleClose} centered>

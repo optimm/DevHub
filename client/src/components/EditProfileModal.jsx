@@ -18,8 +18,7 @@ import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";
 import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
-import { arraysEqual, capitalizeString, trimAll } from "../util/utilFunctions";
-
+import { capitalizeString, trimAll } from "../util/utilFunctions";
 import { platformOptions } from "../util/options";
 
 const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
@@ -35,7 +34,6 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
     useEditProfileMutation();
 
   const [errorText, setErrorText] = useState("");
-  const [profiles, setProfiles] = useState([]);
   const [image, setImage] = useState(null);
 
   const {
@@ -95,7 +93,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
 
   const linkToProfile = (plt) => {
     let str = "";
-    values?.profiles?.map((e) => {
+    let x = values?.profiles?.map((e) => {
       if (e?.platform === plt) str = e?.link;
     });
     return str;
@@ -106,7 +104,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
     const Reader = new FileReader();
     Reader.readAsDataURL(selectedFile);
     Reader.onload = () => {
-      if (Reader.readyState == 2) {
+      if (Reader.readyState === 2) {
         if (
           selectedFile &&
           (selectedFile.type === "image/jpeg" ||

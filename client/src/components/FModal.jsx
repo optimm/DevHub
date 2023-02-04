@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetFollowersFollowingQuery } from "../app/services/userApi";
 import { FAllWrapper, FIndvWrapper } from "../styles/components/FmodalStyles";
@@ -12,8 +11,10 @@ const FModal = ({ show, setShow, category }) => {
 
   const handleClose = () => setShow(false);
 
-  const { data, isLoading, isFetching, isError, isSuccess, error } =
-    useGetFollowersFollowingQuery({ id, category }, { skip: category === "" });
+  const { data, isLoading, isFetching } = useGetFollowersFollowingQuery(
+    { id, category },
+    { skip: category === "" }
+  );
 
   const followers = data?.data?.data;
 
