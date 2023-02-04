@@ -98,7 +98,6 @@ const updateProfile = async (req, res) => {
   const { userId } = req.user;
   const { name, username, email, image, bio, about, profiles } = req.body;
   let me = await User.findById(userId);
-  console.log(me);
 
   if (email && email !== me.email) {
     const user = await User.findOne({ email });
@@ -124,6 +123,7 @@ const updateProfile = async (req, res) => {
   ) {
     throw new BadRequestError("Please provide name,username,email");
   }
+  me.name = name;
   me.bio = bio;
   me.about = about;
   me.profiles = [...profiles];

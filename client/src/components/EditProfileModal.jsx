@@ -59,7 +59,18 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
         createNotification(`${data?.msg}`, "success", 2000);
         setShow(false);
         setBlankLoader(true);
-        dispatch(baseApi.util.invalidateTags(["SingleUser"]));
+        dispatch(
+          baseApi.util.invalidateTags([
+            "SingleUser",
+            "SingleProject",
+            "AllProjects",
+            "SavedProjects",
+            "SingleProject",
+            "Followers",
+            "AllComments",
+            "ProjectOfUser",
+          ])
+        );
         setTimeout(() => {
           setBlankLoader(false);
         }, 1000);

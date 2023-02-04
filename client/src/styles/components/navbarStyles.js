@@ -31,6 +31,7 @@ export const NavContainerRight = styled.div`
   ${flexch}
   gap:2.5vw;
   margin-left: auto;
+
 `;
 
 export const Item = styled.div`

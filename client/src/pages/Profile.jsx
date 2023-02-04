@@ -39,13 +39,14 @@ import {
 import SavedProjects from "../components/SavedProjects";
 import { ProfileLoader } from "../components/Loaders";
 import { Avatar } from "@mui/material";
+import { authenticateMe } from "../features/meSlice";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { isAuthenticated } = useSelector((state) => state.me);
+  const { isAuthenticated, myData } = useSelector((state) => state.me);
   const [blankLoader, setBlankLoader] = useState(false);
   //modals
   const [fmodal, setFmodal] = useState(false);
@@ -89,6 +90,20 @@ const Profile = () => {
         setComplete(false);
       } else {
         setComplete(true);
+      }
+      if (isAuthenticated && data?.isMe) {
+        dispatch(
+          authenticateMe({
+            isAuthenticated: true,
+            data: {
+              _id: tdata?._id,
+              avatar: tdata?.avatar,
+              name: tdata?.name,
+              username: tdata?.username,
+              email: tdata?.email,
+            },
+          })
+        );
       }
     }
   }, [isFetching]);
