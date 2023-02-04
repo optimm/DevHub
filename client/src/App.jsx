@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import { FullScreenLoader } from "./components/Loaders";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
+import About from "./pages/About";
 import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
 import { CreateProject } from "./pages/CreateProject";
@@ -127,6 +128,16 @@ const App = () => {
                   ) : (
                     <Navigate replace to="/login" />
                   )
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <>
+                    <Navbar />
+                    <About />
+                    <Footer />
+                  </>
                 }
               />
             </Routes>
