@@ -22,7 +22,7 @@ import { arraysEqual, capitalizeString, trimAll } from "../util/utilFunctions";
 
 import { platformOptions } from "../util/options";
 
-const EditProfileModal = ({ show, setShow }) => {
+const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const handleClose = () => setShow(false);
@@ -52,33 +52,17 @@ const EditProfileModal = ({ show, setShow }) => {
     onSubmit: async (values) => {
       values = trimAll(values);
       const temp = { ...values };
-
-      if (!me?.about && temp?.about === "") delete temp["about"];
-      if (!me?.bio && temp?.bio === "") delete temp["bio"];
-      if (!me?.profiles && temp?.profiles?.length === 0)
-        delete temp["profiles"];
-
-      if (
-        me?.name === temp?.name &&
-        me?.username === temp?.username &&
-        me?.email === temp?.email &&
-        me?.bio === temp?.bio &&
-        me?.about === temp?.about &&
-        arraysEqual(me?.profiles, temp?.profiles) &&
-        ((me?.avatar?.url?.length > 0 && me?.avatar?.url === image) ||
-          (!me?.avatar?.url && !image))
-      ) {
-        createNotification("Nothing to update", "error", 2000);
-        return;
-      }
-
       if (image) temp.image = image;
 
       try {
         const data = await updateProfile({ body: temp }).unwrap();
         createNotification(`${data?.msg}`, "success", 2000);
         setShow(false);
+        setBlankLoader(true);
         dispatch(baseApi.util.invalidateTags(["SingleUser"]));
+        setTimeout(() => {
+          setBlankLoader(false);
+        }, 1000);
       } catch (error) {
         setErrorText(error?.data?.msg);
       }

@@ -303,7 +303,12 @@ const Profile = () => {
 
           <FModal show={fmodal} setShow={setFmodal} category={fmodalcat} />
           {editProfile && (
-            <EditProfileModal show={editProfile} setShow={setEditProfile} />
+            <EditProfileModal
+              show={editProfile}
+              setShow={setEditProfile}
+              blankLoader={blankLoader}
+              setBlankLoader={setBlankLoader}
+            />
           )}
           {changep && <ChangePassword show={changep} setShow={setChangep} />}
           {del && <DeleteAccountProject show={del} setShow={setDel} />}
