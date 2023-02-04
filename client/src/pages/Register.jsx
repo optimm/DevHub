@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,10 +17,8 @@ import { createNotification } from "../components/Notification";
 import { trimAll } from "../util/utilFunctions";
 
 const Register = () => {
-  const [
-    register,
-    { data, error: requestError, isLoading, isError, isSuccess },
-  ] = useRegisterMutation();
+  const [register, { error: requestError, isLoading, isError }] =
+    useRegisterMutation();
   const navigate = useNavigate();
   const {
     touched,
@@ -40,17 +38,14 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit: async (values) => {
       values = trimAll(values);
-      await register({ body: values });
+      try {
+        const data = await register({ body: values });
+        resetForm();
+        createNotification(data.msg, "success", 2000);
+        navigate("/login");
+      } catch (error) {}
     },
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      resetForm();
-      createNotification(data.msg, "success", 2000);
-      navigate("/login");
-    }
-  }, [isSuccess]);
 
   return (
     <>

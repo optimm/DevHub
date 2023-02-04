@@ -69,7 +69,7 @@ const Project = () => {
         setTagsString(temp);
       }
     }
-  }, [isFetching]);
+  }, [isFetching, data]);
 
   useEffect(() => {
     if (isLoading) {
@@ -79,7 +79,7 @@ const Project = () => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading]);
+  }, [isLoading, data]);
 
   const handleLikeUnlike = async () => {
     if (!isAuthenticated) {
