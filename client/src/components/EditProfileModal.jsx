@@ -93,8 +93,9 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
 
   const linkToProfile = (plt) => {
     let str = "";
-    let x = values?.profiles?.map((e) => {
+    values?.profiles?.map((e) => {
       if (e?.platform === plt) str = e?.link;
+      return 0;
     });
     return str;
   };
@@ -250,6 +251,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
                           onChange={(e) => {
                             let temp = [...values?.profiles];
                             let flag = false;
+
                             if (
                               !e.target.value ||
                               e.target.value.trim() === ""
@@ -259,6 +261,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
                                 if (x?.platform === item) {
                                   ind = i;
                                 }
+                                return 0;
                               });
                               if (ind > -1) {
                                 temp.splice(ind, 1);
@@ -273,8 +276,8 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
                                 newObj.link = e.target.value.trim();
                                 temp[i] = newObj;
                               }
+                              return 0;
                             });
-
                             if (!flag) {
                               temp = [
                                 ...temp,
