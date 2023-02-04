@@ -64,6 +64,8 @@ const login = async (req, res) => {
   const options = {
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    sameSite: "none",
+    secure: true,
   };
 
   res
@@ -84,7 +86,11 @@ const logout = async (req, res) => {
   const { userId } = req.user;
   res
     .status(StatusCodes.OK)
-    .cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+    .cookie("token", null, {
+      sameSite: "none",
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
     .json({ success: true, msg: "Logged out" });
 };
 
