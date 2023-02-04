@@ -93,14 +93,15 @@ const CommentsModal = ({ show, setShow, isMine }) => {
   };
 
   useEffect(() => {
+    let success = data?.success;
     if (isLoading) {
       setBlankLoader(true);
-    } else if (!isLoading && data?.success) {
+    } else if (!isLoading && success === true) {
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading]);
+  }, [isLoading, data]);
 
   const handleDeleteComment = async ({ commentId }) => {
     const { data: deleteCommentData, error: deleteCommentError } =

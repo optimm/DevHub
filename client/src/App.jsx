@@ -23,19 +23,18 @@ const App = () => {
   const [blankLoader, setBlankLoader] = useState(true);
   const [errState, setErrState] = useState(false);
   useEffect(() => {
+    let success = data?.success;
+    let notSuccess = error?.data?.success;
     if (isFetching) {
       setBlankLoader(true);
-    } else if (
-      !isFetching &&
-      (data?.success === true || error?.data?.success === false)
-    ) {
+    } else if (!isFetching && (success === true || notSuccess === false)) {
       if (error?.data?.success === false) setErrState(false);
       else setErrState(true);
       setTimeout(() => {
         setBlankLoader(false);
       }, 2000);
     }
-  }, [isFetching]);
+  }, [isFetching, data, error]);
   return (
     <>
       {isLoading || isFetching || blankLoader ? (
