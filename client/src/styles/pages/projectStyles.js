@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import AllTagsModal from "../../components/AllTagsModal";
-import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
+import { backgroundGeneral, flexcv } from "../globalStyle";
 
 export const ProjectMainWrapper = styled.div`
   width: 100%;

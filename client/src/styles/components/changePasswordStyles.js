@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexch, flexcv } from "../globalStyle";
+import { flexcv } from "../globalStyle";
 
 export const InnerWrapper = styled.div`
   width: 80%;

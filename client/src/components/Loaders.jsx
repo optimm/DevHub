@@ -16,7 +16,7 @@ import {
 export const FullScreenLoader = () => {
   return (
     <FullScreenLoaders>
-      <img className="image" src="/images/cat.gif"></img>
+      <img className="image" src="/images/cat.gif" alt="animation"></img>
       <div className="text">
         <span>Dev</span>hub
       </div>

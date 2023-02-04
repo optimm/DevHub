@@ -1,4 +1,4 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -75,7 +75,7 @@ export const CreateProject = () => {
     const Reader = new FileReader();
     Reader.readAsDataURL(selectedFile);
     Reader.onload = () => {
-      if (Reader.readyState == 2) {
+      if (Reader.readyState === 2) {
         if (
           selectedFile &&
           (selectedFile.type === "image/jpeg" ||

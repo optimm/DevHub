@@ -3,7 +3,7 @@ import { ProjectCardWrapper } from "../styles/components/projectCardStyles";
 import { BiComment } from "react-icons/bi";
 import { AiFillLike } from "react-icons/ai";
 import { Avatar } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
 

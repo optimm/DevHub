@@ -1,4 +1,4 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -18,7 +18,6 @@ import { tags } from "../util/options";
 import createProjectSchema from "../validationSchemas/createProject";
 import { createNotification } from "../components/Notification";
 import { useSelector } from "react-redux";
-import { BsCardImage } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { arraysEqual, trimAll } from "../util/utilFunctions";
 import { ProfileLoader } from "../components/Loaders";
@@ -27,8 +26,8 @@ const EditProject = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [err, setErr] = useState(false);
-  const [update, {}] = useEditProjectMutation();
-  const { data, isLoading, isFetching, isSuccess, isError } =
+  const [update] = useEditProjectMutation();
+  const { data, isLoading, isFetching } =
     useGetSingleProjectQuery({ id }, { skip: err });
 
   const { myData } = useSelector((state) => state.me);
@@ -41,7 +40,6 @@ const EditProject = () => {
     handleSubmit,
     handleBlur,
     handleChange,
-    resetForm,
     setFieldValue,
   } = useFormik({
     initialValues: {
@@ -106,7 +104,7 @@ const EditProject = () => {
     const Reader = new FileReader();
     Reader.readAsDataURL(selectedFile);
     Reader.onload = () => {
-      if (Reader.readyState == 2) {
+      if (Reader.readyState === 2) {
         if (
           selectedFile &&
           (selectedFile.type === "image/jpeg" ||

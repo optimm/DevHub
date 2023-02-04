@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
+import { backgroundGeneral, flexch } from "../globalStyle";
 
 export const ProjectCardWrapper = styled.div`
   height: 234px;

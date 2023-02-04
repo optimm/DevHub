@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
+import { flexch } from "../globalStyle";
 
 export const ProfileWrapper = styled.div`
   padding: 0 6%;

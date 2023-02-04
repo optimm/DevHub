@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { useGetReadmeQuery } from "../app/services/projectApi";
 import MarkdownIt from "markdown-it";
 import "../styles/markdown.css";
 import "../styles/modal.css";
@@ -12,8 +11,7 @@ const ReadmeFile = ({ show, setShow, readmeData }) => {
   useEffect(() => {
     setHtml(md.render(readmeData?.readmeData));
   }, []);
-  const link = readmeData?.link;
-  const baseUrl = link.replace("README.md", "");
+
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">

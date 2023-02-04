@@ -16,7 +16,7 @@ import loginSchema from "../validationSchemas/login";
 import { AiFillHome } from "react-icons/ai";
 
 const Login = () => {
-  const [login, { data, error: requestError, isLoading, isError, isSuccess }] =
+  const [login, { data, error: requestError, isError, isSuccess }] =
     useLoginMutation();
   const navigate = useNavigate();
   const {

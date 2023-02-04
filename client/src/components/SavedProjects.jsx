@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { useGetSavedProjectsQuery } from "../app/services/userApi";
 import { PostWrapper } from "../styles/components/postsOfDevStyles";
 import { AllProjectCardWrapper } from "../styles/pages/allProjectsStyles";

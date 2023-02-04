@@ -46,7 +46,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { isAuthenticated, myData } = useSelector((state) => state.me);
+  const { isAuthenticated } = useSelector((state) => state.me);
   const [blankLoader, setBlankLoader] = useState(false);
   //modals
   const [fmodal, setFmodal] = useState(false);
@@ -58,7 +58,7 @@ const Profile = () => {
   //
   const [complete, setComplete] = useState(false);
   //queries
-  const [logoutFn, {}] = useLogoutMutation();
+  const [logoutFn] = useLogoutMutation();
   const { data, isLoading, isFetching, error } = useGetSingleUserQuery(
     {
       id,
@@ -85,7 +85,7 @@ const Profile = () => {
         !tdata?.bio ||
         tdata?.bio === "" ||
         !tdata?.profiles ||
-        tdata?.profiles.length == 0
+        tdata?.profiles.length === 0
       ) {
         setComplete(false);
       } else {
@@ -238,14 +238,14 @@ const Profile = () => {
             </TopWrapper>
             <ButtonWrapper>
               <button
-                className={`wrapper-button ${active == 1 && "active"}`}
+                className={`wrapper-button ${active === 1 && "active"}`}
                 onClick={() => setActive(1)}
               >
                 About
                 <RiUserFill />
               </button>
               <button
-                className={`wrapper-button ${active == 2 && "active"}`}
+                className={`wrapper-button ${active === 2 && "active"}`}
                 onClick={() => setActive(2)}
               >
                 Projects
@@ -253,7 +253,7 @@ const Profile = () => {
               </button>
               {data?.isMe && (
                 <button
-                  className={`wrapper-button ${active == 3 && "active"}`}
+                  className={`wrapper-button ${active === 3 && "active"}`}
                   onClick={() => setActive(3)}
                 >
                   Saved
@@ -262,7 +262,7 @@ const Profile = () => {
               )}
             </ButtonWrapper>
 
-            {active == 1 ? (
+            {active === 1 ? (
               <MoreDataWrapper>
                 {data?.data?.about?.length > 0 && (
                   <>
@@ -309,7 +309,7 @@ const Profile = () => {
               </MoreDataWrapper>
             ) : active === 2 ? (
               <PostsOfDev isMe={data?.isMe} />
-            ) : active == 3 && data?.isMe ? (
+            ) : active === 3 && data?.isMe ? (
               <SavedProjects />
             ) : (
               <></>

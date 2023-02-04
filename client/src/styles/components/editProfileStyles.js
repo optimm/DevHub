@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundGeneral, flexch } from "../globalStyle";
+// import { backgroundGeneral, flexch } from "../globalStyle";
 
 export const EditWrapper = styled.div`
   width: 100%;

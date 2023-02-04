@@ -10,11 +10,7 @@ import { BiComment, BiShareAlt } from "react-icons/bi";
 import { AiFillLike, AiOutlineDelete } from "react-icons/ai";
 import { RiBookmarkFill, RiEditFill } from "react-icons/ri";
 
-import {
-  ExtraButton,
-  LoadingWrapper,
-  ProfileIndv,
-} from "../styles/pages/profileStyles";
+import { ExtraButton, ProfileIndv } from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
@@ -35,15 +31,14 @@ const Project = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { data, isLoading, isFetching, isSuccess, error, isError } =
-    useGetSingleProjectQuery({ id });
+  const { data, isLoading, isFetching } = useGetSingleProjectQuery({ id });
   const projectData = data?.data;
 
-  const [likeUnlike, {}] = useLikeUnlikeProjectMutation();
-  const [saveUnsave, {}] = useSaveUnsaveProjectMutation();
+  const [likeUnlike] = useLikeUnlikeProjectMutation();
+  const [saveUnsave] = useSaveUnsaveProjectMutation();
 
   const [tagsString, setTagsString] = useState("");
-  const [tagMore, setTagMore] = useState(false);
+  // const [tagMore, setTagMore] = useState(false);
   const [viewAllTags, setViewAllTags] = useState(false);
   const [blankLoader, setBlankLoader] = useState(true);
   const [likesShow, setLikesShow] = useState(false);
@@ -64,7 +59,7 @@ const Project = () => {
           }
           t += arr[i];
           if (t.length > 40) {
-            setTagMore(true);
+            // setTagMore(true);
             temp += "...";
             break;
           } else {
