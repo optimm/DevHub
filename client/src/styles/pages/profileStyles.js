@@ -11,13 +11,7 @@ export const TopWrapper = styled.div`
   justify-content: center;
   gap: 40px;
   height: 35vh;
-  .image-section {
-    background: url(${(props) => props.url});
-    ${backgroundGeneral}
-    border-radius:50%;
-    height: 170px;
-    width: 170px;
-  }
+
   .text-section {
     display: flex;
     flex-direction: column;
@@ -147,7 +141,6 @@ export const SoloButton = styled.button`
   background: ${(props) =>
     props?.notActive ? "var(--primary-color-glass)" : "var(--primary-color)"};
 `;
-
 
 export const ProfileIndv = styled.div`
   ${flexch}

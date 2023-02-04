@@ -38,6 +38,7 @@ import {
 } from "react-icons/ri";
 import SavedProjects from "../components/SavedProjects";
 import { ProfileLoader } from "../components/Loaders";
+import { Avatar } from "@mui/material";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -143,8 +144,11 @@ const Profile = () => {
       ) : (
         <>
           <ProfileWrapper>
-            <TopWrapper url="/images/login.jpg">
-              <div className="image-section"></div>
+            <TopWrapper>
+              <Avatar
+                sx={{ width: 170, height: 170 }}
+                src={data?.data?.avatar?.url}
+              ></Avatar>
               <div className="text-section">
                 <div className="username-section">
                   <div className="username">{data?.data?.username}</div>

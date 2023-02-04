@@ -49,6 +49,9 @@ export const ProjectCardWrapper = styled.div`
     gap: 10px;
     align-items: center;
   }
+  .likes-left .MuiAvatar-root {
+    font-size: 0.88rem;
+  }
   .username {
     font-weight: 500;
   }

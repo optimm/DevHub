@@ -15,12 +15,8 @@ export const EditInner = styled.div`
     align-items: center;
     gap: 20px;
   }
-  .image {
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    background: url(${(props) => props.url});
-    ${backgroundGeneral}
+  #profile-photo {
+    font-size: 0.7rem;
   }
   .text-section {
     height: fit-content;
@@ -31,9 +27,9 @@ export const EditInner = styled.div`
   }
   .edit {
     font-size: 0.9rem;
-    cursor: pointer;
     font-weight: 700;
     color: var(--primary-color);
+    margin-bottom: 10px;
   }
   .text-data-section {
     margin-top: 30px;

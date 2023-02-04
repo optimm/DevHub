@@ -13,7 +13,7 @@ import {
   EditWrapper,
   Footer,
 } from "../styles/components/editProfileStyles";
-import { TextField } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import editProfileSchema from "../validationSchemas/editProfile";
 import { createNotification } from "./Notification";
@@ -31,17 +31,12 @@ const EditProfileModal = ({ show, setShow }) => {
     { skip: !show }
   );
   const me = data?.data;
-  const [
-    updateProfile,
-    {
-      data: updateData,
-      isSuccess: isUpdateSuccess,
-      isLoading: isUpdateLoading,
-    },
-  ] = useEditProfileMutation();
+  const [updateProfile, { isLoading: isUpdateLoading }] =
+    useEditProfileMutation();
 
   const [errorText, setErrorText] = useState("");
   const [profiles, setProfiles] = useState([]);
+  const [image, setImage] = useState(null);
 
   const {
     touched,
@@ -56,20 +51,36 @@ const EditProfileModal = ({ show, setShow }) => {
     validationSchema: editProfileSchema,
     onSubmit: async (values) => {
       values = trimAll(values);
+      const temp = { ...values };
+
+      if (!me?.about && temp?.about === "") delete temp["about"];
+      if (!me?.bio && temp?.bio === "") delete temp["bio"];
+      if (!me?.profiles && temp?.profiles?.length === 0)
+        delete temp["profiles"];
+
       if (
-        me?.name === values?.name &&
-        me?.username === values?.username &&
-        me?.email === values?.email &&
-        me?.bio === values?.bio &&
-        me?.about === values?.about &&
-        arraysEqual(me?.profiles, values?.profiles)
+        me?.name === temp?.name &&
+        me?.username === temp?.username &&
+        me?.email === temp?.email &&
+        me?.bio === temp?.bio &&
+        me?.about === temp?.about &&
+        arraysEqual(me?.profiles, temp?.profiles) &&
+        ((me?.avatar?.url?.length > 0 && me?.avatar?.url === image) ||
+          (!me?.avatar?.url && !image))
       ) {
         createNotification("Nothing to update", "error", 2000);
-      } else {
-        const { data, error } = await updateProfile({ body: values });
-        if (error) {
-          setErrorText(error?.data?.msg);
-        }
+        return;
+      }
+
+      if (image) temp.image = image;
+
+      try {
+        const data = await updateProfile({ body: temp }).unwrap();
+        createNotification(`${data?.msg}`, "success", 2000);
+        setShow(false);
+        dispatch(baseApi.util.invalidateTags(["SingleUser"]));
+      } catch (error) {
+        setErrorText(error?.data?.msg);
       }
     },
   });
@@ -83,16 +94,9 @@ const EditProfileModal = ({ show, setShow }) => {
       temp?.bio && setFieldValue("bio", temp?.bio);
       temp?.about && setFieldValue("about", temp?.about);
       temp?.profiles && setFieldValue("profiles", temp?.profiles);
+      temp?.avatar?.url && setImage(temp?.avatar?.url);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (isUpdateSuccess) {
-      createNotification(`${updateData?.msg}`, "success", 2000);
-      setShow(false);
-      dispatch(baseApi.util.invalidateTags(["SingleUser"]));
-    }
-  }, [isUpdateSuccess]);
 
   const linkToProfile = (plt) => {
     let str = "";
@@ -100,6 +104,35 @@ const EditProfileModal = ({ show, setShow }) => {
       if (e?.platform === plt) str = e?.link;
     });
     return str;
+  };
+
+  const handleImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.readAsDataURL(selectedFile);
+    Reader.onload = () => {
+      if (Reader.readyState == 2) {
+        if (
+          selectedFile &&
+          (selectedFile.type === "image/jpeg" ||
+            selectedFile.type === "image/png" ||
+            selectedFile.type === "image/jpg")
+        ) {
+          if (selectedFile.size <= 3000000) {
+            setImage(Reader.result);
+          } else {
+            createNotification("File size greater than 3MB", "warning", 2000);
+            e.target.value = "";
+            setImage(me?.avatar?.url);
+          }
+        } else {
+          createNotification("File type not supported", "warning", 2000);
+          setFieldValue("image", null);
+          e.target.value = "";
+          setImage(me?.avatar?.url);
+        }
+      }
+    };
   };
 
   return (
@@ -114,12 +147,17 @@ const EditProfileModal = ({ show, setShow }) => {
               <>Loading...</>
             ) : (
               <>
-                <EditInner url="/images/login.jpg">
+                <EditInner>
                   <div className="image-section">
-                    <div className="image"></div>
+                    <Avatar sx={{ height: 80, width: 80 }} src={image} />
                     <div className="text-section">
                       <div className="username">{me?.username}</div>
                       <div className="edit">Change profile photo</div>
+                      <input
+                        type="file"
+                        id="profile-photo"
+                        onChange={(e) => handleImageChange(e)}
+                      />
                     </div>
                   </div>
                   <div className="text-data-section">

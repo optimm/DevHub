@@ -129,7 +129,10 @@ const Project = () => {
               <div className="data-wrapper">
                 <div className="profile-section">
                   <Link to={`/users/${projectData?.owner?._id}`}>
-                    <Avatar sx={{ width: 50, height: 50 }} />
+                    <Avatar
+                      sx={{ width: 50, height: 50 }}
+                      src={projectData?.owner?.avatar?.url}
+                    ></Avatar>
                   </Link>
 
                   <div>
