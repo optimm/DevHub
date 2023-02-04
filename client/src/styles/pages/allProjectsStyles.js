@@ -2,7 +2,7 @@ import styled from "styled-components";
 import * as mq from "../mediaQueries";
 
 export const AllProjectsWrapper = styled.div`
-  min-height: calc(90vh - 210px);
+  min-height: calc(90vh - 70px);
 `;
 
 export const AllProjectCardWrapper = styled.div`

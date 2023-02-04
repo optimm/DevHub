@@ -9,7 +9,7 @@ export const SearchBarWrapper = styled.div`
 `;
 
 export const AllUsersWrapper = styled.div`
-  min-height: calc(90vh - 220px);
+  min-height: calc(90vh - 70px);
 `;
 
 export const AllUsersCardWrapper = styled.div`

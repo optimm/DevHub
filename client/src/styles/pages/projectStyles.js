@@ -4,6 +4,7 @@ import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProjectMainWrapper = styled.div`
   width: 100%;
+  min-height: 100vh;
   display: flex;
   padding: 0% 6%;
 
@@ -107,7 +108,6 @@ export const ProjectImageWrapper = styled.div`
   width: 92%;
   height: 50vh;
   position: relative;
-  margin-top: 17vh;
 
   .project-image {
     border-radius: 5px;

@@ -23,7 +23,7 @@ export const FullScreenLoaders = styled.div`
 `;
 
 export const AllUsersProjectsLoaders = styled.div`
-  height: calc(90vh - 220px);
+  height: calc(90vh - 120px);
   width: 100%;
   ${flexcv}
 `;
