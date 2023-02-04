@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const UserCard = ({ user }) => {
   return (
-    <UserCardWrapper image="/images/login.jpg">
+    <UserCardWrapper image={user?.avatar?.url || "/images/noImage.png"}>
       <Link to={`/users/${user?._id}`}>
         <div className="image-section"></div>
 
