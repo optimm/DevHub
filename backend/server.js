@@ -6,10 +6,18 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT;
 const cookieParser = require("cookie-parser");
+const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
 const helemt = require("helmet");
 const xss = require("xss-clean");
 const morgan = require("morgan");
+
+//cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 //db
 const connectDb = require("./db/connect");
@@ -27,7 +35,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 //middlewares
 app.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
-app.use(express.json());
+app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(helemt());

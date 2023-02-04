@@ -52,10 +52,3 @@ export const AddCommentSection = styled.form`
     ${flexch}
   }
 `;
-
-export const LoadingCommentWrapper = styled.div`
-  width: 100%;
-  height: 45vh;
-  ${flexch}
-  font-size:25px;
-`;

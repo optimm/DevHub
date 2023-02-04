@@ -1,29 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSavedProjectsQuery } from "../app/services/userApi";
 import { PostWrapper } from "../styles/components/postsOfDevStyles";
 import { AllProjectCardWrapper } from "../styles/pages/allProjectsStyles";
+import { PostOfDevLoader } from "./Loaders";
 import ProjectCard from "./ProjectCard";
 
 const SavedProjects = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { data, isLoading, isFetching, isSuccess, isError, error } =
-    useGetSavedProjectsQuery();
+  const { data, isLoading, error } = useGetSavedProjectsQuery();
   const projectData = data?.data?.data;
+  const [blankLoader, setBlankLoader] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) {
+      setBlankLoader(true);
+    } else if (
+      !isLoading &&
+      (data?.success || error?.data?.success === false)
+    ) {
+      setTimeout(() => {
+        setBlankLoader(false);
+      }, 1000);
+    }
+  }, [isLoading]);
   return (
     <PostWrapper>
-      <AllProjectCardWrapper>
-        {isLoading ? (
-          <>Loading...</>
-        ) : data?.data?.total > 0 ? (
-          projectData.map((item, index) => (
-            <ProjectCard project={item} key={index} />
-          ))
-        ) : (
-          <>No Data</>
-        )}
-      </AllProjectCardWrapper>
+      {isLoading || blankLoader ? (
+        <PostOfDevLoader />
+      ) : (
+        <AllProjectCardWrapper noPad>
+          {data?.data?.total > 0 ? (
+            projectData.map((item, index) => (
+              <ProjectCard project={item} key={index} />
+            ))
+          ) : (
+            <>No Data</>
+          )}
+        </AllProjectCardWrapper>
+      )}
     </PostWrapper>
   );
 };

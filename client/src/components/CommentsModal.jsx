@@ -14,7 +14,6 @@ import {
   AddCommentSection,
   CommentSingle,
   CommentsWrapper,
-  LoadingCommentWrapper,
 } from "../styles/components/commentsModalStyles";
 import "../styles/modal.css";
 import { SoloButton } from "../styles/pages/profileStyles";
@@ -22,6 +21,8 @@ import commentSchema from "../validationSchemas/comment";
 import { createNotification } from "./Notification";
 import { AiOutlineDelete } from "react-icons/ai";
 import { RiEditFill } from "react-icons/ri";
+import { trimAll } from "../util/utilFunctions";
+import { CommentLoader } from "./Loaders";
 
 const CommentsModal = ({ show, setShow, isMine }) => {
   const { id } = useParams();
@@ -42,6 +43,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     },
     validationSchema: commentSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       if (!isAuthenticated) {
         createNotification(`Please Login First`, "error", 2000);
         navigate("/login");
@@ -98,7 +100,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
     } else if (!isLoading && data?.success) {
       setTimeout(() => {
         setBlankLoader(false);
-      }, 500);
+      }, 1000);
     }
   }, [isLoading]);
 
@@ -129,7 +131,7 @@ const CommentsModal = ({ show, setShow, isMine }) => {
       </Modal.Header>
       <Modal.Body>
         {isLoading || blankLoader ? (
-          <LoadingCommentWrapper>Loading...</LoadingCommentWrapper>
+          <CommentLoader />
         ) : (
           <CommentsWrapper auth={isAuthenticated}>
             {comments?.map((item, index) => {

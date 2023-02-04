@@ -2,12 +2,13 @@ import styled from "styled-components";
 import * as mq from "../mediaQueries";
 
 export const AllProjectsWrapper = styled.div`
-  padding: 0% 6%;
-  min-height: calc(90vh - 220px);
+  min-height: calc(90vh - 70px);
 `;
 
 export const AllProjectCardWrapper = styled.div`
+  padding: ${(props) => (props.noPad ? "0px" : "0% 6%")};
   margin: 5vh 0px;
+  margin-top: 6vh;
   width: 100%;
 
   display: grid;

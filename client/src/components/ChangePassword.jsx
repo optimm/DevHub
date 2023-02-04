@@ -8,6 +8,7 @@ import { useChangePasswordMutation } from "../app/services/authApi";
 import { InnerWrapper } from "../styles/components/changePasswordStyles";
 import { EditForm, Footer } from "../styles/components/editProfileStyles";
 import "../styles/modal.css";
+import { trimAll } from "../util/utilFunctions";
 import changePasswordSchema from "../validationSchemas/changePassword";
 import { createNotification } from "./Notification";
 
@@ -31,6 +32,7 @@ const ChangePassword = ({ show, setShow }) => {
     },
     validationSchema: changePasswordSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       await change({ body: values });
     },
   });

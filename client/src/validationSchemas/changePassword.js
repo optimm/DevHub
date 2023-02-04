@@ -5,6 +5,8 @@ let changePasswordSchema = yup.object().shape({
   newPassword: yup
     .string()
     .required("New Password is required")
+    .strict(true)
+    .trim("New Password cannot contain leading and trailing spaces")
     .min(6, "New Password must be atleast 6 characters"),
 });
 

@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   ButtonWrapper,
   ExtraButton,
-  LoadingWrapper,
   MoreDataWrapper,
   ProfileIndv,
   ProfileWrapper,
@@ -38,14 +37,17 @@ import {
   RiBookmarkFill,
 } from "react-icons/ri";
 import SavedProjects from "../components/SavedProjects";
+import { ProfileLoader } from "../components/Loaders";
+import { Avatar } from "@mui/material";
+import { authenticateMe } from "../features/meSlice";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { isAuthenticated } = useSelector((state) => state.me);
-  const [blankLoader, setBlankLoader] = useState(true);
+  const { isAuthenticated, myData } = useSelector((state) => state.me);
+  const [blankLoader, setBlankLoader] = useState(false);
   //modals
   const [fmodal, setFmodal] = useState(false);
   const [fmodalcat, setFmodalCat] = useState("");
@@ -57,13 +59,12 @@ const Profile = () => {
   const [complete, setComplete] = useState(false);
   //queries
   const [logoutFn, {}] = useLogoutMutation();
-  const { data, isLoading, isFetching, isSuccess, isError } =
-    useGetSingleUserQuery(
-      {
-        id,
-      },
-      { skip: del }
-    );
+  const { data, isLoading, isFetching, error } = useGetSingleUserQuery(
+    {
+      id,
+    },
+    { skip: del }
+  );
 
   const [
     followFunction,
@@ -90,16 +91,33 @@ const Profile = () => {
       } else {
         setComplete(true);
       }
+      if (isAuthenticated && data?.isMe) {
+        dispatch(
+          authenticateMe({
+            isAuthenticated: true,
+            data: {
+              _id: tdata?._id,
+              avatar: tdata?.avatar,
+              name: tdata?.name,
+              username: tdata?.username,
+              email: tdata?.email,
+            },
+          })
+        );
+      }
     }
   }, [isFetching]);
 
   useEffect(() => {
     if (isLoading) {
       setBlankLoader(true);
-    } else if (!isLoading && data?.success) {
+    } else if (
+      !isLoading &&
+      (data?.success || error?.data?.success === false)
+    ) {
       setTimeout(() => {
         setBlankLoader(false);
-      }, 500);
+      }, 1000);
     }
   }, [isLoading]);
 
@@ -137,12 +155,15 @@ const Profile = () => {
   return (
     <>
       {isLoading || blankLoader ? (
-        <LoadingWrapper>Loading...</LoadingWrapper>
+        <ProfileLoader />
       ) : (
         <>
           <ProfileWrapper>
-            <TopWrapper url="/images/login.jpg">
-              <div className="image-section"></div>
+            <TopWrapper>
+              <Avatar
+                sx={{ width: 170, height: 170 }}
+                src={data?.data?.avatar?.url}
+              ></Avatar>
               <div className="text-section">
                 <div className="username-section">
                   <div className="username">{data?.data?.username}</div>
@@ -230,13 +251,15 @@ const Profile = () => {
                 Projects
                 <BsGridFill />
               </button>
-              <button
-                className={`wrapper-button ${active == 3 && "active"}`}
-                onClick={() => setActive(3)}
-              >
-                Saved
-                <RiBookmarkFill />
-              </button>
+              {data?.isMe && (
+                <button
+                  className={`wrapper-button ${active == 3 && "active"}`}
+                  onClick={() => setActive(3)}
+                >
+                  Saved
+                  <RiBookmarkFill />
+                </button>
+              )}
             </ButtonWrapper>
 
             {active == 1 ? (
@@ -286,14 +309,21 @@ const Profile = () => {
               </MoreDataWrapper>
             ) : active === 2 ? (
               <PostsOfDev isMe={data?.isMe} />
-            ) : (
+            ) : active == 3 && data?.isMe ? (
               <SavedProjects />
+            ) : (
+              <></>
             )}
           </ProfileWrapper>
 
           <FModal show={fmodal} setShow={setFmodal} category={fmodalcat} />
           {editProfile && (
-            <EditProfileModal show={editProfile} setShow={setEditProfile} />
+            <EditProfileModal
+              show={editProfile}
+              setShow={setEditProfile}
+              blankLoader={blankLoader}
+              setBlankLoader={setBlankLoader}
+            />
           )}
           {changep && <ChangePassword show={changep} setShow={setChangep} />}
           {del && <DeleteAccountProject show={del} setShow={setDel} />}

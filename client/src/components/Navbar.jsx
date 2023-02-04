@@ -29,7 +29,9 @@ const Navbar = () => {
       <NavContainerRight>
         {isAuthenticated ? (
           <Link to={`/users/${myData._id}`}>
-            <Avatar sx={{ width: 35, height: 35 }} />
+            <Avatar sx={{ width: 35, height: 35 }}>
+              {myData?.name[0].toUpperCase()}
+            </Avatar>
           </Link>
         ) : (
           <>

@@ -35,10 +35,6 @@ export const authApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
-        dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
-      },
       invalidatesTags: ["AllUsers", "SingleUser", "CheckAuth", "SingleProject"],
     }),
     changePassword: builder.mutation({

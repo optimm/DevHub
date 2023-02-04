@@ -14,6 +14,7 @@ import {
 } from "../styles/pages/loginStyles";
 import registerSchema from "../validationSchemas/register";
 import { createNotification } from "../components/Notification";
+import { trimAll } from "../util/utilFunctions";
 
 const Register = () => {
   const [
@@ -38,6 +39,7 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
+      values = trimAll(values);
       await register({ body: values });
     },
   });
@@ -49,7 +51,6 @@ const Register = () => {
       navigate("/login");
     }
   }, [isSuccess]);
-
 
   return (
     <>

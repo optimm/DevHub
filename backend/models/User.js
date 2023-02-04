@@ -32,23 +32,28 @@ const UserSchema = new mongoose.Schema({
   about: {
     type: String,
     max: [500, "About cannot be more than 500 characters"],
+    default: "",
   },
   bio: {
     type: String,
     max: [200, "Bio cannot be more than 200 characters"],
+    default: "",
   },
-  profiles: [
-    {
-      link: {
-        type: String,
-        required: [true, "Please provide a link"],
+  profiles: {
+    type: [
+      {
+        link: {
+          type: String,
+          required: [true, "Please provide a link"],
+        },
+        platform: {
+          type: String,
+          required: [true, "Please provide the platform name"],
+        },
       },
-      platform: {
-        type: String,
-        required: [true, "Please provide the platform name"],
-      },
-    },
-  ],
+    ],
+    default: [],
+  },
   projects: [
     {
       type: mongoose.Schema.Types.ObjectId,

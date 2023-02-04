@@ -3,22 +3,25 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCheckMyAuthQuery } from "./app/services/userApi";
 import Footer from "./components/Footer";
+import { FullScreenLoader } from "./components/Loaders";
 import Navbar from "./components/Navbar";
 import { Notification } from "./components/Notification";
+import About from "./pages/About";
 import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
 import { CreateProject } from "./pages/CreateProject";
+import EditProject from "./pages/EditProject";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Project from "./pages/Project";
 import Register from "./pages/Register";
-import { LoadingWrapper } from "./styles/pages/profileStyles";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
   const { data, isLoading, error, isFetching } = useCheckMyAuthQuery();
   const [blankLoader, setBlankLoader] = useState(true);
+  const [errState, setErrState] = useState(false);
   useEffect(() => {
     if (isFetching) {
       setBlankLoader(true);
@@ -26,16 +29,17 @@ const App = () => {
       !isFetching &&
       (data?.success === true || error?.data?.success === false)
     ) {
+      if (error?.data?.success === false) setErrState(false);
+      else setErrState(true);
       setTimeout(() => {
         setBlankLoader(false);
-      }, 1000);
+      }, 2000);
     }
   }, [isFetching]);
-
   return (
     <>
       {isLoading || isFetching || blankLoader ? (
-        <LoadingWrapper allWeb>Loading...</LoadingWrapper>
+        <FullScreenLoader />
       ) : (
         <>
           <BrowserRouter>
@@ -52,7 +56,7 @@ const App = () => {
               <Route
                 path={"/login"}
                 element={
-                  data?.success || isAuthenticated ? (
+                  errState || isAuthenticated ? (
                     <Navigate replace to="/" />
                   ) : (
                     <Login />
@@ -101,11 +105,21 @@ const App = () => {
                   </>
                 }
               />
+              <Route
+                path="/projects/:id/edit"
+                element={
+                  <>
+                    <Navbar />
+                    <EditProject />
+                    <Footer />
+                  </>
+                }
+              />
 
               <Route
                 path="/projects/add"
                 element={
-                  data?.success || isAuthenticated ? (
+                  errState || isAuthenticated ? (
                     <>
                       <Navbar />
                       <CreateProject />
@@ -114,6 +128,16 @@ const App = () => {
                   ) : (
                     <Navigate replace to="/login" />
                   )
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <>
+                    <Navbar />
+                    <About />
+                    <Footer />
+                  </>
                 }
               />
             </Routes>

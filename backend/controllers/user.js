@@ -7,6 +7,7 @@ const {
 } = require("../errors");
 const searchUser = require("../utils/searchUser");
 const Project = require("../models/Project");
+const cloudinary = require("cloudinary").v2;
 
 //**************************Generic Routes***********************/
 const getAllUsers = async (req, res) => {
@@ -95,9 +96,9 @@ const checkMyAuth = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const { userId } = req.user;
-  const { name, username, email, about, profiles, bio } = req.body;
-  console.log(req.body);
-  const me = await User.findById(userId);
+  const { name, username, email, image, bio, about, profiles } = req.body;
+  let me = await User.findById(userId);
+
   if (email && email !== me.email) {
     const user = await User.findOne({ email });
     if (user) {
@@ -112,10 +113,28 @@ const updateProfile = async (req, res) => {
     }
     me.username = username;
   }
-  if (name) me.name = name;
-  if (about) me.about = about;
-  if (bio) me.bio = bio;
-  if (profiles) me.profiles = [...profiles];
+  if (
+    !email ||
+    email === "" ||
+    !name ||
+    name === "" ||
+    !username ||
+    username === ""
+  ) {
+    throw new BadRequestError("Please provide name,username,email");
+  }
+  me.name = name;
+  me.bio = bio;
+  me.about = about;
+  me.profiles = [...profiles];
+
+  if (image) {
+    const myCloud = await cloudinary.uploader.upload(image, {
+      folder: "users",
+    });
+    me.avatar = { public_id: myCloud?.public_id, url: myCloud?.secure_url };
+  }
+
   await me.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Profile updated" });
 };

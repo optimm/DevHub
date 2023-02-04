@@ -11,13 +11,7 @@ export const TopWrapper = styled.div`
   justify-content: center;
   gap: 40px;
   height: 35vh;
-  .image-section {
-    background: url(${(props) => props.url});
-    ${backgroundGeneral}
-    border-radius:50%;
-    height: 170px;
-    width: 170px;
-  }
+
   .text-section {
     display: flex;
     flex-direction: column;
@@ -146,17 +140,6 @@ export const SoloButton = styled.button`
   color: var(--text-white);
   background: ${(props) =>
     props?.notActive ? "var(--primary-color-glass)" : "var(--primary-color)"};
-`;
-
-export const LoadingWrapper = styled.div`
-  ${flexch}
-  height: ${(props) =>
-    props.project
-      ? "calc(100vh - 70px);"
-      : props.allWeb
-      ? "100vh;"
-      : "calc(100vh - 69px);"}
-  font-size: 30px;
 `;
 
 export const ProfileIndv = styled.div`

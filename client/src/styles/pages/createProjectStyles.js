@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexch, flexcv } from "../globalStyle";
+import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const Head = styled.div`
   width: 100%;
@@ -44,7 +44,7 @@ export const MainForm = styled.form`
 export const MainRight = styled.div`
   width: 50%;
   height: calc(97vh - 100px);
-  ${flexch}
+  ${flexcv}
   .paper-for-image {
     height: 47vh;
     width: 78%;
@@ -64,8 +64,22 @@ export const MainRight = styled.div`
     border: 3px var(--blue) dashed;
     border-radius: 10px;
   }
+
+
   svg {
     font-size: 4rem;
     color: var(--blue);
   }
+  .file-chooser {
+    margin-top: 30px;
+    font-size: 0.88rem;
+  }
+`;
+
+
+export const UploadedImage = styled.div`
+height: 100%;
+width: 100%;
+background: url(${(props) => props.src});
+${backgroundGeneral}
 `;

@@ -10,7 +10,11 @@ import { BiComment, BiShareAlt } from "react-icons/bi";
 import { AiFillLike, AiOutlineDelete } from "react-icons/ai";
 import { RiBookmarkFill, RiEditFill } from "react-icons/ri";
 
-import { LoadingWrapper, ProfileIndv } from "../styles/pages/profileStyles";
+import {
+  ExtraButton,
+  LoadingWrapper,
+  ProfileIndv,
+} from "../styles/pages/profileStyles";
 import ProfileIcon from "../components/ProfileIcon";
 import {
   useGetSingleProjectQuery,
@@ -24,6 +28,8 @@ import AllTagsModal from "../components/AllTagsModal";
 import LikesSavesModal from "../components/LikesSavesModal";
 import CommentsModal from "../components/CommentsModal";
 import DeleteAccountProject from "../components/DeleteAccountProject";
+import ReadmeFile from "../components/ReadmeFile";
+import { ProfileLoader } from "../components/Loaders";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -44,6 +50,7 @@ const Project = () => {
   const [savesShow, setSavesShow] = useState(false);
   const [comment, setComment] = useState(false);
   const [deleteProject, setDeleteProject] = useState(false);
+  const [readmeShow, setReadmeShow] = useState(false);
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -75,7 +82,7 @@ const Project = () => {
     } else if (!isLoading && data?.success) {
       setTimeout(() => {
         setBlankLoader(false);
-      }, 500);
+      }, 1000);
     }
   }, [isLoading]);
 
@@ -114,7 +121,7 @@ const Project = () => {
   return (
     <>
       {isLoading || blankLoader ? (
-        <LoadingWrapper project>Loading...</LoadingWrapper>
+        <ProfileLoader />
       ) : (
         <>
           <ProjectMainWrapper>
@@ -122,7 +129,10 @@ const Project = () => {
               <div className="data-wrapper">
                 <div className="profile-section">
                   <Link to={`/users/${projectData?.owner?._id}`}>
-                    <Avatar sx={{ width: 50, height: 50 }} />
+                    <Avatar
+                      sx={{ width: 50, height: 50 }}
+                      src={projectData?.owner?.avatar?.url}
+                    ></Avatar>
                   </Link>
 
                   <div>
@@ -144,7 +154,7 @@ const Project = () => {
                       className="view-more"
                       onClick={() => setViewAllTags(true)}
                     >
-                      View All
+                      View Tags
                     </div>
                   </div>
                 </div>
@@ -168,10 +178,20 @@ const Project = () => {
                     </ProfileIndv>
                   )}
                 </div>
+                {data?.readme?.readmeData && (
+                  <div
+                    className="links-section"
+                    onClick={() => setReadmeShow(true)}
+                  >
+                    <ExtraButton>View Readme</ExtraButton>
+                  </div>
+                )}
               </div>
             </div>
             <div className="main-right">
-              <ProjectImageWrapper url="/images/login.jpg">
+              <ProjectImageWrapper
+                url={projectData?.image?.url || "/images/login.jpg"}
+              >
                 <div className="project-back"></div>
                 <div className="project-image"></div>
               </ProjectImageWrapper>
@@ -193,7 +213,10 @@ const Project = () => {
                 </div>
                 {isAuthenticated && data?.isMine && (
                   <div className="likes-section">
-                    <button className="edit-button">
+                    <button
+                      className="edit-button"
+                      onClick={() => navigate("edit")}
+                    >
                       Edit <RiEditFill />
                     </button>
                     <button
@@ -258,6 +281,13 @@ const Project = () => {
               show={deleteProject}
               setShow={setDeleteProject}
               project={true}
+            />
+          )}
+          {readmeShow && (
+            <ReadmeFile
+              show={readmeShow}
+              setShow={setReadmeShow}
+              readmeData={data?.readme}
             />
           )}
         </>

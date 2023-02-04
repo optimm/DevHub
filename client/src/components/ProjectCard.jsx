@@ -8,7 +8,7 @@ const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
 
   return (
-    <ProjectCardWrapper image="/images/login.jpg">
+    <ProjectCardWrapper image={project?.image?.url || "/images/login.jpg"}>
       <div
         className="image-section"
         onClick={() => navigate(`/projects/${project?._id}`)}
@@ -21,9 +21,12 @@ const ProjectCard = ({ project }) => {
         <div className="likes-comments">
           <div className="likes-left">
             <Link to={`/users/${project?.owner?._id}`}>
-              <Avatar sx={{ width: 25, height: 25 }} />
+              <Avatar
+                sx={{ width: 35, height: 35 }}
+                src={project?.owner?.avatar?.url}
+              ></Avatar>
             </Link>
-            <div>{project?.owner?.name}</div>
+            <div className="username">{project?.owner?.username}</div>
           </div>
           <div className="likes-right">
             <div className="like-indv">

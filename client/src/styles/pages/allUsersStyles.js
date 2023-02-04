@@ -7,8 +7,14 @@ export const SearchBarWrapper = styled.div`
   height: 50px;
   margin-top: 5vh;
 `;
+
+export const AllUsersWrapper = styled.div`
+  min-height: calc(90vh - 70px);
+`;
+
 export const AllUsersCardWrapper = styled.div`
   margin: 5vh 0px;
+  margin-top: 6vh;
   width: 100%;
   padding: 0% 6%;
   display: grid;

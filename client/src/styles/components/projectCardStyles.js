@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProjectCardWrapper = styled.div`
-  height: 230px;
+  height: 234px;
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
     0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   border-radius: 0px 0px 5px 5px;
@@ -30,7 +30,7 @@ export const ProjectCardWrapper = styled.div`
 
   .data-section {
     width: 100%;
-    padding: 10px;
+    padding: 12px 10px;
   }
   .title {
     text-align: center;
@@ -42,12 +42,18 @@ export const ProjectCardWrapper = styled.div`
   .likes-comments {
     display: flex;
     justify-content: space-between;
-    font-size: 0.88rem;
+    font-size: 1rem;
   }
   .likes-left {
     display: flex;
     gap: 10px;
     align-items: center;
+  }
+  .likes-left .MuiAvatar-root {
+    font-size: 0.88rem;
+  }
+  .username {
+    font-weight: 500;
   }
   .likes-right {
     display: flex;

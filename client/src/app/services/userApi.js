@@ -47,15 +47,11 @@ export const userApi = baseApi.injectEndpoints({
         "SavedProjects",
         "ProjectOfUser",
       ],
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
-        dispatch(authenticateMe({ isAuthenticated: false, data: {} }));
-      },
     }),
     getAllUser: builder.query({
-      query: () => {
+      query: ({ q }) => {
         return {
-          url: `user`,
+          url: q?.length > 0 ? `user?q=${q}` : "user",
           method: "GET",
         };
       },

@@ -1,9 +1,11 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { AllTagsWrapper, TagSingle } from "../styles/pages/projectStyles";
+import { useNavigate } from "react-router-dom";
 import "../styles/modal.css";
 
 const AllTagsModal = ({ show, setShow, tags = [] }) => {
+  const navigate = useNavigate();
   const handleClose = () => setShow(false);
 
   return (
@@ -15,7 +17,12 @@ const AllTagsModal = ({ show, setShow, tags = [] }) => {
         <Modal.Body>
           <AllTagsWrapper>
             {tags?.map((item, index) => (
-              <TagSingle key={index}>{item}</TagSingle>
+              <TagSingle
+                key={index}
+                onClick={() => navigate(`/projects?q=${item}`)}
+              >
+                {item}
+              </TagSingle>
             ))}
           </AllTagsWrapper>
         </Modal.Body>

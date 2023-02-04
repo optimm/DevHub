@@ -1,5 +1,6 @@
 const Project = require("../models/Project");
 const { StatusCodes } = require("http-status-codes");
+const cloudinary = require("cloudinary").v2;
 const {
   BadRequestError,
   UnauthenticatedError,
@@ -8,13 +9,11 @@ const {
 const searchProject = require("../utils/searchProject");
 const User = require("../models/User");
 const { default: mongoose } = require("mongoose");
+const paginate = require("../utils/paginate");
+const getReadmeUrl = require("../utils/getReadmeUrl");
 
 const getAllProjects = async (req, res) => {
   let searchQuery = {};
-  // if (req.user) {
-  //   const authUserQuery = { owner: { $ne: req.user.userId } };
-  //   searchQuery = { ...authUserQuery };
-  // }
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
@@ -24,6 +23,7 @@ const getSingleProject = async (req, res) => {
   let isLiked = false;
   let isMine = false;
   let isSaved = false;
+  let readme = null;
   const project = await Project.findById(id)
     .select("-comments")
     .populate("owner", "name username email avatar")
@@ -31,6 +31,9 @@ const getSingleProject = async (req, res) => {
     .populate("saved", "name username email avatar");
   if (!project) {
     throw new NotFoundError("Project not found");
+  }
+  if (project?.github_link) {
+    readme = await getReadmeUrl({ github_link: project?.github_link });
   }
   if (req?.user?.userId) {
     const userId = req?.user?.userId.toString();
@@ -45,7 +48,7 @@ const getSingleProject = async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json({ success: true, data: project, isMine, isLiked, isSaved });
+    .json({ success: true, data: project, isMine, isLiked, isSaved, readme });
 };
 
 const getProjectsOfUser = async (req, res) => {
@@ -63,11 +66,32 @@ const getProjectsOfUser = async (req, res) => {
 const createProject = async (req, res) => {
   const { userId } = req.user;
   const me = await User.findById(userId);
-  const { title, live_link, github_link } = req.body;
-  if (!title || (title && !live_link && !github_link)) {
-    throw new BadRequestError("Title and one link for project is required");
+  const { title, desc, live_link, github_link, image, tags } = req.body;
+  if (
+    !title ||
+    !image ||
+    title === "" ||
+    (title &&
+      (!live_link || live_link === "") &&
+      (!github_link || github_link === ""))
+  ) {
+    throw new BadRequestError(
+      "Please Provide title, cover image and one link for project"
+    );
   }
-  const project = await Project.create({ ...req.body, owner: userId });
+  const myCloud = await cloudinary.uploader.upload(image, {
+    folder: "projects",
+  });
+  let projectData = {
+    title,
+    image: { public_id: myCloud?.public_id, url: myCloud?.secure_url },
+  };
+  if (desc) projectData.desc = desc;
+  if (live_link) projectData.live_link = live_link;
+  if (github_link) projectData.github_link = github_link;
+  if (tags) projectData.tags = tags;
+
+  const project = await Project.create({ ...projectData, owner: userId });
   me.projects.unshift(project._id);
   me.total_projects += 1;
   await me.save();
@@ -75,24 +99,43 @@ const createProject = async (req, res) => {
 };
 
 const updateProject = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   const { userId } = req.user;
-  const project = await Project.findById(id);
+  let project = await Project.findById(id);
   if (!project) {
     throw new NotFoundError("Project not found");
   }
   if (userId.toString() !== project.owner.toString()) {
     throw new UnauthenticatedError("Project is not owned by current user");
   }
-  const { title, live_link, github_link, tags, desc } = req.body;
+  const { title, live_link, github_link, tags, desc, image } = req.body;
+  if (
+    !title ||
+    title === "" ||
+    (title &&
+      (!live_link || live_link === "") &&
+      (!github_link || github_link === ""))
+  ) {
+    throw new BadRequestError("Please Provide title and one link for project");
+  }
+  project = project.toObject();
   if (title) {
     project.title = title;
+  }
+  if (project?.desc && (!desc || desc === "")) {
+    delete project.desc;
   }
   if (desc) {
     project.desc = desc;
   }
+  if (project?.live_link && (live_link || live_link === "")) {
+    delete project.live_link;
+  }
   if (live_link) {
     project.live_link = live_link;
+  }
+  if (project?.github_link && (github_link || github_link === "")) {
+    delete project.github_link;
   }
   if (github_link) {
     project.github_link = github_link;
@@ -100,7 +143,16 @@ const updateProject = async (req, res) => {
   if (tags) {
     project.tags = [...tags];
   }
-  await project.save();
+  if (image) {
+    const myCloud = await cloudinary.uploader.upload(image, {
+      folder: "projects",
+    });
+    project.image = { public_id: myCloud?.public_id, url: myCloud?.secure_url };
+  }
+
+  await Project.deleteOne({ _id: id });
+  let newProject = new Project(project);
+  await newProject.save();
   res.status(StatusCodes.OK).json({ success: true, msg: "Project Updated" });
 };
 
@@ -130,6 +182,7 @@ const deleteProject = async (req, res) => {
 const getSavedProjects = async (req, res) => {
   const { userId } = req.user;
   const searchQuery = { saved: userId };
+
   const data = await searchProject(req, res, searchQuery);
   res.status(StatusCodes.OK).json({ success: true, data });
 };
@@ -187,7 +240,7 @@ const commentOnProject = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.user;
   const { comment } = req.body;
-  if (!comment) {
+  if (!comment || comment === "") {
     throw new BadRequestError("Please provide a comment");
   }
   const project = await Project.findById(id);
@@ -255,6 +308,9 @@ const editComment = async (req, res) => {
   const { userId } = req.user;
   const { id: pId } = req.params;
   let { commentId, commentText } = req.body;
+  if (!commentText || commentText === "") {
+    throw new BadRequestError("Please provide a comment");
+  }
   const project = await Project.findById(pId);
   commentId = mongoose.Types.ObjectId(commentId);
 

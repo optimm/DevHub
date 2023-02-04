@@ -4,9 +4,9 @@ import { authenticateMe } from "../../features/meSlice";
 export const projectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProjects: builder.query({
-      query: () => {
+      query: ({ q }) => {
         return {
-          url: "project",
+          url: q?.length > 0 ? `project?q=${q}` : "project",
           method: "GET",
         };
       },
@@ -30,6 +30,17 @@ export const projectApi = baseApi.injectEndpoints({
         };
       },
       invalidatesTags: ["AllProjects", "SingleUser", "ProjectOfUser"],
+    }),
+    editProject: builder.mutation({
+      query: ({ body, id }) => {
+        return {
+          url: `project/${id}`,
+          method: "PATCH",
+          body,
+        };
+      },
+      invalidatesTags: (result, error) =>
+        result?.success ? ["SingleProject"] : [],
     }),
     deleteProject: builder.mutation({
       query: ({ id }) => {
@@ -124,11 +135,21 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllComments"],
     }),
+    ///
+    getReadme: builder.query({
+      query: ({ url }) => {
+        return {
+          url: url,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
 export const {
   useCreateProjectMutation,
+  useEditProjectMutation,
   useDeleteProjectMutation,
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
@@ -138,4 +159,5 @@ export const {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useEditCommentMutation,
+  useGetReadmeQuery,
 } = projectApi;

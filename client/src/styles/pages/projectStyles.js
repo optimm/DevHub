@@ -4,6 +4,7 @@ import { backgroundGeneral, flexch, flexcv } from "../globalStyle";
 
 export const ProjectMainWrapper = styled.div`
   width: 100%;
+  min-height: 100vh;
   display: flex;
   padding: 0% 6%;
 
@@ -48,7 +49,7 @@ export const ProjectMainWrapper = styled.div`
   }
 
   .tags-section {
-    margin-top: 15px;
+    margin-top: 25px;
   }
   .tags-head {
     font-weight: 600;
@@ -66,7 +67,7 @@ export const ProjectMainWrapper = styled.div`
     cursor: pointer;
   }
   .links-section {
-    margin-top: 20px;
+    margin-top: 25px;
     display: flex;
     gap: 20px;
   }
@@ -107,7 +108,6 @@ export const ProjectImageWrapper = styled.div`
   width: 92%;
   height: 50vh;
   position: relative;
-  margin-top: 17vh;
 
   .project-image {
     border-radius: 5px;
@@ -132,10 +132,15 @@ export const AllTagsWrapper = styled.div`
   max-height: 40vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   padding: 0px 10px;
 `;
 
 export const TagSingle = styled.div`
-  font-size: 0.88rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    color: var(--blue);
+  }
 `;
