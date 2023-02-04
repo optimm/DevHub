@@ -27,8 +27,10 @@ const EditProject = () => {
   const navigate = useNavigate();
   const [err, setErr] = useState(false);
   const [update] = useEditProjectMutation();
-  const { data, isLoading, isFetching } =
-    useGetSingleProjectQuery({ id }, { skip: err });
+  const { data, isLoading, isFetching } = useGetSingleProjectQuery(
+    { id },
+    { skip: err }
+  );
 
   const { myData } = useSelector((state) => state.me);
   const [image, setImage] = useState(null);
@@ -96,7 +98,7 @@ const EditProject = () => {
       pData?.tags && setFieldValue("tags", pData?.tags);
       setImage(pData?.image?.url);
     }
-  }, [data]);
+  }, [data, setFieldValue]);
 
   const handleImageChange = (e) => {
     let pData = data?.data;

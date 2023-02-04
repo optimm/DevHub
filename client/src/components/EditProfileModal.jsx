@@ -89,7 +89,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
       temp?.profiles && setFieldValue("profiles", temp?.profiles);
       temp?.avatar?.url && setImage(temp?.avatar?.url);
     }
-  }, [data]);
+  }, [data, setFieldValue]);
 
   const linkToProfile = (plt) => {
     let str = "";

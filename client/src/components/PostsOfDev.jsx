@@ -10,23 +10,21 @@ import ProjectCard from "./ProjectCard";
 const PostsOfDev = ({ isMe }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, error } =
-    useGetProjectOfUserQuery({ id });
+  const { data, isLoading, error } = useGetProjectOfUserQuery({ id });
   const projectData = data?.data?.data;
   const [blankLoader, setBlankLoader] = useState(false);
 
   useEffect(() => {
+    const success = data?.success;
+    const noSuccess = error?.data?.success;
     if (isLoading) {
       setBlankLoader(true);
-    } else if (
-      !isLoading &&
-      (data?.success || error?.data?.success === false)
-    ) {
+    } else if (!isLoading && (success || noSuccess === false)) {
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading]);
+  }, [isLoading, data, error]);
 
   return (
     <PostWrapper>

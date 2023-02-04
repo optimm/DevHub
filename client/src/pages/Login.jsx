@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createNotification } from "../components/Notification";
 import { useLoginMutation } from "../app/services/authApi";
@@ -16,8 +16,7 @@ import loginSchema from "../validationSchemas/login";
 import { AiFillHome } from "react-icons/ai";
 
 const Login = () => {
-  const [login, { data, error: requestError, isError, isSuccess }] =
-    useLoginMutation();
+  const [login, { error: requestError, isError }] = useLoginMutation();
   const navigate = useNavigate();
   const {
     touched,
@@ -34,18 +33,15 @@ const Login = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
-      await login({ body: values });
+      try {
+        const data = await login({ body: values }).unwrap();
+        resetForm();
+        createNotification(`Welcome ${data?.data?.name}`, "success", 2000);
+        const { _id: id } = data?.data;
+        navigate(`/users/${id}`);
+      } catch (error) {}
     },
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      resetForm();
-      createNotification(`Welcome ${data?.data?.name}`, "success", 2000);
-      const { _id: id } = data?.data;
-      navigate(`/user/${id}`);
-    }
-  }, [isSuccess]);
 
   return (
     <>

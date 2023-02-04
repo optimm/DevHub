@@ -66,15 +66,8 @@ const Profile = () => {
     { skip: del }
   );
 
-  const [
-    followFunction,
-    {
-      data: followData,
-      isLoading: isFollowLoading,
-      isError: isFollowError,
-      isSuccess: isFollowSuccess,
-    },
-  ] = useFollowUserMutation();
+  const [followFunction, { isLoading: isFollowLoading }] =
+    useFollowUserMutation();
 
   useEffect(() => {
     if (!isFetching && data?.success) {
@@ -91,7 +84,7 @@ const Profile = () => {
       } else {
         setComplete(true);
       }
-      if (isAuthenticated && data?.isMe) {
+      if (data?.isMe) {
         dispatch(
           authenticateMe({
             isAuthenticated: true,
@@ -106,7 +99,7 @@ const Profile = () => {
         );
       }
     }
-  }, [isFetching]);
+  }, [isFetching, data, dispatch]);
 
   useEffect(() => {
     if (isLoading) {
@@ -119,15 +112,7 @@ const Profile = () => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isFollowError) {
-      createNotification(`Something went wrong`, "error", 2000);
-    } else if (isFollowSuccess) {
-      createNotification(followData?.msg, "success", 2000);
-    }
-  }, [isFollowError, isFollowSuccess]);
+  }, [isLoading, data, error]);
 
   const handleLogout = async () => {
     const { data: logoutData, error: logoutError } = await logoutFn();
@@ -148,7 +133,12 @@ const Profile = () => {
       createNotification(`Please Login First`, "error", 2000);
       navigate("/login");
     } else {
-      await followFunction({ id });
+      try {
+        const followData = await followFunction({ id }).unwrap();
+        createNotification(followData?.msg, "success", 2000);
+      } catch (error) {
+        createNotification(`Something went wrong`, "error", 2000);
+      }
     }
   };
 

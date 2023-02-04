@@ -37,7 +37,7 @@ const AllUsers = () => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading, isFetching]);
+  }, [isLoading, isFetching, data, error]);
 
   return (
     <AllUsersWrapper>

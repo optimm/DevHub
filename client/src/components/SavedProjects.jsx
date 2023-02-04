@@ -21,7 +21,7 @@ const SavedProjects = () => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading]);
+  }, [isLoading, data, error]);
   return (
     <PostWrapper>
       {isLoading || blankLoader ? (

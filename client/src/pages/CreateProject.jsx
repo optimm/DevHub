@@ -1,7 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useCreateProjectMutation } from "../app/services/projectApi";
 import {
   Head,
@@ -19,8 +18,7 @@ import { BsCardImage } from "react-icons/bs";
 import { trimAll } from "../util/utilFunctions";
 
 export const CreateProject = () => {
-  const [create, { data, isLoading, isError, isSuccess, error }] =
-    useCreateProjectMutation();
+  const [create, { isLoading }] = useCreateProjectMutation();
   const { myData } = useSelector((state) => state.me);
 
   const [image, setImage] = useState(null);
@@ -54,21 +52,16 @@ export const CreateProject = () => {
       if (temp?.tags?.length === 0) delete temp["tags"];
       if (temp?.desc?.length === 0) delete temp["desc"];
       temp.image = image;
-
-      await create({ body: temp });
+      try {
+        const data = await create({ body: temp }).unwrap();
+        createNotification(data?.msg, "success", 2000);
+        resetForm();
+        setImage(null);
+      } catch (error) {
+        createNotification(error?.data?.msg, "error", 2000);
+      }
     },
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      createNotification(data?.msg, "success", 2000);
-      resetForm();
-      setImage(null);
-    }
-    if (isError) {
-      createNotification(error?.data?.msg, "error", 2000);
-    }
-  }, [isSuccess, isError]);
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];

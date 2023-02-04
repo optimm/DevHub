@@ -8,10 +8,11 @@ const md = new MarkdownIt({ html: true, linkify: true });
 const ReadmeFile = ({ show, setShow, readmeData }) => {
   const handleClose = () => setShow(false);
   const [html, setHtml] = useState("");
-  useEffect(() => {
-    setHtml(md.render(readmeData?.readmeData));
-  }, []);
 
+  useEffect(() => {
+    let htm = md.render(readmeData?.readmeData);
+    setHtml(htm);
+  }, [readmeData]);
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">

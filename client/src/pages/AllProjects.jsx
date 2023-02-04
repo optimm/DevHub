@@ -36,7 +36,7 @@ const AllProjects = () => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading, isFetching]);
+  }, [isLoading, isFetching, data, error]);
 
   return (
     <AllProjectsWrapper>
