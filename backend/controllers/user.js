@@ -177,7 +177,12 @@ const deleteProfile = async (req, res) => {
   //logout and send res
   res
     .status(StatusCodes.OK)
-    .cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+    .cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    })
     .json({ success: true, msg: "Profile Deleted" });
 };
 

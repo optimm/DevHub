@@ -88,6 +88,7 @@ const logout = async (req, res) => {
     .status(StatusCodes.OK)
     .cookie("token", null, {
       sameSite: "none",
+      secure: true,
       expires: new Date(Date.now()),
       httpOnly: true,
     })
