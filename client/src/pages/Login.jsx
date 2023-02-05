@@ -14,9 +14,11 @@ import {
 } from "../styles/pages/loginStyles";
 import loginSchema from "../validationSchemas/login";
 import { AiFillHome } from "react-icons/ai";
+import { ButtonLoader } from "../components/Loaders";
 
 const Login = () => {
-  const [login, { error: requestError, isError }] = useLoginMutation();
+  const [login, { error: requestError, isError, isLoading }] =
+    useLoginMutation();
   const navigate = useNavigate();
   const {
     touched,
@@ -82,8 +84,12 @@ const Login = () => {
                   touched.password && errors.password ? errors.password : null
                 }
               />
-              <button className="form-button" type="submit">
-                Login
+              <button
+                className="form-button"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? <ButtonLoader /> : "Login"}
               </button>
 
               {isError && (

@@ -15,6 +15,7 @@ import {
 import registerSchema from "../validationSchemas/register";
 import { createNotification } from "../components/Notification";
 import { trimAll } from "../util/utilFunctions";
+import { ButtonLoader } from "../components/Loaders";
 
 const Register = () => {
   const [register, { error: requestError, isLoading, isError }] =
@@ -131,7 +132,7 @@ const Register = () => {
                 type="submit"
                 disabled={isLoading}
               >
-                {"Register"}
+                {isLoading ? <ButtonLoader /> : "Register"}
               </button>
               {isError && (
                 <div className="error">{requestError?.data?.msg}</div>

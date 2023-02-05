@@ -3,6 +3,7 @@ import {
   AllUsersProjectsLoaders,
   FullScreenLoaders,
   LoadingCommentWrapper,
+  NoDataWrapper,
   PostDevLoadingWrapper,
   ProfileLoadingWrapper,
 } from "../styles/components/loadingStyles";
@@ -88,5 +89,28 @@ export const CommentLoader = () => {
         backgroundColor="var(--primary-color)"
       />
     </LoadingCommentWrapper>
+  );
+};
+
+export const ButtonLoader = () => {
+  return (
+    <ThreeDots
+      height="20"
+      width="30"
+      radius="5"
+      color="#fff"
+      ariaLabel="three-dots-loading"
+      wrapperStyle={{}}
+      wrapperClassName=""
+      visible={true}
+    />
+  );
+};
+
+export const Nodata = () => {
+  return (
+    <NoDataWrapper>
+      <img src="/images/noData.gif" alt="No Data"></img>
+    </NoDataWrapper>
   );
 };

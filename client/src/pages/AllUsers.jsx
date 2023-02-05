@@ -10,7 +10,7 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { AllUsersProjectsLoader } from "../components/Loaders";
+import { AllUsersProjectsLoader, Nodata } from "../components/Loaders";
 
 const AllUsers = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -66,15 +66,17 @@ const AllUsers = () => {
       {isLoading || blankLoader ? (
         <AllUsersProjectsLoader />
       ) : (
-        <AllUsersCardWrapper>
+        <>
           {data?.data?.total > 0 ? (
-            userData.map((item, index) => (
-              <UserCard user={item} key={item._id} />
-            ))
+            <AllUsersCardWrapper>
+              {userData?.map((item, index) => (
+                <UserCard user={item} key={item._id} />
+              ))}
+            </AllUsersCardWrapper>
           ) : (
-            <>No Data</>
+            <Nodata />
           )}
-        </AllUsersCardWrapper>
+        </>
       )}
     </AllUsersWrapper>
   );

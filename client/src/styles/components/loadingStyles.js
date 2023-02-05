@@ -45,3 +45,12 @@ export const LoadingCommentWrapper = styled.div`
   height: 45vh;
   ${flexcv}
 `;
+
+export const NoDataWrapper = styled.div`
+  ${flexcv}
+  height: calc(90vh - 120px);
+  width: 100%;
+  img {
+    height: 180px;
+  }
+`;

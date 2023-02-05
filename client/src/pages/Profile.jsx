@@ -291,9 +291,11 @@ const Profile = () => {
                   </div>
                 ) : (
                   <div className="extra-options">
-                    <ExtraButton primary>
-                      Contact <RiMailOpenLine />
-                    </ExtraButton>
+                    <a href={`mailto: ${data?.data?.email}`}>
+                      <ExtraButton primary>
+                        Contact <RiMailOpenLine />
+                      </ExtraButton>
+                    </a>
                   </div>
                 )}
               </MoreDataWrapper>

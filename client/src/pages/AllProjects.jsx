@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
 import { useGetAllProjectsQuery } from "../app/services/projectApi";
-import { AllUsersProjectsLoader } from "../components/Loaders";
+import { AllUsersProjectsLoader, Nodata } from "../components/Loaders";
 import ProjectCard from "../components/ProjectCard";
 import {
   AllProjectCardWrapper,
@@ -65,15 +65,17 @@ const AllProjects = () => {
       {isLoading || blankLoader ? (
         <AllUsersProjectsLoader />
       ) : (
-        <AllProjectCardWrapper>
+        <>
           {data?.data?.total > 0 ? (
-            projectData.map((item, index) => (
-              <ProjectCard project={item} key={index} />
-            ))
+            <AllProjectCardWrapper>
+              {projectData.map((item, index) => (
+                <ProjectCard project={item} key={index} />
+              ))}
+            </AllProjectCardWrapper>
           ) : (
-            <>No Data</>
+            <Nodata />
           )}
-        </AllProjectCardWrapper>
+        </>
       )}
     </AllProjectsWrapper>
   );
