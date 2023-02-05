@@ -54,3 +54,18 @@ export const NoDataWrapper = styled.div`
     height: 180px;
   }
 `;
+
+export const ErrorPageWrapper = styled.div`
+  ${flexcv}
+  height: calc(100vh - 70px);
+  gap: 7vh;
+  width: 100%;
+  img {
+    height: 45vh;
+  }
+  .text {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-4);
+  }
+`;

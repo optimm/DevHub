@@ -37,7 +37,7 @@ import {
   RiBookmarkFill,
 } from "react-icons/ri";
 import SavedProjects from "../components/SavedProjects";
-import { ProfileLoader } from "../components/Loaders";
+import { ErrorPage, ProfileLoader } from "../components/Loaders";
 import { Avatar } from "@mui/material";
 import { authenticateMe } from "../features/meSlice";
 
@@ -48,6 +48,7 @@ const Profile = () => {
 
   const { isAuthenticated } = useSelector((state) => state.me);
   const [blankLoader, setBlankLoader] = useState(false);
+  const [errorPage, setErrorPage] = useState(false);
   //modals
   const [fmodal, setFmodal] = useState(false);
   const [fmodalcat, setFmodalCat] = useState("");
@@ -71,6 +72,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!isFetching && data?.success) {
+      setErrorPage(false);
       let tdata = data?.data;
       if (
         !tdata?.about ||
@@ -108,6 +110,9 @@ const Profile = () => {
       !isLoading &&
       (data?.success || error?.data?.success === false)
     ) {
+      if (error) {
+        setErrorPage(true);
+      }
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);
@@ -146,6 +151,8 @@ const Profile = () => {
     <>
       {isLoading || blankLoader ? (
         <ProfileLoader />
+      ) : errorPage ? (
+        <ErrorPage text={"User Not Found"} />
       ) : (
         <>
           <ProfileWrapper>

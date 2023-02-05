@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AllUsersProjectsLoaders,
+  ErrorPageWrapper,
   FullScreenLoaders,
   LoadingCommentWrapper,
   NoDataWrapper,
@@ -112,5 +113,14 @@ export const Nodata = () => {
     <NoDataWrapper>
       <img src="/images/noData.gif" alt="No Data"></img>
     </NoDataWrapper>
+  );
+};
+
+export const ErrorPage = ({ text }) => {
+  return (
+    <ErrorPageWrapper>
+      <img alt="error" src="/images/errorPage.gif"></img>
+      <div className="text">{text}</div>
+    </ErrorPageWrapper>
   );
 };

@@ -25,13 +25,15 @@ import LikesSavesModal from "../components/LikesSavesModal";
 import CommentsModal from "../components/CommentsModal";
 import DeleteAccountProject from "../components/DeleteAccountProject";
 import ReadmeFile from "../components/ReadmeFile";
-import { ProfileLoader } from "../components/Loaders";
+import { ErrorPage, ProfileLoader } from "../components/Loaders";
 
 const Project = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.me);
-  const { data, isLoading, isFetching } = useGetSingleProjectQuery({ id });
+  const { data, isLoading, isFetching, error } = useGetSingleProjectQuery({
+    id,
+  });
   const projectData = data?.data;
 
   const [likeUnlike] = useLikeUnlikeProjectMutation();
@@ -40,15 +42,19 @@ const Project = () => {
   const [tagsString, setTagsString] = useState("");
   // const [tagMore, setTagMore] = useState(false);
   const [viewAllTags, setViewAllTags] = useState(false);
-  const [blankLoader, setBlankLoader] = useState(true);
   const [likesShow, setLikesShow] = useState(false);
   const [savesShow, setSavesShow] = useState(false);
   const [comment, setComment] = useState(false);
   const [deleteProject, setDeleteProject] = useState(false);
   const [readmeShow, setReadmeShow] = useState(false);
 
+  const [blankLoader, setBlankLoader] = useState(true);
+  const [errorPage, setErrorPage] = useState(false);
+
   useEffect(() => {
     if (!isFetching && data?.success) {
+      setErrorPage(false);
+
       let temp = "";
       if (data?.data?.tags?.length > 0) {
         let arr = data?.data?.tags;
@@ -74,12 +80,18 @@ const Project = () => {
   useEffect(() => {
     if (isLoading) {
       setBlankLoader(true);
-    } else if (!isLoading && data?.success) {
+    } else if (
+      (!isLoading && data?.success) ||
+      error?.data?.success === false
+    ) {
+      if (error) {
+        setErrorPage(true);
+      }
       setTimeout(() => {
         setBlankLoader(false);
       }, 1000);
     }
-  }, [isLoading, data]);
+  }, [isLoading, data, error]);
 
   const handleLikeUnlike = async () => {
     if (!isAuthenticated) {
@@ -117,6 +129,8 @@ const Project = () => {
     <>
       {isLoading || blankLoader ? (
         <ProfileLoader />
+      ) : errorPage ? (
+        <ErrorPage text={"Project Not Found"} />
       ) : (
         <>
           <ProjectMainWrapper>
