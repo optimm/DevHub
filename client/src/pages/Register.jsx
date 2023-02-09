@@ -1,9 +1,9 @@
-import React from "react";
-import { TextField } from "@mui/material";
+import React, { useState } from "react";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../app/services/authApi";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillEye, AiFillEyeInvisible, AiFillHome } from "react-icons/ai";
 import {
   MainCard,
   MainCardForm,
@@ -47,6 +47,9 @@ const Register = () => {
       } catch (error) {}
     },
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <>
@@ -114,7 +117,7 @@ const Register = () => {
               />
               <TextField
                 name="password"
-                type={"password"}
+                type={showPassword ? "text" : "password"}
                 label="Password"
                 variant="standard"
                 color="secondary"
@@ -126,6 +129,24 @@ const Register = () => {
                 helperText={
                   touched.password && errors.password ? errors.password : null
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                onCopy={(e) => {
+                  e.preventDefault();
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                }}
               />
               <button
                 className="form-button"

@@ -1,5 +1,5 @@
-import React from "react";
-import { TextField } from "@mui/material";
+import React, { useState } from "react";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { Modal } from "react-bootstrap";
 import { useChangePasswordMutation } from "../app/services/authApi";
@@ -9,6 +9,7 @@ import "../styles/modal.css";
 import { trimAll } from "../util/utilFunctions";
 import changePasswordSchema from "../validationSchemas/changePassword";
 import { createNotification } from "./Notification";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const ChangePassword = ({ show, setShow }) => {
   const { touched, errors, values, handleSubmit, handleBlur, handleChange } =
@@ -30,6 +31,8 @@ const ChangePassword = ({ show, setShow }) => {
 
   const handleClose = () => setShow(false);
   const [change, { isLoading, error, isError }] = useChangePasswordMutation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -45,7 +48,7 @@ const ChangePassword = ({ show, setShow }) => {
               variant="outlined"
               color="secondary"
               fullWidth
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={values.currentPassword}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -57,6 +60,24 @@ const ChangePassword = ({ show, setShow }) => {
                   ? errors.currentPassword
                   : null
               }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onCopy={(e) => {
+                e.preventDefault();
+              }}
+              onPaste={(e) => {
+                e.preventDefault();
+              }}
             />
             <TextField
               name="newPassword"
@@ -64,7 +85,7 @@ const ChangePassword = ({ show, setShow }) => {
               variant="outlined"
               color="secondary"
               fullWidth
-              type="password"
+              type={showPassword1 ? "text" : "password"}
               value={values.newPassword}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -74,6 +95,24 @@ const ChangePassword = ({ show, setShow }) => {
                   ? errors.newPassword
                   : null
               }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword1(!showPassword1)}
+                    >
+                      {showPassword1 ? <AiFillEye /> : <AiFillEyeInvisible />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onCopy={(e) => {
+                e.preventDefault();
+              }}
+              onPaste={(e) => {
+                e.preventDefault();
+              }}
             />
           </InnerWrapper>
         </Modal.Body>

@@ -57,6 +57,12 @@ export const MainCardForm = styled.form`
     margin-top: 15px;
     margin-top: ${(props) => (props.login ? "15px" : "20px")};
   }
+  .forgot-password {
+    color: var(--text-2);
+    font-weight: 500;
+    margin-top: 10px;
+    cursor: pointer;
+  }
 
   .MuiFormHelperText-root {
     font-size: 0.7rem;

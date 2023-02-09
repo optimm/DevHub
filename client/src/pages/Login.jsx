@@ -1,6 +1,6 @@
-import { TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createNotification } from "../components/Notification";
 import { useLoginMutation } from "../app/services/authApi";
@@ -13,7 +13,7 @@ import {
   MainWrapper,
 } from "../styles/pages/loginStyles";
 import loginSchema from "../validationSchemas/login";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillEye, AiFillEyeInvisible, AiFillHome } from "react-icons/ai";
 import { ButtonLoader } from "../components/Loaders";
 
 const Login = () => {
@@ -36,6 +36,7 @@ const Login = () => {
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       try {
+        setShowPassword(false);
         const data = await login({ body: values }).unwrap();
         resetForm();
         createNotification(`Welcome ${data?.data?.name}`, "success", 2000);
@@ -44,7 +45,8 @@ const Login = () => {
       } catch (error) {}
     },
   });
-
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   return (
     <>
       <MainWrapper>
@@ -71,7 +73,7 @@ const Login = () => {
               />
               <TextField
                 name="password"
-                type={"password"}
+                type={showPassword ? "text" : "password"}
                 label="Password"
                 variant="standard"
                 color="secondary"
@@ -83,6 +85,24 @@ const Login = () => {
                 helperText={
                   touched.password && errors.password ? errors.password : null
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                onCopy={(e) => {
+                  e.preventDefault();
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                }}
               />
               <button
                 className="form-button"
@@ -91,7 +111,12 @@ const Login = () => {
               >
                 {isLoading ? <ButtonLoader /> : "Login"}
               </button>
-
+              <div
+                className="forgot-password"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot Password ?
+              </div>
               {isError && (
                 <div className="error">{requestError?.data?.msg}</div>
               )}
