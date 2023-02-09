@@ -11,11 +11,13 @@ import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
 import { CreateProject } from "./pages/CreateProject";
 import EditProject from "./pages/EditProject";
+import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Project from "./pages/Project";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.me);
@@ -59,6 +61,26 @@ const App = () => {
                     <Navigate replace to="/" />
                   ) : (
                     <Login />
+                  )
+                }
+              />
+              <Route
+                path={"/forgot-password"}
+                element={
+                  errState || isAuthenticated ? (
+                    <Navigate replace to="/" />
+                  ) : (
+                    <ForgotPassword />
+                  )
+                }
+              />
+              <Route
+                path={"/reset-password"}
+                element={
+                  errState || isAuthenticated ? (
+                    <Navigate replace to="/" />
+                  ) : (
+                    <ResetPassword />
                   )
                 }
               />

@@ -105,3 +105,57 @@ export const MainCardOverLay = styled.div`
     font-weight: 600;
   }
 `;
+
+export const ForgotPasswdCard = styled.form`
+  height: 50vh;
+  width: 30%;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 15%),
+    0px 1px 1px 0px rgb(0 0 0 / 10%), 0px 1px 3px 0px rgb(0 0 0 / 10%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  .form-head {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .form-button {
+    width: 100%;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+  }
+`;
+
+export const ResetPasswdCard = styled.form`
+  height: 70vh;
+  width: 30%;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 15%),
+    0px 1px 1px 0px rgb(0 0 0 / 10%), 0px 1px 3px 0px rgb(0 0 0 / 10%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  .form-head {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .form-button {
+    width: 100%;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+  }
+`;

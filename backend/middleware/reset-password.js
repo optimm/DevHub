@@ -9,7 +9,13 @@ const resetPasswordMiddleware = async (req, res, next) => {
   if (!token) {
     throw new UnauthenticatedError("Token not present");
   }
-  const { userId, hash } = jwt.verify(token, process.env.JWT_SECRET);
+  let data;
+  try {
+    data = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    throw new UnauthenticatedError("Link is invalid or expired");
+  }
+  const { userId, hash } = data;
   if (!userId || !hash) {
     throw new BadRequestError("Link is broken");
   }

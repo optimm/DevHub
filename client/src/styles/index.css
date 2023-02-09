@@ -47,6 +47,9 @@ button {
 .red {
   color: red !important;
 }
+.green {
+  color: green;
+}
 
 @keyframes fadeIn {
   0% {
