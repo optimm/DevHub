@@ -90,10 +90,14 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  reset_password: {
+    type: String,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
+    console.log("password change");
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
@@ -105,9 +109,9 @@ UserSchema.methods.CheckPassword = async function (userPassword) {
 };
 
 // generating the jwt token
-UserSchema.methods.CreateJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+UserSchema.methods.CreateJWT = function ({ expires, id = null }) {
+  return jwt.sign({ userId: this._id, hash: id }, process.env.JWT_SECRET, {
+    expiresIn: expires,
   });
 };
 

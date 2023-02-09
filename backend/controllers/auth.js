@@ -7,6 +7,8 @@ const {
 } = require("../errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { SendMail } = require("../utils/sendMail");
+const { v4: uuidv4 } = require("uuid");
 
 const register = async (req, res) => {
   const { name, email, password, username } = req.body;
@@ -58,7 +60,7 @@ const login = async (req, res) => {
   }
 
   //generate jwt token
-  const token = user.CreateJWT();
+  const token = user.CreateJWT({ expires: "30d" });
 
   // cookie options
   const options = {
@@ -119,7 +121,54 @@ const changePassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, msg: "Password changed" });
 };
 
-const forgotPassword = async (req, res) => {};
-const resetPassword = async (req, res) => {};
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email || email === "") {
+    throw new BadRequestError("Please provide email");
+  }
+  const user = await User.findOne({ email });
 
-module.exports = { register, login, changePassword, logout };
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+  const uniqueId = uuidv4();
+  user.reset_password = uniqueId;
+  const hashedId = await bcrypt.hash(uniqueId, 10);
+  const token = user.CreateJWT({ id: hashedId, expires: 60 * 10 });
+  const msg = await SendMail({ token, email });
+  await user.save();
+  res.status(StatusCodes.OK).json({ success: true, msg });
+};
+const resetPassword = async (req, res) => {
+  const { newPassword } = req.body;
+  const { userId, hash } = req.user;
+  const user = await User.findById(userId).select("+password");
+  if (!user) {
+    throw new UnauthenticatedError("User does not exist");
+  }
+  if (!user.reset_password) {
+    throw new BadRequestError("Link has expired");
+  }
+  const ismatch = await bcrypt.compare(user.reset_password, hash);
+  if (!ismatch) {
+    throw new BadRequestError("Link is broken");
+  }
+  if (!newPassword) {
+    throw new BadRequestError("Provide a new password");
+  }
+  user.reset_password = null;
+  user.password = newPassword;
+  await user.save();
+  res
+    .status(StatusCodes.OK)
+    .json({ success: true, msg: "Password reset successfull" });
+};
+
+module.exports = {
+  register,
+  login,
+  changePassword,
+  logout,
+  forgotPassword,
+  resetPassword,
+};
