@@ -37,7 +37,7 @@ import {
   RiBookmarkFill,
 } from "react-icons/ri";
 import SavedProjects from "../components/SavedProjects";
-import { ErrorPage, ProfileLoader } from "../components/Loaders";
+import { ButtonLoader, ErrorPage, ProfileLoader } from "../components/Loaders";
 import { Avatar } from "@mui/material";
 import { authenticateMe } from "../features/meSlice";
 
@@ -175,7 +175,7 @@ const Profile = () => {
                       primary={data?.isFollowing === false}
                     >
                       {isFollowLoading || isFetching ? (
-                        "Loading.."
+                        <ButtonLoader />
                       ) : data?.isFollowing ? (
                         <>
                           Unfollow <RiUserUnfollowLine />

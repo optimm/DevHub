@@ -20,6 +20,7 @@ import { createNotification } from "./Notification";
 import { baseApi } from "../app/services/baseApi";
 import { capitalizeString, trimAll } from "../util/utilFunctions";
 import { platformOptions } from "../util/options";
+import { ButtonLoader } from "./Loaders";
 
 const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
   const dispatch = useDispatch();
@@ -303,7 +304,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
               type="submit"
               disabled={isUpdateLoading}
             >
-              {isUpdateLoading ? "Loading.." : "Update"}
+              {isUpdateLoading ? <ButtonLoader /> : "Update"}
             </button>
           </Footer>
         </Modal.Footer>

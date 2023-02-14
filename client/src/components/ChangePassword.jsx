@@ -10,6 +10,7 @@ import { trimAll } from "../util/utilFunctions";
 import changePasswordSchema from "../validationSchemas/changePassword";
 import { createNotification } from "./Notification";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { ButtonLoader } from "./Loaders";
 
 const ChangePassword = ({ show, setShow }) => {
   const { touched, errors, values, handleSubmit, handleBlur, handleChange } =
@@ -124,7 +125,7 @@ const ChangePassword = ({ show, setShow }) => {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "Loading.." : "Update"}
+              {isLoading ? <ButtonLoader/> : "Update"}
             </button>
           </Footer>
         </Modal.Footer>

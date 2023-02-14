@@ -16,6 +16,7 @@ import { createNotification } from "../components/Notification";
 import { useSelector } from "react-redux";
 import { BsCardImage } from "react-icons/bs";
 import { trimAll } from "../util/utilFunctions";
+import { ButtonLoader } from "../components/Loaders";
 
 export const CreateProject = () => {
   const [create, { isLoading }] = useCreateProjectMutation();
@@ -190,7 +191,7 @@ export const CreateProject = () => {
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? "Loading..." : "Add Project"}
+                {isLoading ? <ButtonLoader /> : "Add Project"}
               </button>
             </div>
           </MainForm>
