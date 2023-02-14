@@ -2,7 +2,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible, AiFillHome } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "../app/services/authApi";
 import { ButtonLoader } from "../components/Loaders";
 import { createNotification } from "../components/Notification";
@@ -17,6 +17,7 @@ const ResetPassword = () => {
   const [reset, { isLoading }] = useResetPasswordMutation();
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get("token");
+  const navigate = useNavigate();
   const {
     touched,
     errors,
@@ -36,6 +37,7 @@ const ResetPassword = () => {
         const resetData = await reset({ body: values, token }).unwrap();
         resetForm();
         createNotification(resetData?.msg, "success", 2000);
+        navigate("/login");
       } catch (error) {
         createNotification(error?.data?.msg, "error", 2000);
       }
