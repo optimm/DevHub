@@ -104,6 +104,15 @@ export const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["SavedProjects"],
     }),
+    getFeed: builder.query({
+      query: () => {
+        return {
+          url: `user/me/feed`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Feed"],
+    }),
   }),
 });
 
@@ -117,4 +126,5 @@ export const {
   useDeleteProfileMutation,
   useGetProjectOfUserQuery,
   useGetSavedProjectsQuery,
+  useGetFeedQuery,
 } = userApi;

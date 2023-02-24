@@ -17,9 +17,11 @@ const Navbar = () => {
       <Logo>
         <Link to="/">DevHub</Link>
       </Logo>
-      <Item>
-        <Link to="/feed">Feed</Link>
-      </Item>
+      {isAuthenticated && (
+        <Item>
+          <Link to="/feed">Feed</Link>
+        </Item>
+      )}
       <Item>
         <Link to="/projects">All Projects</Link>
       </Item>

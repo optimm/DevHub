@@ -10,8 +10,11 @@ export const UserCardWrapper = styled.div`
   .image-section {
     width: 100%;
     height: 200px;
-    background: url(${(props) => props.image});
+    background: ${(props) => (props.loading ? "white" : `url(${props.image})`)};
     ${backgroundGeneral}
+    ${(props) =>
+      props.loading &&
+      "opacity: 0.7; animation: skeleton-loading 1s linear infinite alternate;"}
   }
   .data-section {
     width: 100%;

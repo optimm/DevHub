@@ -11,9 +11,12 @@ export const ProjectCardWrapper = styled.div`
   .image-section {
     width: 100%;
     height: 180px;
-    background: url(${(props) => props.image});
+    background: ${(props) => (props.loading ? "white" : `url(${props.image})`)};
     ${backgroundGeneral}
     position:relative;
+    ${(props) =>
+      props.loading &&
+      "opacity: 0.7; animation: skeleton-loading 1s linear infinite alternate;"}
   }
   .image-overlay {
     display: none;
