@@ -147,6 +147,11 @@ const Profile = () => {
     }
   };
 
+  const [loading, setLoading] = useState(true);
+  function handleImageLoad() {
+    setLoading(false);
+  }
+
   return (
     <>
       {isLoading || blankLoader ? (
@@ -159,8 +164,14 @@ const Profile = () => {
             <TopWrapper>
               <Avatar
                 sx={{ width: 170, height: 170 }}
-                src={data?.data?.avatar?.url}
+                src={!loading && data?.data?.avatar?.url}
               ></Avatar>
+              <img
+                src={data?.data?.avatar?.url}
+                onLoad={handleImageLoad}
+                style={{ display: "none" }}
+                alt={"skeleton"}
+              />
               <div className="text-section">
                 <div className="username-section">
                   <div className="username">{data?.data?.username}</div>
