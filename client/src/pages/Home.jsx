@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { LandingContainer, LandingOverlay } from "../styles/pages/homeStyles";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <LandingContainer url="/images/landing.jpg">
@@ -15,7 +17,12 @@ const Home = () => {
               portal for you to share your projects and get inspired for free.
             </div>
             <div className="button-container">
-              <button className="button-main">Discover Projects</button>
+              <button
+                className="button-main"
+                onClick={() => navigate("/projects")}
+              >
+                Discover Projects
+              </button>
             </div>
           </div>
         </LandingOverlay>

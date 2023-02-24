@@ -40,7 +40,7 @@ const Register = () => {
     onSubmit: async (values) => {
       values = trimAll(values);
       try {
-        const data = await register({ body: values });
+        const data = await register({ body: values }).unwrap();
         resetForm();
         createNotification(data.msg, "success", 2000);
         navigate("/login");

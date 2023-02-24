@@ -17,6 +17,7 @@ const {
 const {
   getProjectsOfUser,
   getSavedProjects,
+  getFeed,
 } = require("../controllers/project");
 
 router.route("/").get(ifAuthenticated, getAllUsers);
@@ -25,6 +26,7 @@ router
   .get(authMiddleware, checkMyAuth)
   .patch(authMiddleware, updateProfile)
   .delete(authMiddleware, deleteProfile);
+router.route("/me/feed").get(authMiddleware, getFeed);
 router.route("/me/saved").get(authMiddleware, getSavedProjects);
 router.route("/:id").get(ifAuthenticated, getSingleUser);
 router.route("/:id/followers").get(getFollowers);

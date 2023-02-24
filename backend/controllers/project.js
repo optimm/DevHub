@@ -62,6 +62,20 @@ const getProjectsOfUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, data });
 };
 
+const getFeed = async (req, res) => {
+  const { userId } = req.user;
+  // let { id } = req.params;
+  let id = mongoose.Types.ObjectId(userId);
+  const user = await User.findById(id);
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+  const following = user.following;
+  let searchQuery = { owner: following };
+  const data = await searchProject(req, res, searchQuery);
+  res.status(StatusCodes.OK).json({ success: true, data });
+};
+
 // can be done by only owner********/
 const createProject = async (req, res) => {
   const { userId } = req.user;
@@ -348,6 +362,7 @@ const editComment = async (req, res) => {
 module.exports = {
   getAllProjects,
   getSingleProject,
+  getFeed,
   createProject,
   updateProject,
   deleteProject,

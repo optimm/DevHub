@@ -18,6 +18,7 @@ const {
 } = require("../controllers/project");
 
 router.route("/").get(ifAuthenticated, getAllProjects);
+
 router
   .route("/:id")
   .get(ifAuthenticated, getSingleProject)

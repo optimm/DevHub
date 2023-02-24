@@ -18,7 +18,10 @@ const Navbar = () => {
         <Link to="/">DevHub</Link>
       </Logo>
       <Item>
-        <Link to="/projects">Projects</Link>
+        <Link to="/feed">Feed</Link>
+      </Item>
+      <Item>
+        <Link to="/projects">All Projects</Link>
       </Item>
       <Item>
         <Link to="/users">Developers</Link>

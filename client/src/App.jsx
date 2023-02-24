@@ -11,6 +11,7 @@ import AllProjects from "./pages/AllProjects";
 import AllUsers from "./pages/AllUsers";
 import { CreateProject } from "./pages/CreateProject";
 import EditProject from "./pages/EditProject";
+import Feed from "./pages/Feed";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -51,6 +52,16 @@ const App = () => {
                   <>
                     <Navbar />
                     <Home />
+                  </>
+                }
+              />
+              <Route
+                path="/feed"
+                element={
+                  <>
+                    <Navbar />
+                    <Feed />
+                    <Footer />
                   </>
                 }
               />

@@ -7,6 +7,7 @@ const authMiddleware = async (req, res, next) => {
   if (!req.cookies) {
     throw new UnauthenticatedError("Cookie not present, Please log in");
   }
+  console.log(req.cookies);
   const { token } = req.cookies;
   if (!token) {
     throw new UnauthenticatedError("Token not present, Please log in");

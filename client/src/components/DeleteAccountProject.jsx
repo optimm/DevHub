@@ -6,12 +6,15 @@ import { useDeleteProjectMutation } from "../app/services/projectApi";
 import { useDeleteProfileMutation } from "../app/services/userApi";
 import { createNotification } from "./Notification";
 import { flexcv } from "../styles/globalStyle";
+import { ButtonLoader } from "./Loaders";
 
 const DeleteAccountProject = ({ show, setShow, project }) => {
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
-  const [deleteAcc] = useDeleteProfileMutation();
-  const [deleteProject] = useDeleteProjectMutation();
+  const [deleteAcc, { isLoading: isAccDelLoading }] =
+    useDeleteProfileMutation();
+  const [deleteProject, { isLoading: isProDelLoading }] =
+    useDeleteProjectMutation();
   const { id } = useParams();
 
   const handleDelete = async () => {
@@ -68,7 +71,13 @@ const DeleteAccountProject = ({ show, setShow, project }) => {
             recovered afterwards.
           </div>
           <Button variant="danger" onClick={handleDelete}>
-            {project ? "Delete Project" : "Delete Account"}
+            {isAccDelLoading || isProDelLoading ? (
+              <ButtonLoader />
+            ) : project ? (
+              "Delete Project"
+            ) : (
+              "Delete Account"
+            )}
           </Button>
         </div>
       </Modal.Body>
