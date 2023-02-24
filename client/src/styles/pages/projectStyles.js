@@ -112,8 +112,11 @@ export const ProjectImageWrapper = styled.div`
     border-radius: 5px;
     width: 100%;
     height: 100%;
-    background: url(${(props) => props.url});
+    background: ${(props) => (props.loading ? "white" : `url(${props.url})`)};
     ${backgroundGeneral}
+    ${(props) =>
+      props.loading &&
+      "animation: skeleton-loading 1s linear infinite alternate;"}
   }
   .project-back {
     border-radius: 5px;

@@ -124,6 +124,10 @@ const Project = () => {
     navigator.clipboard.writeText(window.location.href);
     createNotification("Url copied to clipboard", "success", 2000);
   };
+  const [loading, setLoading] = useState(true);
+  function handleImageLoad() {
+    setLoading(false);
+  }
 
   return (
     <>
@@ -200,9 +204,16 @@ const Project = () => {
             <div className="main-right">
               <ProjectImageWrapper
                 url={projectData?.image?.url || "/images/login.jpg"}
+                loading={loading}
               >
                 <div className="project-back"></div>
                 <div className="project-image"></div>
+                <img
+                  src={projectData?.image?.url || "/images/login.jpg"}
+                  onLoad={handleImageLoad}
+                  style={{ display: "none" }}
+                  alt={"skeleton"}
+                />
               </ProjectImageWrapper>
 
               <div className="flex-justify">
