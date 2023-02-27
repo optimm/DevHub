@@ -47,6 +47,16 @@ const App = () => {
             style={{ display: "none" }}
             alt={"skeleton"}
           />
+          <img
+            src="/images/login.jpg"
+            style={{ display: "none" }}
+            alt={"skeleton"}
+          />
+          <img
+            src="/images/register.jpg"
+            style={{ display: "none" }}
+            alt={"skeleton"}
+          />
           <FullScreenLoader />
         </>
       ) : (
