@@ -41,7 +41,14 @@ const App = () => {
   return (
     <>
       {isLoading || isFetching || blankLoader ? (
-        <FullScreenLoader />
+        <>
+          <img
+            src="/images/landing.jpg"
+            style={{ display: "none" }}
+            alt={"skeleton"}
+          />
+          <FullScreenLoader />
+        </>
       ) : (
         <>
           <BrowserRouter>
