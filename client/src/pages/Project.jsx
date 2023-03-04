@@ -26,6 +26,7 @@ import CommentsModal from "../components/CommentsModal";
 import DeleteAccountProject from "../components/DeleteAccountProject";
 import ReadmeFile from "../components/ReadmeFile";
 import { ErrorPage, ProfileLoader } from "../components/Loaders";
+import { RotatingLines } from "react-loader-spinner";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -36,11 +37,12 @@ const Project = () => {
   });
   const projectData = data?.data;
 
-  const [likeUnlike] = useLikeUnlikeProjectMutation();
-  const [saveUnsave] = useSaveUnsaveProjectMutation();
+  const [likeUnlike, { isLoading: isLikeLoading }] =
+    useLikeUnlikeProjectMutation();
+  const [saveUnsave, { isLoading: isSaveLoading }] =
+    useSaveUnsaveProjectMutation();
 
   const [tagsString, setTagsString] = useState("");
-  // const [tagMore, setTagMore] = useState(false);
   const [viewAllTags, setViewAllTags] = useState(false);
   const [likesShow, setLikesShow] = useState(false);
   const [savesShow, setSavesShow] = useState(false);
@@ -65,7 +67,6 @@ const Project = () => {
           }
           t += arr[i];
           if (t.length > 40) {
-            // setTagMore(true);
             temp += "...";
             break;
           } else {
@@ -125,6 +126,7 @@ const Project = () => {
     createNotification("Url copied to clipboard", "success", 2000);
   };
   const [loading, setLoading] = useState(true);
+
   function handleImageLoad() {
     setLoading(false);
   }
@@ -218,18 +220,48 @@ const Project = () => {
 
               <div className="flex-justify">
                 <div className="likes-section">
-                  <LikesIndv onClick={handleLikeUnlike} checked={data?.isLiked}>
-                    <AiFillLike />
-                  </LikesIndv>
+                  {isLikeLoading ? (
+                    <LikesIndv>
+                      <RotatingLines
+                        strokeColor="grey"
+                        strokeWidth="3"
+                        animationDuration="2"
+                        width="24"
+                        visible={true}
+                      />
+                    </LikesIndv>
+                  ) : (
+                    <LikesIndv
+                      onClick={handleLikeUnlike}
+                      checked={data?.isLiked}
+                    >
+                      <AiFillLike />
+                    </LikesIndv>
+                  )}
                   <LikesIndv onClick={() => setComment(true)}>
                     <BiComment />
                   </LikesIndv>
                   <LikesIndv onClick={handleShare}>
                     <BiShareAlt />
                   </LikesIndv>
-                  <LikesIndv onClick={handleSaveUnsave} checked={data?.isSaved}>
-                    <RiBookmarkFill />
-                  </LikesIndv>
+                  {isSaveLoading ? (
+                    <LikesIndv>
+                      <RotatingLines
+                        strokeColor="grey"
+                        strokeWidth="3"
+                        animationDuration="2"
+                        width="24"
+                        visible={true}
+                      />
+                    </LikesIndv>
+                  ) : (
+                    <LikesIndv
+                      onClick={handleSaveUnsave}
+                      checked={data?.isSaved}
+                    >
+                      <RiBookmarkFill />
+                    </LikesIndv>
+                  )}
                 </div>
                 {isAuthenticated && data?.isMine && (
                   <div className="likes-section">
