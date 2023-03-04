@@ -281,13 +281,14 @@ const Profile = () => {
 
                 {data?.data?.profiles?.length > 0 && (
                   <>
-                    <div className="about-head">Profiles</div>
+                    <div className="about-head">Links</div>
                     <div className="profiles-section">
                       {data?.data?.profiles?.map((item, index) => (
                         <ProfileIndv
                           className="profile"
                           key={index}
                           onClick={() => window.open(linkProcessor(item?.link))}
+                          title={item?.platform}
                         >
                           <ProfileIcon platform={item?.platform} />
                         </ProfileIndv>

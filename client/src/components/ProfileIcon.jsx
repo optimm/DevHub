@@ -6,6 +6,7 @@ import {
   AiFillTwitterCircle,
   AiFillFacebook,
   AiFillRedditCircle,
+  AiFillFileText,
 } from "react-icons/ai";
 import { SiWebmoney } from "react-icons/si";
 
@@ -27,6 +28,9 @@ const ProfileIcon = ({ platform }) => {
   }
   if (platform === "reddit") {
     return <AiFillRedditCircle />;
+  }
+  if(platform === "resume"){
+    return  <AiFillFileText/>
   }
   return <SiWebmoney />;
 };

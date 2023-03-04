@@ -5,6 +5,7 @@ export const platformOptions = [
   "facebook",
   "twitter",
   "reddit",
+  "resume",
 ];
 
 export const tags = [

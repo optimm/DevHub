@@ -236,7 +236,7 @@ const EditProfileModal = ({ show, setShow, blankLoader, setBlankLoader }) => {
                     />
                   </div>
                   <div className="profiles-section">
-                    <div className="profile-head">Profiles</div>
+                    <div className="profile-head">Links</div>
                     <div className="profiles">
                       {platformOptions.map((item, index) => (
                         <TextField

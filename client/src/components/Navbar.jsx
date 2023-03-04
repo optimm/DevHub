@@ -28,9 +28,9 @@ const Navbar = () => {
       <Item>
         <Link to="/users">Developers</Link>
       </Item>
-      <Item>
+      {/* <Item>
         <Link to="/about">About</Link>
-      </Item>
+      </Item> */}
       <NavContainerRight>
         {isAuthenticated ? (
           <Link to={`/users/${myData._id}`}>
