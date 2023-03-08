@@ -15,6 +15,7 @@
 - Save, Unsave projects and view your saved projects.
 - Fetching Readme of the project if github url is provides.
 
+![sample image](https://github.com/optimm/DevHub/blob/master/client/public/images/sample.png)
 
 ### To Run Locally
 - Clone the repository `git clone https://github.com/optimm/DevHub.git`.
