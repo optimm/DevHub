@@ -11,6 +11,10 @@ const cors = require("cors");
 const helemt = require("helmet");
 const xss = require("xss-clean");
 const morgan = require("morgan");
+const cluster = require("cluster");
+const os = require("os");
+
+const numCPUs = os.cpus().length;
 
 //cloudinary
 cloudinary.config({
@@ -64,9 +68,26 @@ const start = async () => {
   try {
     await connectDb();
     console.log("Connected to Database...\n");
-    app.listen(port, () => {
-      console.log(`Devhub Server is running on port ${port} `);
-    });
+
+    if (cluster.isMaster) {
+      console.log(`Master ${process.pid} is running`);
+
+      // Fork workers
+      for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+      }
+
+      cluster.on("exit", (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`);
+        cluster.fork(); // replace the dead worker
+      });
+    } else {
+      app.listen(port, () => {
+        console.log(
+          `Devhub Server is running on port ${port} and worker ${process.pid} is listening`
+        );
+      });
+    }
   } catch (error) {
     console.log(error);
   }
